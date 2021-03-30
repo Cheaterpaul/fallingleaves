@@ -64,10 +64,14 @@ public abstract class LeafTickMixin {
                 modifier = FallingLeavesConfig.CONFIG.coniferLeafSpawnRate.get();
             }
         }
-        spawnChance *= modifier / 10 / 75;
+        modifier = modifier / 10f / 75f;
+        spawnChance *= modifier;
 
-        if (spawnChance != 0 && random.nextDouble() < spawnChance) {
-            LeafUtil.trySpawnLeafParticle(state, world, pos, random, leafSettings);
+        while (spawnChance > 0) {
+            if (random.nextDouble() < spawnChance) {
+                LeafUtil.trySpawnLeafParticle(state, world, pos, random, leafSettings);
+            }
+            spawnChance -= 1;
         }
     }
 
