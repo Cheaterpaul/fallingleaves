@@ -29,6 +29,9 @@ java.toolchain.languageVersion = JavaLanguageVersion.of(8) // Mojang ships Java 
 ext.mod_version="Test"
 ext.type="test"
 
+apply from: 'gradle/versioning.gradle'
+apply from: 'gradle/deploy.gradle'
+
 println('Java: ' + System.getProperty('java.version') + ' JVM: ' + System.getProperty('java.vm.version') + '(' + System.getProperty('java.vendor') + ') Arch: ' + System.getProperty('os.arch'))
 minecraft {
     mappings channel: 'official', version: "$project.minecraft_version"
@@ -128,8 +131,23 @@ jar {
     }
 }
 
-apply from: 'gradle/deploy.gradle'
-apply from: 'gradle/versioning.gradle'
+processResources {
+
+    from(sourceSets.main.resources.srcDirs) {
+        include 'META-INF/mods.toml'
+
+        expand 'version': project.mod_version, 'mcversion': minecraft_version, 'forge_version': forge_version
+    }
+
+    outputs.upToDateWhen { false }
+
+
+    from(sourceSets.main.resources.srcDirs) {
+        exclude 'META-INF/mods.toml'
+    }
+
+    exclude '**/Thumbs.db'
+}
 
 apply plugin: 'org.spongepowered.mixin'
 
