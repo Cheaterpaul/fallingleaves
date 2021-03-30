@@ -1,4 +1,4 @@
-package randommcsomethin.fallingleaves.util;
+package de.cheaterpaul.fallingleaves.util;
 
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;

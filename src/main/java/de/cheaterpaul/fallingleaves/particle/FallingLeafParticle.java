@@ -1,15 +1,13 @@
-package randommcsomethin.fallingleaves.particle;
+package de.cheaterpaul.fallingleaves.particle;
 
+import de.cheaterpaul.fallingleaves.init.Config;
 import net.minecraft.client.particle.*;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.particles.BasicParticleType;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-
-import static randommcsomethin.fallingleaves.init.Config.CONFIG;
 
 /**
  * TODO - Plenty of "Magic numbers" in this class that we may want to get rid of
@@ -26,7 +24,7 @@ public class FallingLeafParticle extends SpriteTexturedParticle {
         this.setSpriteFromAge(provider);
         this.hasPhysics = true;
         this.gravity = 0.1F;
-        this.lifetime = CONFIG.leafLifespan.get();
+        this.lifetime = Config.CONFIG.leafLifespan.get();
 
         this.xd *= 0.3F;
         this.yd *= 0.0F;
@@ -37,7 +35,7 @@ public class FallingLeafParticle extends SpriteTexturedParticle {
         this.bCol  = (float) b;
         this.rotateFactor = ((float) Math.random() - 0.5F) * 0.01F;
 
-        this.quadSize = CONFIG.leafSize.get();
+        this.quadSize = Config.CONFIG.leafSize.get();
     }
 
     public void tick() {

@@ -1,9 +1,6 @@
-package randommcsomethin.fallingleaves.config;
+package de.cheaterpaul.fallingleaves.config;
 
 import net.minecraftforge.common.ForgeConfigSpec;
-
-import java.util.HashMap;
-import java.util.function.Consumer;
 
 @SuppressWarnings({"FieldMayBeFinal", "CanBeFinal"})
 public class ClientConfig {

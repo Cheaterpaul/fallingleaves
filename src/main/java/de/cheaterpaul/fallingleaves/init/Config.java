@@ -1,12 +1,13 @@
-package randommcsomethin.fallingleaves.init;
+package de.cheaterpaul.fallingleaves.init;
 
+import de.cheaterpaul.fallingleaves.config.ClientConfig;
+import de.cheaterpaul.fallingleaves.config.TreeValueLoader;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.config.ModConfig;
 import org.apache.commons.lang3.tuple.Pair;
-import randommcsomethin.fallingleaves.config.*;
 
 public class Config {
 

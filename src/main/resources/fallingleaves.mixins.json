@@ -1,11 +1,10 @@
 {
   "required": true,
   "minVersion": "0.8",
-  "package": "randommcsomethin.fallingleaves.mixin",
+  "package": "de.cheaterpaul.fallingleaves.mixin",
   "compatibilityLevel": "JAVA_8",
   "client": [
-    "LeafTickMixin",
-    "ClientPlayNetworkHandlerMixin"
+    "LeafTickMixin"
   ],
   "injectors": {
     "defaultRequire": 1

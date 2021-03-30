@@ -1,5 +1,9 @@
-package randommcsomethin.fallingleaves.util;
+package de.cheaterpaul.fallingleaves.util;
 
+import de.cheaterpaul.fallingleaves.FallingLeavesMod;
+import de.cheaterpaul.fallingleaves.config.LeafSettingsEntry;
+import de.cheaterpaul.fallingleaves.init.Config;
+import de.cheaterpaul.fallingleaves.init.Leaves;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.LeavesBlock;
@@ -14,8 +18,6 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import randommcsomethin.fallingleaves.config.LeafSettingsEntry;
-import randommcsomethin.fallingleaves.init.Leaves;
 
 import javax.annotation.Nullable;
 import javax.imageio.ImageIO;
@@ -25,9 +27,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 import java.util.Random;
-
-import static randommcsomethin.fallingleaves.FallingLeavesMod.LOGGER;
-import static randommcsomethin.fallingleaves.init.Config.CONFIG;
 
 public class LeafUtil {
 
@@ -73,7 +72,7 @@ public class LeafUtil {
                 try (InputStream is = res.getInputStream()) {
                     textureColor = averageColor(ImageIO.read(is));
                     TextureCache.INST.put(texture, new TextureCache.Data(textureColor, resourcePack));
-                    LOGGER.debug("{}: Calculated texture color {} ", texture, textureColor);
+                    FallingLeavesMod.LOGGER.debug("{}: Calculated texture color {} ", texture, textureColor);
                 }
             }
 
@@ -86,7 +85,7 @@ public class LeafUtil {
 
             return textureColor;
         } catch (IOException e) {
-            LOGGER.error("Couldn't access resource {}", texture, e);
+            FallingLeavesMod.LOGGER.error("Couldn't access resource {}", texture, e);
             return new double[] { 1, 1, 1 };
         }
     }
@@ -96,7 +95,7 @@ public class LeafUtil {
         // This test is necessary because modded leaf blocks may not have collisions
         if (isLeafBlock(world.getBlockState(pos.below()).getBlock(), true)) return false;
 
-        double y2 = y - CONFIG.minimumFreeSpaceBelow.get() * 0.5;
+        double y2 = y - Config.CONFIG.minimumFreeSpaceBelow.get() * 0.5;
         AxisAlignedBB collisionBox = new AxisAlignedBB(x - 0.1, y, z - 0.1, x + 0.1, y2, z + 0.1);
 
         // Only spawn the particle if there's enough room for it

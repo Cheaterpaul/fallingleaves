@@ -1,4 +1,4 @@
-package randommcsomethin.fallingleaves.util;
+package de.cheaterpaul.fallingleaves.util;
 
 import net.minecraft.util.ResourceLocation;
 

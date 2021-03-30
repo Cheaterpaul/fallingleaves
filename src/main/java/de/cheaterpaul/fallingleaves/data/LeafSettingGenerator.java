@@ -1,15 +1,15 @@
-package randommcsomethin.fallingleaves.data;
+package de.cheaterpaul.fallingleaves.data;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
+import de.cheaterpaul.fallingleaves.config.LeafSettingsEntry;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DirectoryCache;
 import net.minecraft.data.IDataProvider;
 import net.minecraft.util.ResourceLocation;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import randommcsomethin.fallingleaves.config.LeafSettingsEntry;
 
 import java.io.BufferedWriter;
 import java.io.IOException;

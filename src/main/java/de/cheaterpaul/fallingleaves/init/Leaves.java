@@ -1,9 +1,13 @@
-package randommcsomethin.fallingleaves.init;
+package de.cheaterpaul.fallingleaves.init;
 
+import de.cheaterpaul.fallingleaves.FallingLeavesMod;
+import de.cheaterpaul.fallingleaves.config.LeafSettingsEntry;
+import de.cheaterpaul.fallingleaves.particle.FallingConiferLeafParticle;
+import de.cheaterpaul.fallingleaves.particle.FallingLeafParticle;
+import de.cheaterpaul.fallingleaves.util.LeafUtil;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.LeavesBlock;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.particle.ParticleManager;
 import net.minecraft.particles.BasicParticleType;
 import net.minecraft.particles.ParticleType;
 import net.minecraft.util.ResourceLocation;
@@ -11,11 +15,6 @@ import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.registries.ObjectHolder;
-import randommcsomethin.fallingleaves.FallingLeavesMod;
-import randommcsomethin.fallingleaves.config.LeafSettingsEntry;
-import randommcsomethin.fallingleaves.particle.FallingConiferLeafParticle;
-import randommcsomethin.fallingleaves.particle.FallingLeafParticle;
-import randommcsomethin.fallingleaves.util.LeafUtil;
 
 @ObjectHolder(FallingLeavesMod.MOD_ID)
 public class Leaves {

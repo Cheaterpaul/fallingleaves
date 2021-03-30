@@ -1,9 +1,11 @@
-package randommcsomethin.fallingleaves.mixin;
+package de.cheaterpaul.fallingleaves.mixin;
 
+import de.cheaterpaul.fallingleaves.config.LeafSettingsEntry;
+import de.cheaterpaul.fallingleaves.init.Config;
+import de.cheaterpaul.fallingleaves.util.LeafUtil;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.LeavesBlock;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -11,12 +13,8 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import randommcsomethin.fallingleaves.config.LeafSettingsEntry;
-import randommcsomethin.fallingleaves.init.Config;
 
 import java.util.Random;
-
-import static randommcsomethin.fallingleaves.util.LeafUtil.trySpawnLeafParticle;
 
 @OnlyIn(Dist.CLIENT)
 @Mixin(LeavesBlock.class)
@@ -37,7 +35,7 @@ public abstract class LeafTickMixin {
         double spawnChance = leafSettings == null? 1:leafSettings.getSpawnChance();
 
         if (spawnChance != 0 && random.nextDouble() < spawnChance) {
-            trySpawnLeafParticle(state, world, pos, random, leafSettings);
+            LeafUtil.trySpawnLeafParticle(state, world, pos, random, leafSettings);
         }
     }
 

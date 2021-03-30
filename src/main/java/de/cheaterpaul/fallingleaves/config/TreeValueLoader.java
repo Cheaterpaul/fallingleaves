@@ -1,4 +1,4 @@
-package randommcsomethin.fallingleaves.config;
+package de.cheaterpaul.fallingleaves.config;
 
 import com.google.gson.*;
 import net.minecraft.client.resources.JsonReloadListener;

@@ -1,7 +1,7 @@
-package randommcsomethin.fallingleaves.config;
+package de.cheaterpaul.fallingleaves.config;
 
+import de.cheaterpaul.fallingleaves.init.Config;
 import net.minecraft.util.ResourceLocation;
-import randommcsomethin.fallingleaves.init.Config;
 
 public class LeafSettingsEntry {
 
