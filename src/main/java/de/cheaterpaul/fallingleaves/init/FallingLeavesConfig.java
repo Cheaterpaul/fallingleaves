@@ -3,13 +3,14 @@ package de.cheaterpaul.fallingleaves.init;
 import de.cheaterpaul.fallingleaves.config.ClientConfig;
 import de.cheaterpaul.fallingleaves.config.TreeValueLoader;
 import net.minecraftforge.common.ForgeConfigSpec;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.config.ModConfig;
 import org.apache.commons.lang3.tuple.Pair;
 
-public class Config {
+public class FallingLeavesConfig {
 
     public static final ClientConfig CONFIG;
     private static final ForgeConfigSpec clientSpec;
@@ -24,10 +25,11 @@ public class Config {
 
     public static void registerConfigs() {
         ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, clientSpec);
+        MinecraftForge.EVENT_BUS.addListener(FallingLeavesConfig::onReloadListenerEvent);
     }
 
     @SubscribeEvent
-    public void onReloadListenerEvent(AddReloadListenerEvent event) {
+    public static void onReloadListenerEvent(AddReloadListenerEvent event) {
         event.addListener(LEAFSETTINGS);
     }
 

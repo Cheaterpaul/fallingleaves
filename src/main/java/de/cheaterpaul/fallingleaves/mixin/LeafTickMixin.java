@@ -1,7 +1,7 @@
 package de.cheaterpaul.fallingleaves.mixin;
 
 import de.cheaterpaul.fallingleaves.config.LeafSettingsEntry;
-import de.cheaterpaul.fallingleaves.init.Config;
+import de.cheaterpaul.fallingleaves.init.FallingLeavesConfig;
 import de.cheaterpaul.fallingleaves.util.LeafUtil;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.LeavesBlock;
@@ -22,22 +22,22 @@ public abstract class LeafTickMixin {
 
     @Inject(at = @At("HEAD"), method = "animateTick(Lnet/minecraft/block/BlockState;Lnet/minecraft/world/World;Lnet/minecraft/util/math/BlockPos;Ljava/util/Random;)V")
     private void animateTick(BlockState state, World world, BlockPos pos, Random random, CallbackInfo ci) {
-        LeafSettingsEntry leafSettings = Config.LEAFSETTINGS.getLeafSetting(state.getBlock().getRegistryName());
+        LeafSettingsEntry leafSettings = FallingLeavesConfig.LEAFSETTINGS.getLeafSetting(state.getBlock().getRegistryName());
 
         // Every leaf block has a settings entry, but some blocks are considered leaves when they technically aren't
         // E.g. terrestria:sakura_log can be "leaf-logged" - in that case, we simply ignore them
         if (leafSettings == null && !(state.getBlock() instanceof LeavesBlock))
             return;
 
-        if (!Config.CONFIG.dropFromPlayerPlacedBlocks.get() && state.getValue(LeavesBlock.PERSISTENT))
+        if (!FallingLeavesConfig.CONFIG.dropFromPlayerPlacedBlocks.get() && state.getValue(LeavesBlock.PERSISTENT))
             return;
 
         double spawnChance = 1;
-        double modifier = Config.CONFIG.leafSpawnRate.get();
+        double modifier = FallingLeavesConfig.CONFIG.leafSpawnRate.get();
         if (leafSettings != null) {
             spawnChance = leafSettings.getSpawnChance();
             if (leafSettings.isConiferBlock) {
-                modifier = Config.CONFIG.coniferLeafSpawnRate.get();
+                modifier = FallingLeavesConfig.CONFIG.coniferLeafSpawnRate.get();
             }
         }
         spawnChance *= modifier / 10 / 75;

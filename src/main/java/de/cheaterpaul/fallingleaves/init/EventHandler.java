@@ -19,7 +19,7 @@ public class EventHandler {
     @SubscribeEvent()
     public void onAttackLeavesBlock(PlayerInteractEvent.LeftClickBlock e) {
         BlockState state = e.getWorld().getBlockState(e.getPos());
-        LeafSettingsEntry leafSettings = Config.LEAFSETTINGS.getLeafSetting(state.getBlock().getRegistryName());
+        LeafSettingsEntry leafSettings = FallingLeavesConfig.LEAFSETTINGS.getLeafSetting(state.getBlock().getRegistryName());
         if (leafSettings != null || state.getBlock() instanceof LeavesBlock) {
             // binomial distribution - extremes (0 or 3 leaves) are less likely
             for (int i = 0; i < 3; i++) {

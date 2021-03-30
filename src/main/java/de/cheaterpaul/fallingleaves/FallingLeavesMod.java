@@ -1,8 +1,8 @@
 package de.cheaterpaul.fallingleaves;
 
 import de.cheaterpaul.fallingleaves.data.LeafSettingGenerator;
-import de.cheaterpaul.fallingleaves.init.Config;
 import de.cheaterpaul.fallingleaves.init.EventHandler;
+import de.cheaterpaul.fallingleaves.init.FallingLeavesConfig;
 import de.cheaterpaul.fallingleaves.init.Leaves;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -23,7 +23,7 @@ public class FallingLeavesMod {
 
     public FallingLeavesMod() {
         IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
-        Config.registerConfigs();
+        FallingLeavesConfig.registerConfigs();
         bus.register(new Leaves());
         bus.addListener(this::gatherData);
         bus.addListener(this::setup);

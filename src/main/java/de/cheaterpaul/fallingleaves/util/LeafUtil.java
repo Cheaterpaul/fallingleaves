@@ -2,7 +2,7 @@ package de.cheaterpaul.fallingleaves.util;
 
 import de.cheaterpaul.fallingleaves.FallingLeavesMod;
 import de.cheaterpaul.fallingleaves.config.LeafSettingsEntry;
-import de.cheaterpaul.fallingleaves.init.Config;
+import de.cheaterpaul.fallingleaves.init.FallingLeavesConfig;
 import de.cheaterpaul.fallingleaves.init.Leaves;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -98,7 +98,7 @@ public class LeafUtil {
         // This test is necessary because modded leaf blocks may not have collisions
         if (isLeafBlock(world.getBlockState(pos.below()).getBlock(), true)) return false;
 
-        double y2 = y - Config.CONFIG.minimumFreeSpaceBelow.get() * 0.5;
+        double y2 = y - FallingLeavesConfig.CONFIG.minimumFreeSpaceBelow.get() * 0.5;
         AxisAlignedBB collisionBox = new AxisAlignedBB(x - 0.1, y, z - 0.1, x + 0.1, y2, z + 0.1);
 
         // Only spawn the particle if there's enough room for it

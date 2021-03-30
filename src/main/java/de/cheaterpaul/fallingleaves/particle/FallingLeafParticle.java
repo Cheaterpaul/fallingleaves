@@ -1,6 +1,6 @@
 package de.cheaterpaul.fallingleaves.particle;
 
-import de.cheaterpaul.fallingleaves.init.Config;
+import de.cheaterpaul.fallingleaves.init.FallingLeavesConfig;
 import net.minecraft.client.particle.*;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.particles.BasicParticleType;
@@ -24,7 +24,7 @@ public class FallingLeafParticle extends SpriteTexturedParticle {
         this.setSpriteFromAge(provider);
         this.hasPhysics = true;
         this.gravity = 0.1F;
-        this.lifetime = Config.CONFIG.leafLifespan.get();
+        this.lifetime = FallingLeavesConfig.CONFIG.leafLifespan.get();
 
         this.xd *= 0.3F;
         this.yd *= 0.0F;
@@ -35,7 +35,7 @@ public class FallingLeafParticle extends SpriteTexturedParticle {
         this.bCol  = (float) b;
         this.rotateFactor = ((float) Math.random() - 0.5F) * 0.01F;
 
-        this.quadSize = Config.CONFIG.leafSize.get() / 50f;
+        this.quadSize = FallingLeavesConfig.CONFIG.leafSize.get() / 50f;
     }
 
     public void tick() {
