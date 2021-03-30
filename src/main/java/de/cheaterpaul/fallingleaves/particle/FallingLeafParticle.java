@@ -35,7 +35,7 @@ public class FallingLeafParticle extends SpriteTexturedParticle {
         this.bCol  = (float) b;
         this.rotateFactor = ((float) Math.random() - 0.5F) * 0.01F;
 
-        this.quadSize = Config.CONFIG.leafSize.get();
+        this.quadSize = Config.CONFIG.leafSize.get() / 50f;
     }
 
     public void tick() {

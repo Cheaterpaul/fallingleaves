@@ -2,11 +2,13 @@ package de.cheaterpaul.fallingleaves;
 
 import de.cheaterpaul.fallingleaves.data.LeafSettingGenerator;
 import de.cheaterpaul.fallingleaves.init.Config;
+import de.cheaterpaul.fallingleaves.init.EventHandler;
 import de.cheaterpaul.fallingleaves.init.Leaves;
-import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.GatherDataEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
@@ -15,7 +17,6 @@ import org.apache.logging.log4j.Logger;
 @Mod("fallingleaves")
 public class FallingLeavesMod {
 
-    /** The mod's unique identifier, used to avoid mod conflicts in the Registry and config files */
     public static final String MOD_ID = "fallingleaves";
 
     public static final Logger LOGGER = LogManager.getLogger(MOD_ID);
@@ -23,9 +24,10 @@ public class FallingLeavesMod {
     public FallingLeavesMod() {
         IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
         Config.registerConfigs();
-        MinecraftForge.EVENT_BUS.register(new Leaves());
+        bus.register(new Leaves());
         bus.addListener(this::gatherData);
-        bus.addListener(this::clientSetup);
+        bus.addListener(this::setup);
+        DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> EventHandler::new);
     }
 
     private void gatherData(final GatherDataEvent event) {
@@ -34,8 +36,7 @@ public class FallingLeavesMod {
         }
     }
 
-    private void clientSetup(final FMLClientSetupEvent event) {
-        Leaves.registerParticles();
+    private void setup(FMLCommonSetupEvent event) {
+        DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> Leaves::registerParticles);
     }
-
 }

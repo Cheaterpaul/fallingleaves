@@ -1,6 +1,5 @@
 package de.cheaterpaul.fallingleaves.config;
 
-import de.cheaterpaul.fallingleaves.init.Config;
 import net.minecraft.util.ResourceLocation;
 
 public class LeafSettingsEntry {
@@ -16,8 +15,7 @@ public class LeafSettingsEntry {
     }
 
     public double getSpawnChance() {
-        double spawnChance = (isConiferBlock ? Config.CONFIG.coniferLeafSpawnRate.get() : Config.CONFIG.leafSpawnRate.get());
-        return spawnRateFactor * spawnChance;
+        return spawnRateFactor;
     }
 
     @Override

@@ -18,6 +18,8 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
 import javax.imageio.ImageIO;
@@ -28,6 +30,7 @@ import java.io.InputStream;
 import java.util.List;
 import java.util.Random;
 
+@OnlyIn(Dist.CLIENT)
 public class LeafUtil {
 
     public static void trySpawnLeafParticle(BlockState state, World world, BlockPos pos, Random random, @Nullable LeafSettingsEntry leafSettings) {
@@ -130,9 +133,9 @@ public class LeafUtil {
         }
 
         return new double[] {
-            (r / n) / 255.0,
-            (g / n) / 255.0,
-            (b / n) / 255.0
+                (r / n) / 255.0,
+                (g / n) / 255.0,
+                (b / n) / 255.0
         };
     }
 

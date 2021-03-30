@@ -1,9 +1,12 @@
 package de.cheaterpaul.fallingleaves.util;
 
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.HashMap;
 
+@OnlyIn(Dist.CLIENT)
 public class TextureCache {
     public static final class Data {
         private final double[] color;
