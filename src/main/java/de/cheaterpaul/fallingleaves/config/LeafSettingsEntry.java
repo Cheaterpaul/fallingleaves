@@ -14,15 +14,12 @@ public class LeafSettingsEntry {
         this.isConiferBlock = isConiferBlock;
     }
 
-    public double getSpawnChance() {
-        return spawnRateFactor;
-    }
-
     @Override
     public String toString() {
-        return String.format("LeafSettingsEntry{spawnRateFactor=%s, isConiferBlock=%s}",
-            spawnRateFactor,
-            isConiferBlock);
+        return "LeafSettingsEntry{" +
+                "id=" + id +
+                ", spawnRateFactor=" + spawnRateFactor +
+                ", isConiferBlock=" + isConiferBlock +
+                '}';
     }
-
 }
