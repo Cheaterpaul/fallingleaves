@@ -21,7 +21,7 @@ import java.util.Random;
 public abstract class LeafTickMixin {
 
     @Inject(at = @At("HEAD"), method = "animateTick(Lnet/minecraft/block/BlockState;Lnet/minecraft/world/World;Lnet/minecraft/util/math/BlockPos;Ljava/util/Random;)V")
-    private void randomDisplayTick(BlockState state, World world, BlockPos pos, Random random, CallbackInfo ci) {
+    private void animateTick(BlockState state, World world, BlockPos pos, Random random, CallbackInfo ci) {
         LeafSettingsEntry leafSettings = Config.LEAFSETTINGS.getLeafSetting(state.getBlock().getRegistryName());
 
         // Every leaf block has a settings entry, but some blocks are considered leaves when they technically aren't
