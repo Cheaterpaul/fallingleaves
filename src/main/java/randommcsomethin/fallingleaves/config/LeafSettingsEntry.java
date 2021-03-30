@@ -1,21 +1,22 @@
 package randommcsomethin.fallingleaves.config;
 
-import net.minecraft.util.Identifier;
-
-import static randommcsomethin.fallingleaves.init.Config.CONFIG;
+import net.minecraft.util.ResourceLocation;
+import randommcsomethin.fallingleaves.init.Config;
 
 public class LeafSettingsEntry {
 
-    public double spawnRateFactor;
-    public boolean isConiferBlock;
+    public final ResourceLocation id;
+    public final double spawnRateFactor;
+    public final boolean isConiferBlock;
 
-    public LeafSettingsEntry(Identifier identifier) {
-        this.spawnRateFactor = ConfigDefaults.spawnRateFactor(identifier);
-        this.isConiferBlock = ConfigDefaults.isConifer(identifier);
+    public LeafSettingsEntry(ResourceLocation identifier, double spawnRateFactor, boolean isConiferBlock) {
+        this.id = identifier;
+        this.spawnRateFactor = spawnRateFactor;
+        this.isConiferBlock = isConiferBlock;
     }
 
     public double getSpawnChance() {
-        double spawnChance = (isConiferBlock ? CONFIG.getBaseConiferLeafSpawnChance() : CONFIG.getBaseLeafSpawnChance());
+        double spawnChance = (isConiferBlock ? Config.CONFIG.coniferLeafSpawnRate.get() : Config.CONFIG.leafSpawnRate.get());
         return spawnRateFactor * spawnChance;
     }
 

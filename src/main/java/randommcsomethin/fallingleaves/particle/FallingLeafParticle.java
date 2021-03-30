@@ -1,12 +1,13 @@
 package randommcsomethin.fallingleaves.particle;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.particle.*;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.world.ClientWorld;
-import net.minecraft.particle.DefaultParticleType;
-import net.minecraft.tag.FluidTags;
+import net.minecraft.particles.BasicParticleType;
+import net.minecraft.tags.FluidTags;
 import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import static randommcsomethin.fallingleaves.init.Config.CONFIG;
 
@@ -15,74 +16,74 @@ import static randommcsomethin.fallingleaves.init.Config.CONFIG;
  *        or, at the very least, define as class constants at the head of the file.
  */
 
-public class FallingLeafParticle extends SpriteBillboardParticle {
+@OnlyIn(Dist.CLIENT)
+public class FallingLeafParticle extends SpriteTexturedParticle {
 
     private final float rotateFactor;
 
-    protected FallingLeafParticle(ClientWorld clientWorld, double x, double y, double z, double r, double g, double b, SpriteProvider provider) {
+    protected FallingLeafParticle(ClientWorld clientWorld, double x, double y, double z, double r, double g, double b, IAnimatedSprite provider) {
         super(clientWorld, x, y, z, r, g, b); // Note: will set velocity to (r, g, b)
-        this.setSprite(provider);
+        this.setSpriteFromAge(provider);
+        this.hasPhysics = true;
+        this.gravity = 0.1F;
+        this.lifetime = CONFIG.leafLifespan.get();
 
-        this.collidesWithWorld = true;
-        this.gravityStrength = 0.1F;
-        this.maxAge = CONFIG.leafLifespan;
+        this.xd *= 0.3F;
+        this.yd *= 0.0F;
+        this.zd *= 0.3F;
 
-        this.velocityX *= 0.3F;
-        this.velocityY *= 0.0F;
-        this.velocityZ *= 0.3F;
-
-        this.colorRed   = (float) r;
-        this.colorGreen = (float) g;
-        this.colorBlue  = (float) b;
+        this.rCol   = (float) r;
+        this.gCol = (float) g;
+        this.bCol  = (float) b;
         this.rotateFactor = ((float) Math.random() - 0.5F) * 0.01F;
 
-        this.scale = CONFIG.getLeafSize();
+        this.quadSize = CONFIG.leafSize.get();
     }
 
     public void tick() {
         super.tick();
 
         if (this.age < 2) {
-            this.velocityY = 0;
+            this.yd = 0;
         }
 
-        if (this.age > this.maxAge - 1 / 0.06F) {
-            if (this.colorAlpha > 0.06F) {
-                this.colorAlpha -= 0.06F;
+        if (this.age > this.lifetime - 1 / 0.06F) {
+            if (this.alpha > 0.06F) {
+                this.alpha -= 0.06F;
             } else {
-                this.markDead();
+                this.remove();
             }
         }
 
-        this.prevAngle = this.angle;
+        this.oRoll = this.roll;
 
-        if (!this.onGround && !this.world.getFluidState(new BlockPos(this.x, this.y, this.z)).isIn(FluidTags.WATER)) {
-            this.angle += Math.PI * Math.sin(this.rotateFactor * this.age) / 2;
+        if (!this.onGround && !this.level.getFluidState(new BlockPos(this.x, this.y, this.z)).is(FluidTags.WATER)) {
+            this.roll += Math.PI * Math.sin(this.rotateFactor * this.age) / 2;
         }
 
-        if (this.world.getFluidState(new BlockPos(this.x, this.y, this.z)).isIn(FluidTags.WATER)) {
-            this.velocityY = 0;
-            this.gravityStrength = 0;
+        if (this.level.getFluidState(new BlockPos(this.x, this.y, this.z)).is(FluidTags.WATER)) {
+            this.yo = 0;
+            this.gravity = 0;
         } else {
-            this.gravityStrength = 0.1F;
+            this.gravity = 0.1F;
         }
     }
 
     @Override
-    public ParticleTextureSheet getType() {
-        return ParticleTextureSheet.PARTICLE_SHEET_TRANSLUCENT;
+    public IParticleRenderType getRenderType() {
+        return IParticleRenderType.PARTICLE_SHEET_TRANSLUCENT;
     }
 
-    @Environment(EnvType.CLIENT)
-    public static class DefaultFactory implements ParticleFactory<DefaultParticleType> {
-        private final SpriteProvider provider;
+    @OnlyIn(Dist.CLIENT)
+    public static class DefaultFactory implements IParticleFactory<BasicParticleType> {
+        private final IAnimatedSprite provider;
 
-        public DefaultFactory(SpriteProvider provider) {
+        public DefaultFactory(IAnimatedSprite provider) {
             this.provider = provider;
         }
 
         @Override
-        public Particle createParticle(DefaultParticleType parameters, ClientWorld world, double x, double y, double z, double velocityX, double velocityY, double velocityZ) {
+        public Particle createParticle(BasicParticleType parameters, ClientWorld world, double x, double y, double z, double velocityX, double velocityY, double velocityZ) {
             return new FallingLeafParticle(world, x, y, z, velocityX, velocityY, velocityZ, this.provider);
         }
     }

@@ -1,6 +1,6 @@
 package randommcsomethin.fallingleaves.util;
 
-import net.minecraft.util.Identifier;
+import net.minecraft.util.ResourceLocation;
 
 import java.util.HashMap;
 
@@ -25,7 +25,7 @@ public class TextureCache {
         }
     }
 
-    public static final HashMap<Identifier, Data> INST = new HashMap<>();
+    public static final HashMap<ResourceLocation, Data> INST = new HashMap<>();
 
     private TextureCache() {}
 

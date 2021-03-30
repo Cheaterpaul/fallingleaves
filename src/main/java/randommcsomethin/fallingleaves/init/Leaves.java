@@ -1,92 +1,56 @@
 package randommcsomethin.fallingleaves.init;
 
-import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry;
-import net.fabricmc.fabric.api.event.player.AttackBlockCallback;
-import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
-import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener;
 import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.particle.DefaultParticleType;
-import net.minecraft.resource.ResourceManager;
-import net.minecraft.resource.ResourceType;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.world.World;
+import net.minecraft.block.LeavesBlock;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.particle.ParticleManager;
+import net.minecraft.particles.BasicParticleType;
+import net.minecraft.particles.ParticleType;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.registries.ObjectHolder;
+import randommcsomethin.fallingleaves.FallingLeavesMod;
 import randommcsomethin.fallingleaves.config.LeafSettingsEntry;
 import randommcsomethin.fallingleaves.particle.FallingConiferLeafParticle;
 import randommcsomethin.fallingleaves.particle.FallingLeafParticle;
 import randommcsomethin.fallingleaves.util.LeafUtil;
-import randommcsomethin.fallingleaves.util.RegistryUtil;
 
-import java.util.Map;
-import java.util.Random;
-
-import static randommcsomethin.fallingleaves.FallingLeavesClient.LOGGER;
-import static randommcsomethin.fallingleaves.init.Config.CONFIG;
-import static randommcsomethin.fallingleaves.util.LeafUtil.getLeafSettingsEntry;
-import static randommcsomethin.fallingleaves.util.RegistryUtil.makeNewIdentifier;
-
+@ObjectHolder(FallingLeavesMod.MOD_ID)
 public class Leaves {
-    public static DefaultParticleType FALLING_LEAF;
-    public static DefaultParticleType FALLING_CONIFER_LEAF;
 
-    private static boolean preLoadedRegisteredLeafBlocks = false;
+    public static final BasicParticleType falling_leaf = null;
+    public static final BasicParticleType falling_leaf_conifer = null;
 
-    public static void init() {
-        LOGGER.debug("Registering leaf particles.");
 
-        FALLING_LEAF = RegistryUtil.registerNewLeafParticle("falling_leaf");
-        FALLING_CONIFER_LEAF = RegistryUtil.registerNewLeafParticle("falling_leaf_conifer");
-
-        ParticleFactoryRegistry.getInstance().register(FALLING_LEAF, FallingLeafParticle.DefaultFactory::new);
-        ParticleFactoryRegistry.getInstance().register(FALLING_CONIFER_LEAF, FallingConiferLeafParticle.DefaultFactory::new);
-
-        registerReloadListener();
-        registerAttackBlockLeaves();
+    @SubscribeEvent
+    public void onRegisterParticles(RegistryEvent.Register<ParticleType<?>> event) {
+        event.getRegistry().register(new BasicParticleType(false).setRegistryName(modId("falling_leaf")));
+        event.getRegistry().register(new BasicParticleType(false).setRegistryName(modId("falling_leaf_conifer")));
     }
 
-    private static void registerReloadListener() {
-        ResourceManagerHelper.get(ResourceType.CLIENT_RESOURCES).registerReloadListener(new SimpleSynchronousResourceReloadListener() {
-            @Override
-            public void apply(ResourceManager resourceManager) {
-                // This is called before the block tags are useable, so we'll get an incomplete list of leaf blocks
-                // Still better than having an empty settings menu on first launch
-                if (!preLoadedRegisteredLeafBlocks) {
-                    for (Map.Entry<Identifier, LeafSettingsEntry> registered : LeafUtil.getRegisteredLeafBlocks(false).entrySet())
-                        CONFIG.leafSettings.computeIfAbsent(registered.getKey(), k -> registered.getValue());
+    public static ResourceLocation modId(String name) {
+        return new ResourceLocation(FallingLeavesMod.MOD_ID, name);
+    }
 
-                    preLoadedRegisteredLeafBlocks = true;
-                }
-            }
-
-            @Override
-            public Identifier getFabricId() {
-                return makeNewIdentifier("resource_reload_listener");
-            }
-        });
+    public static void registerParticles() {
+        Minecraft.getInstance().particleEngine.register(falling_leaf, FallingLeafParticle.DefaultFactory::new);
+        Minecraft.getInstance().particleEngine.register(falling_leaf_conifer, FallingConiferLeafParticle.DefaultFactory::new);
     }
 
     /** Spawn between 0 and 3 leaves on hitting a leaf block */
-    private static void registerAttackBlockLeaves() {
-        Random random = new Random();
-
-        AttackBlockCallback.EVENT.register((PlayerEntity player, World world, Hand hand, BlockPos pos, Direction direction) -> {
-            BlockState state = world.getBlockState(pos);
-            LeafSettingsEntry leafSettings = getLeafSettingsEntry(state);
-
-            if (leafSettings != null) {
-                // binomial distribution - extremes (0 or 3 leaves) are less likely
-                for (int i = 0; i < 3; i++) {
-                    if (random.nextBoolean()) {
-                        LeafUtil.trySpawnLeafParticle(state, world, pos, random, leafSettings);
-                    }
+    @SubscribeEvent
+    public void onAttackLeavesBlock(PlayerInteractEvent.LeftClickBlock e) {
+        BlockState state = e.getWorld().getBlockState(e.getPos());
+        LeafSettingsEntry leafSettings = Config.LEAFSETTINGS.getLeafSetting(state.getBlock().getRegistryName());
+        if (leafSettings != null || state.getBlock() instanceof LeavesBlock) {
+            // binomial distribution - extremes (0 or 3 leaves) are less likely
+            for (int i = 0; i < 3; i++) {
+                if (e.getPlayer().getRandom().nextBoolean()) {
+                    LeafUtil.trySpawnLeafParticle(state, e.getWorld(), e.getPos(), e.getPlayer().getRandom(), leafSettings);
                 }
             }
-
-            return ActionResult.PASS;
-        });
+        }
     }
 }

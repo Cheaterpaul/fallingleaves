@@ -3,56 +3,50 @@ package randommcsomethin.fallingleaves.util;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.LeavesBlock;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.render.model.BakedModel;
-import net.minecraft.client.render.model.BakedQuad;
-import net.minecraft.client.texture.Sprite;
-import net.minecraft.resource.Resource;
-import net.minecraft.tag.BlockTags;
-import net.minecraft.tag.Tag;
-import net.minecraft.util.Identifier;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.model.BakedQuad;
+import net.minecraft.client.renderer.model.IBakedModel;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.resources.IResource;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.util.Direction;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Box;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
-import org.jetbrains.annotations.Nullable;
 import randommcsomethin.fallingleaves.config.LeafSettingsEntry;
 import randommcsomethin.fallingleaves.init.Leaves;
 
+import javax.annotation.Nullable;
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
-import static randommcsomethin.fallingleaves.FallingLeavesClient.LOGGER;
+import static randommcsomethin.fallingleaves.FallingLeavesMod.LOGGER;
 import static randommcsomethin.fallingleaves.init.Config.CONFIG;
-import static randommcsomethin.fallingleaves.util.RegistryUtil.getBlockId;
 
 public class LeafUtil {
 
-    public static void trySpawnLeafParticle(BlockState state, World world, BlockPos pos, Random random, LeafSettingsEntry leafSettings) {
+    public static void trySpawnLeafParticle(BlockState state, World world, BlockPos pos, Random random, @Nullable LeafSettingsEntry leafSettings) {
         // Particle position
         double x = pos.getX() + random.nextDouble();
         double y = pos.getY();
         double z = pos.getZ() + random.nextDouble();
 
         if (shouldSpawnParticle(world, pos, x, y, z)) {
-            MinecraftClient client = MinecraftClient.getInstance();
+            Minecraft client = Minecraft.getInstance();
 
             // read the bottom quad to determine whether we should color the texture
-            BakedModel model = client.getBlockRenderManager().getModel(state);
+            IBakedModel model = client.getBlockRenderer().getBlockModel(state);
             List<BakedQuad> quads = model.getQuads(state, Direction.DOWN, random);
-            boolean shouldColor = quads.isEmpty() || quads.stream().anyMatch(BakedQuad::hasColor);
+            boolean shouldColor = quads.isEmpty() || quads.stream().anyMatch(BakedQuad::isTinted);
 
             int blockColor = client.getBlockColors().getColor(state, world, pos, 0);
-            Identifier texture = spriteToTexture(model.getSprite());
+            ResourceLocation texture = spriteToTexture(model.getParticleIcon());
 
             double[] color = calculateLeafColor(texture, shouldColor, blockColor, client);
 
@@ -61,17 +55,13 @@ public class LeafUtil {
             double b = color[2];
 
             // Add the particle.
-            world.addParticle(
-                leafSettings.isConiferBlock ? Leaves.FALLING_CONIFER_LEAF : Leaves.FALLING_LEAF,
-                x, y, z,
-                r, g, b
-            );
+            world.addParticle(leafSettings == null || !leafSettings.isConiferBlock ? Leaves.falling_leaf:Leaves.falling_leaf_conifer, x, y, z, r, g, b);
         }
     }
 
-    private static double[] calculateLeafColor(Identifier texture, boolean shouldColor, int blockColor, MinecraftClient client) {
-        try (Resource res = client.getResourceManager().getResource(texture)) {
-            String resourcePack = res.getResourcePackName();
+    private static double[] calculateLeafColor(ResourceLocation texture, boolean shouldColor, int blockColor, Minecraft client) {
+        try (IResource res = client.getResourceManager().getResource(texture)) {
+            String resourcePack = res.getSourceName();
             TextureCache.Data cache = TextureCache.INST.get(texture);
             double[] textureColor;
 
@@ -104,34 +94,18 @@ public class LeafUtil {
     private static boolean shouldSpawnParticle(World world, BlockPos pos, double x, double y, double z) {
         // Never spawn a particle if there's a leaf block below
         // This test is necessary because modded leaf blocks may not have collisions
-        if (isLeafBlock(world.getBlockState(pos.down()).getBlock(), true)) return false;
+        if (isLeafBlock(world.getBlockState(pos.below()).getBlock(), true)) return false;
 
-        double y2 = y - CONFIG.minimumFreeSpaceBelow * 0.5;
-        Box collisionBox = new Box(x - 0.1, y, z - 0.1, x + 0.1, y2, z + 0.1);
+        double y2 = y - CONFIG.minimumFreeSpaceBelow.get() * 0.5;
+        AxisAlignedBB collisionBox = new AxisAlignedBB(x - 0.1, y, z - 0.1, x + 0.1, y2, z + 0.1);
 
         // Only spawn the particle if there's enough room for it
         return !world.getBlockCollisions(null, collisionBox).findAny().isPresent();
     }
 
-    public static Map<Identifier, LeafSettingsEntry> getRegisteredLeafBlocks(boolean useBlockTags) {
-        return Registry.BLOCK
-            .getIds()
-            .stream()
-            .filter(entry -> isLeafBlock(Registry.BLOCK.get(entry), useBlockTags))
-            .collect(Collectors.toMap(
-                Function.identity(),
-                LeafSettingsEntry::new
-            ));
-    }
-
     /** Block tags can only be used once the integrated server is started */
     public static boolean isLeafBlock(Block block, boolean useBlockTags) {
-        return (block instanceof LeavesBlock) || (useBlockTags && block.isIn(BlockTags.LEAVES));
-    }
-
-    @Nullable
-    public static LeafSettingsEntry getLeafSettingsEntry(BlockState blockState) {
-        return CONFIG.leafSettings.get(getBlockId(blockState));
+        return (block instanceof LeavesBlock) || (useBlockTags && block.is(BlockTags.LEAVES));
     }
 
     public static double[] averageColor(BufferedImage image) {
@@ -163,9 +137,9 @@ public class LeafUtil {
         };
     }
 
-    public static Identifier spriteToTexture(Sprite sprite) {
-        String texture = sprite.getId().getPath(); // e.g. block/sakura_leaves
-        return new Identifier(sprite.getId().getNamespace(), "textures/" + texture + ".png");
+    public static ResourceLocation spriteToTexture(TextureAtlasSprite sprite) {
+        String texture = sprite.getName().getPath(); // e.g. block/sakura_leaves
+        return new ResourceLocation(sprite.getName().getNamespace(), "textures/" + texture + ".png");
     }
 
 }

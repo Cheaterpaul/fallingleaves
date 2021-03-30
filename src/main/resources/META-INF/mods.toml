@@ -1,0 +1,70 @@
+{
+  "schemaVersion": 1,
+  "id": "fallingleaves",
+  "version": "${version}",
+  "name": "Falling Leaves",
+  "description": "\"How the gentle wind \nbeckons through the leaves \nas autumn colors fall,\ndancing in a swirl \nof golden memories:\nthe loveliest lies of all.\"",
+  "authors": [
+    "Fourmisain",
+    "BrekiTomasson",
+    "RandomMcSomethin"
+  ],
+  "contact": {
+    "homepage": "https://www.curseforge.com/minecraft/mc-mods/falling-leaves-fabric",
+    "issues": "https://github.com/RandomMcSomethin/fallingleaves/issues",
+    "sources": "https://github.com/RandomMcSomethin/fallingleaves"
+  },
+  "license": "MIT",
+  "icon": "logo.png",
+  "environment": "client",
+  "entrypoints": {
+    "client": [
+      "randommcsomethin.fallingleaves.FallingLeavesMod"
+    ],
+    "modmenu": [
+      "randommcsomethin.fallingleaves.config.FallingLeavesMenu"
+    ]
+  },
+  "mixins": [
+    "fallingleaves.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.11.1",
+    "fabric": ">=0.29.0",
+    "minecraft": ">=1.16.2"
+  }
+}
+
+modLoader = "javafml"
+loaderVersion = "[36,)"
+issueTrackerURL = "https://github.com/Cheaterpaul/fallingleaves/issues"
+license = "MIT"
+
+[[mods]]
+modid="fallingleaves"
+version="${version}"
+displayName="Falling Leaves"
+logoFile="logo.png"
+credits="Thanks to Fourmisain, BrekiTomasson and RandomMcSomethin who developed this mod for fabric and published the source code with MIT licence"
+authors="Cheaterpaul, Fourmisain, BrekiTomasson and RandomMcSomethin"
+description="\"How the gentle wind \nbeckons through the leaves \nas autumn colors fall,\ndancing in a swirl \nof golden memories:\nthe loveliest lies of all.\""
+
+[[dependencies.fallingleaves]] #optional
+# the modid of the dependency
+modId="forge" #mandatory
+# Does this dependency have to exist - if not, ordering below must be specified
+mandatory=true #mandatory
+# The version range of the dependency
+versionRange="[36,)" #mandatory
+# An ordering relationship for the dependency - BEFORE or AFTER required if the relationship is not mandatory
+ordering="NONE"
+# Side this dependency is applied on - BOTH, CLIENT or SERVER
+side="CLIENT"
+# Here's another dependency
+[[dependencies.fallingleaves]]
+modId="minecraft"
+mandatory=true
+# This version range declares a minimum of the current minecraft version up to but not including the next major version
+versionRange="[1.16.5,1.17)"
+ordering="NONE"
+side="CLIENT"
