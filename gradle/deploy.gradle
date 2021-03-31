@@ -24,12 +24,6 @@ curseforge {
             displayName = "FallingLeaves(Forge)-${project.minecraft_version}-${project.mod_version}"
         }
 
-        relations {
-            requiredDependency 'vampirism-become-a-vampire'
-            optionalDependency 'jei'
-            optionalDependency 'guide-api-village-and-pillage'
-        }
-
     }
 
 
