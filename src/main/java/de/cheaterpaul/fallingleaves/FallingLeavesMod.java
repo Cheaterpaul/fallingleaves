@@ -5,10 +5,10 @@ import de.cheaterpaul.fallingleaves.init.EventHandler;
 import de.cheaterpaul.fallingleaves.init.FallingLeavesConfig;
 import de.cheaterpaul.fallingleaves.init.Leaves;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.client.event.ParticleFactoryRegisterEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.GatherDataEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
@@ -26,7 +26,7 @@ public class FallingLeavesMod {
         FallingLeavesConfig.registerConfigs();
         bus.register(new Leaves());
         bus.addListener(this::gatherData);
-        bus.addListener(this::setup);
+        bus.addListener(this::registerParticles);
         DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> EventHandler::new);
     }
 
@@ -36,7 +36,7 @@ public class FallingLeavesMod {
         }
     }
 
-    private void setup(FMLCommonSetupEvent event) {
+    private void registerParticles(ParticleFactoryRegisterEvent event) {
         DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> Leaves::registerParticles);
     }
 }
