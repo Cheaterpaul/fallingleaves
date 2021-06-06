@@ -45,7 +45,7 @@ public class FallingLeafParticle extends SpriteTexturedParticle {
 
     protected FallingLeafParticle(ClientWorld clientWorld, double x, double y, double z, double r, double g, double b, IAnimatedSprite provider) {
         super(clientWorld, x, y, z, r, g, b); // Note: will set velocity to (r, g, b)
-        this.setSpriteFromAge(provider);
+        this.pickSprite(provider);
         this.hasPhysics = true;
         this.gravity = 0.1F;
         this.lifetime = FallingLeavesConfig.CONFIG.leafLifespan.get();
