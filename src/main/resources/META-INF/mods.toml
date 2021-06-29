@@ -6,33 +6,25 @@ license = "LGPL-3.0"
 [[mods]]
 modId = "fallingleaves"
 version = "${version}"
-displayName="Falling Leaves"
-logoFile="logo.png"
-credits="Thanks to Fourmisain, BrekiTomasson and RandomMcSomethin who developed this mod for fabric and published the source code with MIT licence"
+displayName = "Falling Leaves"
+logoFile = "logo.png"
+credits = "Thanks to Fourmisain, BrekiTomasson and RandomMcSomethin who developed this mod for fabric and published the source code with MIT licence"
 authors = "Cheaterpaul, Fourmisain, BrekiTomasson and RandomMcSomethin"
 description = '''How the gentle wind
-beckons through the leaves
-as autumn colors fall,
-dancing in a swirl
-of golden memories:
-the loveliest lies of all.'''
-
+    beckons through the leaves
+    as autumn colors fall,
+    dancing in a swirl
+    of golden memories:
+    the loveliest lies of all.'''
 [[dependencies.fallingleaves]] #optional
-# the modid of the dependency
 modId = "forge" #mandatory
-# Does this dependency have to exist - if not, ordering below must be specified
 mandatory = true #mandatory
-# The version range of the dependency
 versionRange = "[34,)" #mandatory
-# An ordering relationship for the dependency - BEFORE or AFTER required if the relationship is not mandatory
 ordering = "NONE"
-# Side this dependency is applied on - BOTH, CLIENT or SERVER
 side = "BOTH"
-# Here's another dependency
 [[dependencies.fallingleaves]]
-modId="minecraft"
-mandatory=true
-# This version range declares a minimum of the current minecraft version up to but not including the next major version
+modId = "minecraft"
+mandatory = true
 versionRange = "[1.16.3,1.17)"
 ordering = "NONE"
 side = "BOTH"
