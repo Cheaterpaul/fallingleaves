@@ -5,13 +5,13 @@
   "compatibilityLevel": "JAVA_8",
   "refmap": "fallingleaves.refmap.json",
   "client": [
-    "LeafTickMixin"
+    "LeafTickMixin",
+    "MinecraftClientMixin",
+    "ParticleManagerMixin"
   ],
   "injectors": {
     "defaultRequire": 1
   },
   "mixins": [
-    "MinecraftClientMixin",
-    "ParticleManagerMixin"
   ]
 }
