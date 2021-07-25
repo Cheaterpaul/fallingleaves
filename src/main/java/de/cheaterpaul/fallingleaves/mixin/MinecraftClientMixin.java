@@ -2,7 +2,7 @@ package de.cheaterpaul.fallingleaves.mixin;
 
 import de.cheaterpaul.fallingleaves.util.Wind;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.world.ClientWorld;
+import net.minecraft.client.multiplayer.ClientLevel;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -12,7 +12,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class MinecraftClientMixin {
 
     @Inject(method = "setLevel", at = @At("HEAD"))
-    public void joinWorld(ClientWorld world, CallbackInfo ci) {
+    public void joinWorld(ClientLevel world, CallbackInfo ci) {
         Wind.init();
     }
 

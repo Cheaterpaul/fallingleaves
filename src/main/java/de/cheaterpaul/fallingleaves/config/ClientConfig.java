@@ -1,8 +1,8 @@
 package de.cheaterpaul.fallingleaves.config;
 
 import com.google.common.collect.Lists;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.DimensionType;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraftforge.common.ForgeConfigSpec;
 
 import java.util.List;

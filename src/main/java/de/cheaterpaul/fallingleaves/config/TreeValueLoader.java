@@ -1,11 +1,11 @@
 package de.cheaterpaul.fallingleaves.config;
 
 import com.google.gson.*;
-import net.minecraft.client.resources.JsonReloadListener;
-import net.minecraft.profiler.IProfiler;
-import net.minecraft.resources.IResourceManager;
-import net.minecraft.util.JSONUtils;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.packs.resources.ResourceManager;
+import net.minecraft.server.packs.resources.SimpleJsonResourceReloadListener;
+import net.minecraft.util.GsonHelper;
+import net.minecraft.util.profiling.ProfilerFiller;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -15,7 +15,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-public class TreeValueLoader extends JsonReloadListener {
+public class TreeValueLoader extends SimpleJsonResourceReloadListener {
 
     private static final Logger LOGGER = LogManager.getLogger();
     private static final Gson GSON = new GsonBuilder().create();
@@ -26,11 +26,11 @@ public class TreeValueLoader extends JsonReloadListener {
     }
 
     @Override
-    protected void apply(Map<ResourceLocation, JsonElement> values, IResourceManager resourceManager, IProfiler profiler) {
+    protected void apply(Map<ResourceLocation, JsonElement> values, ResourceManager resourceManager, ProfilerFiller profiler) {
         Map<ResourceLocation, LeafSettingsEntry> map = new HashMap<>();
         values.forEach((id, json) -> {
             try {
-                JsonObject object = JSONUtils.convertToJsonObject(json, "leafsettings");
+                JsonObject object = GsonHelper.convertToJsonObject(json, "leafsettings");
                 double spawnrate = 1;
                 if (object.has("spawnrate")) {
                     spawnrate = object.get("spawnrate").getAsDouble();

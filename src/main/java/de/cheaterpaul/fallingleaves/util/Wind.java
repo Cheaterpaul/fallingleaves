@@ -4,11 +4,11 @@ import de.cheaterpaul.fallingleaves.init.FallingLeavesConfig;
 import de.cheaterpaul.fallingleaves.math.SmoothNoise;
 import de.cheaterpaul.fallingleaves.math.TriangularDistribution;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.NewChatGui;
-import net.minecraft.client.world.ClientWorld;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.client.gui.components.ChatComponent;
+import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -31,8 +31,8 @@ public class Wind {
 
     public static void debug() {
         state = State.values()[(state.ordinal() + 1) % State.values().length];
-        NewChatGui chatHud = Minecraft.getInstance().gui.getChat();
-        chatHud.addMessage(new StringTextComponent("set wind state to " + state));
+        ChatComponent chatHud = Minecraft.getInstance().gui.getChat();
+        chatHud.addMessage(new TextComponent("set wind state to " + state));
     }
 
     public static void init() {
@@ -56,7 +56,7 @@ public class Wind {
         });
     }
 
-    protected static void tickState(ClientWorld world) {
+    protected static void tickState(ClientLevel world) {
         --stateDuration;
 
         ResourceLocation dimension = world.dimension().location();
@@ -94,7 +94,7 @@ public class Wind {
         wasThundering = isThundering;
     }
 
-    public static void tick(ClientWorld world) {
+    public static void tick(ClientLevel world) {
         tickState(world);
 
         velocityNoise.tick();
@@ -116,8 +116,8 @@ public class Wind {
          /**/
 
         // calculate wind velocity (in blocks / tick)
-        windX = strength * MathHelper.cos(direction);
-        windZ = strength * MathHelper.sin(direction);
+        windX = strength * Mth.cos(direction);
+        windZ = strength * Mth.sin(direction);
     }
 
     protected enum State {

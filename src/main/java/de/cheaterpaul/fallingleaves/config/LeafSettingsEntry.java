@@ -1,6 +1,6 @@
 package de.cheaterpaul.fallingleaves.config;
 
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 
 public class LeafSettingsEntry {
 

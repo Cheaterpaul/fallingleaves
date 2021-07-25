@@ -27,10 +27,10 @@ package de.cheaterpaul.fallingleaves.mixin;
 import de.cheaterpaul.fallingleaves.config.LeafSettingsEntry;
 import de.cheaterpaul.fallingleaves.init.FallingLeavesConfig;
 import de.cheaterpaul.fallingleaves.util.LeafUtil;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.LeavesBlock;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.LeavesBlock;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.spongepowered.asm.mixin.Mixin;
@@ -45,7 +45,7 @@ import java.util.Random;
 public abstract class LeafTickMixin {
 
     @Inject(at = @At("HEAD"), method = "animateTick(Lnet/minecraft/block/BlockState;Lnet/minecraft/world/World;Lnet/minecraft/util/math/BlockPos;Ljava/util/Random;)V")
-    private void animateTick(BlockState state, World world, BlockPos pos, Random random, CallbackInfo ci) {
+    private void animateTick(BlockState state, Level world, BlockPos pos, Random random, CallbackInfo ci) {
         LeafSettingsEntry leafSettings = FallingLeavesConfig.LEAFSETTINGS.getLeafSetting(state.getBlock().getRegistryName());
 
         // Every leaf block has a settings entry, but some blocks are considered leaves when they technically aren't

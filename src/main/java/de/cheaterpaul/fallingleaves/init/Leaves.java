@@ -4,16 +4,16 @@ import de.cheaterpaul.fallingleaves.FallingLeavesMod;
 import de.cheaterpaul.fallingleaves.particle.FallingConiferLeafParticle;
 import de.cheaterpaul.fallingleaves.particle.FallingLeafParticle;
 import net.minecraft.client.Minecraft;
-import net.minecraft.particles.BasicParticleType;
-import net.minecraft.particles.ParticleType;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.core.particles.ParticleType;
+import net.minecraft.core.particles.SimpleParticleType;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 public class Leaves {
 
-    public static final BasicParticleType falling_leaf = new BasicParticleType(false);
-    public static final BasicParticleType falling_leaf_conifer = new BasicParticleType(false);
+    public static final SimpleParticleType falling_leaf = new SimpleParticleType(false);
+    public static final SimpleParticleType falling_leaf_conifer = new SimpleParticleType(false);
 
 
     @SubscribeEvent

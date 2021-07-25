@@ -2,12 +2,11 @@ buildscript {
     repositories {
         maven { url = 'https://files.minecraftforge.net/maven' }
         mavenCentral()
-        jcenter()
         maven {url='https://repo.spongepowered.org/repository/maven-public'}
 
     }
     dependencies {
-        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.0.1', changing: true
+        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
         classpath 'org.spongepowered:mixingradle:0.7-SNAPSHOT'
     }
 }
@@ -17,6 +16,7 @@ plugins {
 apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'eclipse'
 apply plugin: 'org.spongepowered.mixin'
+apply from: 'https://raw.githubusercontent.com/SizableShrimp/Forge-Class-Remapper/main/classremapper.gradle'
 
 mixin {
     add sourceSets.main, "fallingleaves.refmap.json"
@@ -26,7 +26,7 @@ version = '1.0'
 group = 'de.cheaterpaul.fallingleaves'
 archivesBaseName = project.archives_base_name
 
-java.toolchain.languageVersion = JavaLanguageVersion.of(8)
+java.toolchain.languageVersion = JavaLanguageVersion.of(16)
 
 ext.mod_version="Test"
 ext.type="test"
@@ -38,7 +38,7 @@ apply from: 'gradle/curse.gradle'
 
 println('Java: ' + System.getProperty('java.version') + ' JVM: ' + System.getProperty('java.vm.version') + '(' + System.getProperty('java.vendor') + ') Arch: ' + System.getProperty('os.arch'))
 minecraft {
-    mappings channel: 'official', version: "$project.minecraft_version"
+    mappings channel: 'official', version: "$project.mappings_mc_version"
     // makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
 
     // accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')

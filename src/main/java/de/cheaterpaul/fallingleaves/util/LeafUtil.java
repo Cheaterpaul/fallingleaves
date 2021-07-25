@@ -28,20 +28,20 @@ import de.cheaterpaul.fallingleaves.FallingLeavesMod;
 import de.cheaterpaul.fallingleaves.config.LeafSettingsEntry;
 import de.cheaterpaul.fallingleaves.init.FallingLeavesConfig;
 import de.cheaterpaul.fallingleaves.init.Leaves;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.LeavesBlock;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.model.BakedQuad;
-import net.minecraft.client.renderer.model.IBakedModel;
+import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.resources.IResource;
+import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.util.Direction;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.LeavesBlock;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -57,7 +57,7 @@ import java.util.Random;
 @OnlyIn(Dist.CLIENT)
 public class LeafUtil {
 
-    public static void trySpawnLeafParticle(BlockState state, World world, BlockPos pos, Random random, @Nullable LeafSettingsEntry leafSettings) {
+    public static void trySpawnLeafParticle(BlockState state, Level world, BlockPos pos, Random random, @Nullable LeafSettingsEntry leafSettings) {
         // Particle position
         double x = pos.getX() + random.nextDouble();
         double y = pos.getY() - (random.nextDouble() / 3);
@@ -67,7 +67,7 @@ public class LeafUtil {
             Minecraft client = Minecraft.getInstance();
 
             // read the bottom quad to determine whether we should color the texture
-            IBakedModel model = client.getBlockRenderer().getBlockModel(state);
+            BakedModel model = client.getBlockRenderer().getBlockModel(state);
             List<BakedQuad> quads = model.getQuads(state, Direction.DOWN, random);
             boolean shouldColor = quads.isEmpty() || quads.stream().anyMatch(BakedQuad::isTinted);
 
@@ -86,7 +86,7 @@ public class LeafUtil {
     }
 
     private static double[] calculateLeafColor(ResourceLocation texture, boolean shouldColor, int blockColor, Minecraft client) {
-        try (IResource res = client.getResourceManager().getResource(texture)) {
+        try (Resource res = client.getResourceManager().getResource(texture)) {
             String resourcePack = res.getSourceName();
             TextureCache.Data cache = TextureCache.INST.get(texture);
             double[] textureColor;
@@ -117,13 +117,13 @@ public class LeafUtil {
         }
     }
 
-    private static boolean shouldSpawnParticle(World world, BlockPos pos, double x, double y, double z) {
+    private static boolean shouldSpawnParticle(Level world, BlockPos pos, double x, double y, double z) {
         // Never spawn a particle if there's a leaf block below
         // This test is necessary because modded leaf blocks may not have collisions
         if (isLeafBlock(world.getBlockState(pos.below()).getBlock(), true)) return false;
 
         double y2 = y - FallingLeavesConfig.CONFIG.minimumFreeSpaceBelow.get() * 0.5;
-        AxisAlignedBB collisionBox = new AxisAlignedBB(x - 0.1, y, z - 0.1, x + 0.1, y2, z + 0.1);
+        AABB collisionBox = new AABB(x - 0.1, y, z - 0.1, x + 0.1, y2, z + 0.1);
 
         // Only spawn the particle if there's enough room for it
         return !world.getBlockCollisions(null, collisionBox).findAny().isPresent();

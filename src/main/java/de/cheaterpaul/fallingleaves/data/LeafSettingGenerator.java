@@ -5,9 +5,9 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import de.cheaterpaul.fallingleaves.config.LeafSettingsEntry;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.data.DirectoryCache;
-import net.minecraft.data.IDataProvider;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.data.DataProvider;
+import net.minecraft.data.HashCache;
+import net.minecraft.resources.ResourceLocation;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -20,7 +20,7 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.function.Consumer;
 
-public class LeafSettingGenerator implements IDataProvider {
+public class LeafSettingGenerator implements DataProvider {
 
     private static final Logger LOGGER = LogManager.getLogger();
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
@@ -31,7 +31,7 @@ public class LeafSettingGenerator implements IDataProvider {
     }
 
     @Override
-    public void run(DirectoryCache cache) throws IOException {
+    public void run(HashCache cache) throws IOException {
         Path path = this.generator.getOutputFolder();
         Set<ResourceLocation> set = new HashSet<>();
         this.registerLeafSettingEntries((entry) -> {
@@ -51,7 +51,7 @@ public class LeafSettingGenerator implements IDataProvider {
         return "Falling Leaves leaves settings generator";
     }
 
-    private void saveLeafSettingEntries(DirectoryCache cache, JsonObject entryJson, Path path) {
+    private void saveLeafSettingEntries(HashCache cache, JsonObject entryJson, Path path) {
         try {
             String s = GSON.toJson(entryJson);
             @SuppressWarnings("UnstableApiUsage")

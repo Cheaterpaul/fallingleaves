@@ -26,11 +26,11 @@ package de.cheaterpaul.fallingleaves.particle;
 
 import de.cheaterpaul.fallingleaves.init.FallingLeavesConfig;
 import de.cheaterpaul.fallingleaves.util.Wind;
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.*;
-import net.minecraft.client.world.ClientWorld;
-import net.minecraft.particles.BasicParticleType;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.tags.FluidTags;
-import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -40,7 +40,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
  */
 
 @OnlyIn(Dist.CLIENT)
-public class FallingLeafParticle extends SpriteTexturedParticle {
+public class FallingLeafParticle extends TextureSheetParticle {
 
     protected static final float TAU = (float) (2 * Math.PI); // 1 rotation
 
@@ -54,7 +54,7 @@ public class FallingLeafParticle extends SpriteTexturedParticle {
     protected final int maxRotateTime;
     protected int rotateTime = 0;
 
-    protected FallingLeafParticle(ClientWorld clientWorld, double x, double y, double z, double r, double g, double b, IAnimatedSprite provider) {
+    protected FallingLeafParticle(ClientLevel clientWorld, double x, double y, double z, double r, double g, double b, SpriteSet provider) {
         super(clientWorld, x, y, z, 0, 0, 0);
         this.pickSprite(provider);
 
@@ -141,20 +141,20 @@ public class FallingLeafParticle extends SpriteTexturedParticle {
     }
 
     @Override
-    public IParticleRenderType getRenderType() {
-        return IParticleRenderType.PARTICLE_SHEET_TRANSLUCENT;
+    public ParticleRenderType getRenderType() {
+        return ParticleRenderType.PARTICLE_SHEET_TRANSLUCENT;
     }
 
     @OnlyIn(Dist.CLIENT)
-    public static class DefaultFactory implements IParticleFactory<BasicParticleType> {
-        private final IAnimatedSprite provider;
+    public static class DefaultFactory implements ParticleProvider<SimpleParticleType> {
+        private final SpriteSet provider;
 
-        public DefaultFactory(IAnimatedSprite provider) {
+        public DefaultFactory(SpriteSet provider) {
             this.provider = provider;
         }
 
         @Override
-        public Particle createParticle(BasicParticleType parameters, ClientWorld world, double x, double y, double z, double r, double g, double b) {
+        public Particle createParticle(SimpleParticleType parameters, ClientLevel world, double x, double y, double z, double r, double g, double b) {
             return new FallingLeafParticle(world, x, y, z, r, g, b, this.provider);
         }
     }
