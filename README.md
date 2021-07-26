@@ -1,4 +1,4 @@
-Falling Leaves for Minecraft 1.16 - Forge [![](http://cf.way2muchnoise.eu/short_463155_downloads.svg)](https://www.curseforge.com/minecraft/mc-mods/falling-leaves-forge) [![License: LGPL v3](https://img.shields.io/badge/License-LGPL%20v3-blue.svg)](https://www.gnu.org/licenses/lgpl-3.0)
+Falling Leaves for Minecraft 1.16 - Forge [![](http://cf.way2muchnoise.eu/short_463155_downloads.svg)](https://www.curseforge.com/minecraft/mc-mods/falling-leaves-forge) [![License: LGPL v3](https://img.shields.io/badge/License-LGPL%20v3-blue.svg)](https://www.gnu.org/licenses/lgpl-3.0) [![](https://badgen.net/maven/v/metadata-url/https/maven.paube.de/releases/de/cheaterpaul/fallingleaves/Fallingleaves/maven-metadata.xml)](https://maven.paube.de/releases/de/cheaterpaul/fallingleaves/Fallingleaves)
 ===================================
 
 ## Mod Description
