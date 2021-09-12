@@ -131,7 +131,7 @@ public class LeafUtil {
 
     /** Block tags can only be used once the integrated server is started */
     public static boolean isLeafBlock(Block block, boolean useBlockTags) {
-        return (block instanceof LeavesBlock) || (useBlockTags && block.is(BlockTags.LEAVES));
+        return (block instanceof LeavesBlock) || (useBlockTags && BlockTags.LEAVES.contains(block));
     }
 
     public static double[] averageColor(BufferedImage image) {

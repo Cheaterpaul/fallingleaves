@@ -11,7 +11,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(Minecraft.class)
 public class MinecraftClientMixin {
 
-    @Inject(method = "setLevel", at = @At("HEAD"))
+    @Inject(method = "setLevel(Lnet/minecraft/client/multiplayer/ClientLevel;)V", at = @At("HEAD"))
     public void joinWorld(ClientLevel world, CallbackInfo ci) {
         Wind.init();
     }

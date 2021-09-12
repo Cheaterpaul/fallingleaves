@@ -44,7 +44,7 @@ import java.util.Random;
 @Mixin(LeavesBlock.class)
 public abstract class LeafTickMixin {
 
-    @Inject(at = @At("HEAD"), method = "animateTick(Lnet/minecraft/block/BlockState;Lnet/minecraft/world/World;Lnet/minecraft/util/math/BlockPos;Ljava/util/Random;)V")
+    @Inject(at = @At("HEAD"), method = "animateTick(Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/world/level/Level;Lnet/minecraft/core/BlockPos;Ljava/util/Random;)V")
     private void animateTick(BlockState state, Level world, BlockPos pos, Random random, CallbackInfo ci) {
         LeafSettingsEntry leafSettings = FallingLeavesConfig.LEAFSETTINGS.getLeafSetting(state.getBlock().getRegistryName());
 

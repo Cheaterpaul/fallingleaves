@@ -18,7 +18,7 @@ public class ParticleManagerMixin {
     @Shadow
     protected ClientLevel level;
 
-    @Inject(at = @At("HEAD"), method = "tick")
+    @Inject(at = @At("HEAD"), method = "tick()V")
     public void tick(CallbackInfo ci) {
         Wind.tick(level);
     }

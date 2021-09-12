@@ -19,12 +19,12 @@ description = '''How the gentle wind
 [[dependencies.fallingleaves]] #optional
 modId = "forge" #mandatory
 mandatory = true #mandatory
-versionRange = "[34,)" #mandatory
+versionRange = "[${forge_version},)" #mandatory
 ordering = "NONE"
 side = "BOTH"
 [[dependencies.fallingleaves]]
 modId = "minecraft"
 mandatory = true
-versionRange = "[1.16.3,1.17)"
+versionRange = "[${mcversion},)"
 ordering = "NONE"
 side = "BOTH"
