@@ -5,7 +5,8 @@
   "compatibilityLevel": "JAVA_8",
   "refmap": "fallingleaves.refmap.json",
   "client": [
-    "LeafTickMixin"
+    "LeafTickMixin",
+    "ParticleEngineAccessor"
   ],
   "injectors": {
     "defaultRequire": 1
