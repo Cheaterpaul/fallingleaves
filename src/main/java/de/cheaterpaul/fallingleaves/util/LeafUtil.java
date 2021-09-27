@@ -44,6 +44,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.client.model.data.IModelData;
 
 import javax.annotation.Nullable;
 import javax.imageio.ImageIO;
@@ -68,11 +69,12 @@ public class LeafUtil {
 
             // read the bottom quad to determine whether we should color the texture
             IBakedModel model = client.getBlockRenderer().getBlockModel(state);
-            List<BakedQuad> quads = model.getQuads(state, Direction.DOWN, random);
+            IModelData modelData = model.getModelData(world, pos, state, net.minecraftforge.client.model.data.EmptyModelData.INSTANCE);
+            List<BakedQuad> quads = model.getQuads(state, Direction.DOWN, random, modelData);
             boolean shouldColor = quads.isEmpty() || quads.stream().anyMatch(BakedQuad::isTinted);
 
             int blockColor = client.getBlockColors().getColor(state, world, pos, 0);
-            ResourceLocation texture = spriteToTexture(model.getParticleIcon());
+            ResourceLocation texture = spriteToTexture(client.getModelManager().getBlockModelShaper().getTexture(state, world, pos));
 
             double[] color = calculateLeafColor(texture, shouldColor, blockColor, client);
 
