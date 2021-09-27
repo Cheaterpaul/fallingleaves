@@ -61,6 +61,12 @@ minecraft {
             }
         }
 
+        client2 {
+            parent runs.client
+            taskName 'runClient2'
+            args "-mixin.config=fallingleaves.mixins.json", '--username', 'Dev2'
+        }
+
         server {
             workingDirectory project.file('run')
 
