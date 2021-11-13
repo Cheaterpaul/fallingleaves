@@ -6,13 +6,13 @@
   "refmap": "fallingleaves.refmap.json",
   "client": [
     "LeafTickMixin",
-    "ParticleEngineAccessor"
+    "MinecraftClientMixin",
+    "ParticleEngineAccessor",
+    "ParticleManagerMixin"
   ],
   "injectors": {
     "defaultRequire": 1
   },
   "mixins": [
-    "MinecraftClientMixin",
-    "ParticleManagerMixin"
   ]
 }
