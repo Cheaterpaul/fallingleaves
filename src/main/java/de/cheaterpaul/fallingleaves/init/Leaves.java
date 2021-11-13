@@ -12,13 +12,6 @@ public class Leaves {
     public static final BasicParticleType falling_leaf = (BasicParticleType) new BasicParticleType(false).setRegistryName(modId("falling_leaf"));
     public static final BasicParticleType falling_leaf_conifer = (BasicParticleType) new BasicParticleType(false).setRegistryName(modId("falling_leaf"));
 
-
-//    @SubscribeEvent
-//    public void onRegisterParticles(RegistryEvent.Register<ParticleType<?>> event) {
-//        event.getRegistry().register(falling_leaf.setRegistryName(modId("falling_leaf")));
-//        event.getRegistry().register(falling_leaf_conifer.setRegistryName(modId("falling_leaf_conifer")));
-//    }
-
     public static ResourceLocation modId(String name) {
         return new ResourceLocation(FallingLeavesMod.MOD_ID, name);
     }

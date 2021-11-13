@@ -8,9 +8,13 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.ParticleFactoryRegisterEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.DistExecutor;
+import net.minecraftforge.fml.ExtensionPoint;
+import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.GatherDataEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.fml.network.FMLNetworkConstants;
+import org.apache.commons.lang3.tuple.Pair;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -22,12 +26,15 @@ public class FallingLeavesMod {
     public static final Logger LOGGER = LogManager.getLogger(MOD_ID);
 
     public FallingLeavesMod() {
+        ModLoadingContext.get().registerExtensionPoint(ExtensionPoint.DISPLAYTEST, () -> Pair.of(() -> FMLNetworkConstants.IGNORESERVERONLY, (a, b) -> true));
         IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
-        FallingLeavesConfig.registerConfigs();
-        bus.register(new Leaves());
-        bus.addListener(this::gatherData);
-        bus.addListener(this::registerParticles);
+        DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
+            FallingLeavesConfig.registerConfigs();
+            bus.addListener(this::gatherData);
+            bus.addListener(this::registerParticles);
+        });
         DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> EventHandler::new);
+        DistExecutor.unsafeRunWhenOn(Dist.DEDICATED_SERVER, () -> () -> LOGGER.warn("Falling Leaves is a client only mod and should be removed from the mods list"));
     }
 
     private void gatherData(final GatherDataEvent event) {
@@ -37,6 +44,6 @@ public class FallingLeavesMod {
     }
 
     private void registerParticles(ParticleFactoryRegisterEvent event) {
-        DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> Leaves::registerParticles);
+        Leaves.registerParticles();
     }
 }
