@@ -4,23 +4,13 @@ import de.cheaterpaul.fallingleaves.FallingLeavesMod;
 import de.cheaterpaul.fallingleaves.particle.FallingConiferLeafParticle;
 import de.cheaterpaul.fallingleaves.particle.FallingLeafParticle;
 import net.minecraft.client.Minecraft;
-import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.event.RegistryEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 public class Leaves {
 
-    public static final SimpleParticleType falling_leaf = new SimpleParticleType(false);
-    public static final SimpleParticleType falling_leaf_conifer = new SimpleParticleType(false);
-
-
-    @SubscribeEvent
-    public void onRegisterParticles(RegistryEvent.Register<ParticleType<?>> event) {
-        event.getRegistry().register(falling_leaf.setRegistryName(modId("falling_leaf")));
-        event.getRegistry().register(falling_leaf_conifer.setRegistryName(modId("falling_leaf_conifer")));
-    }
+    public static final SimpleParticleType falling_leaf = (SimpleParticleType) new SimpleParticleType(false).setRegistryName(modId("falling_leaf"));
+    public static final SimpleParticleType falling_leaf_conifer = (SimpleParticleType) new SimpleParticleType(false).setRegistryName(modId("falling_leaf"));
 
     public static ResourceLocation modId(String name) {
         return new ResourceLocation(FallingLeavesMod.MOD_ID, name);
