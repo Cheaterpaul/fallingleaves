@@ -33,6 +33,7 @@ public class FallingLeavesMod {
             bus.addListener(this::gatherData);
             bus.addListener(this::registerParticles);
         });
+
         DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> EventHandler::new);
         DistExecutor.unsafeRunWhenOn(Dist.DEDICATED_SERVER, () -> () -> LOGGER.warn("Falling Leaves is a client only mod and should be removed from the mods list"));
     }
