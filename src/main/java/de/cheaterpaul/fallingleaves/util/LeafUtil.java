@@ -128,7 +128,7 @@ public class LeafUtil {
         AABB collisionBox = new AABB(x - 0.1, y, z - 0.1, x + 0.1, y2, z + 0.1);
 
         // Only spawn the particle if there's enough room for it
-        return !world.getBlockCollisions(null, collisionBox).findAny().isPresent();
+        return !world.getBlockCollisions(null, collisionBox).iterator().hasNext();
     }
 
     /** Block tags can only be used once the integrated server is started */
