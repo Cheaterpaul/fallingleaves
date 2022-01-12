@@ -28,8 +28,10 @@ public abstract class ParticleEngineAccessor {
     @Redirect(method = "reload(Lnet/minecraft/resources/IFutureReloadListener$IStage;Lnet/minecraft/resources/IResourceManager;Lnet/minecraft/profiler/IProfiler;Lnet/minecraft/profiler/IProfiler;Ljava/util/concurrent/Executor;Ljava/util/concurrent/Executor;)Ljava/util/concurrent/CompletableFuture;", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/registry/Registry;keySet()Ljava/util/Set;"))
     private Set<ResourceLocation> fallingleaves_particle_reg_name_3(Registry<ParticleType<?>> registry) {
         Set<ResourceLocation> set = new HashSet<>(registry.keySet());
-        set.add(Leaves.falling_leaf.getRegistryName());
-        set.add(Leaves.falling_leaf_conifer.getRegistryName());
+        if (Leaves.ADDED) {
+            set.add(Leaves.falling_leaf.getRegistryName());
+            set.add(Leaves.falling_leaf_conifer.getRegistryName());
+        }
         return set;
     }
 
