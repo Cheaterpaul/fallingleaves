@@ -26,8 +26,8 @@ public class FallingLeavesMod {
 
     public FallingLeavesMod() {
         ModLoadingContext.get().registerExtensionPoint(IExtensionPoint.DisplayTest.class, () -> new IExtensionPoint.DisplayTest(() -> FMLNetworkConstants.IGNORESERVERONLY, (a, b) -> true));
-        IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
+            IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
             FallingLeavesConfig.registerConfigs();
             bus.addListener(this::gatherData);
             bus.addListener(this::registerParticles);
