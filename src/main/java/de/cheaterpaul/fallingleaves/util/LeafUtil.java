@@ -70,7 +70,7 @@ public class LeafUtil {
             // read the bottom quad to determine whether we should color the texture
             IBakedModel model = client.getBlockRenderer().getBlockModel(state);
             IModelData modelData = model.getModelData(world, pos, state, net.minecraftforge.client.model.data.EmptyModelData.INSTANCE);
-            List<BakedQuad> quads = model.getQuads(state, Direction.DOWN, random, modelData);
+            List<BakedQuad> quads = model.getQuads(state, null, random, modelData);
             boolean shouldColor = quads.isEmpty() || quads.stream().anyMatch(BakedQuad::isTinted);
 
             int blockColor = client.getBlockColors().getColor(state, world, pos, 0);
