@@ -107,6 +107,16 @@ sourceSets.main.resources {
     exclude '.cache'
 }
 
+repositories {
+    maven {
+        url "https://www.cursemaven.com"
+        content {
+            includeGroup "curse.maven"
+        }
+    }
+}
+
+
 dependencies {
     minecraft([
             group: "net.minecraftforge",
@@ -116,6 +126,10 @@ dependencies {
     if (System.getProperty("idea.sync.active") != "true") {
         annotationProcessor 'org.spongepowered:mixin:0.8.4:processor'
     }
+    //Serene Seasons API
+    compileOnly fg.deobf("curse.maven:serene-seasons-api-291874:3582838")
+    //Serene Seasons Full for testing
+//    runtimeOnly fg.deobf("curse.maven:serene-seasons-291874:3582836")
 }
 
 // Example for how to get properties into the manifest for reading by the runtime..

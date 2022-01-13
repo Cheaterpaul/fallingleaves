@@ -4,6 +4,7 @@ import de.cheaterpaul.fallingleaves.data.LeafSettingGenerator;
 import de.cheaterpaul.fallingleaves.init.EventHandler;
 import de.cheaterpaul.fallingleaves.init.FallingLeavesConfig;
 import de.cheaterpaul.fallingleaves.init.Leaves;
+import de.cheaterpaul.fallingleaves.modcompat.SereneSeasons;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.ParticleFactoryRegisterEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -11,7 +12,6 @@ import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.IExtensionPoint;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.forge.event.lifecycle.GatherDataEvent;
 import net.minecraftforge.network.NetworkConstants;
@@ -29,9 +29,12 @@ public class FallingLeavesMod {
         ModLoadingContext.get().registerExtensionPoint(IExtensionPoint.DisplayTest.class, () -> new IExtensionPoint.DisplayTest(() -> NetworkConstants.IGNORESERVERONLY, (a, b) -> true));
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
             IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
-            FallingLeavesConfig.registerConfigs();
             bus.addListener(this::gatherData);
             bus.addListener(this::registerParticles);
+            if (SereneSeasons.setup()) {
+                bus.register(SereneSeasons.class);
+            }
+            FallingLeavesConfig.registerConfigs();
         });
 
         DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> EventHandler::new);
