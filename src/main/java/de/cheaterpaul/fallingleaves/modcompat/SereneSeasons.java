@@ -15,8 +15,8 @@ public class SereneSeasons {
         return isEnabled = ModList.get().isLoaded("sereneseasons");
     }
 
-    public static float getModifier(Level  level) {
-        return config.getModifier(level);
+    public static float getModifier(Level level) {
+        return config == null ? 1 : config.getModifier(level);
     }
 
     public static void registerConfig(ForgeConfigSpec.Builder builder) {
