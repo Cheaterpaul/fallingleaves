@@ -122,7 +122,7 @@ public class LeafUtil {
     private static boolean shouldSpawnParticle(Level world, BlockPos pos, double x, double y, double z) {
         // Never spawn a particle if there's a leaf block below
         // This test is necessary because modded leaf blocks may not have collisions
-        if (isLeafBlock(world.getBlockState(pos.below()).getBlock(), true)) return false;
+        if (isLeafBlock(world.getBlockState(pos.below()), true)) return false;
 
         double y2 = y - FallingLeavesConfig.CONFIG.minimumFreeSpaceBelow.get() * 0.5;
         AABB collisionBox = new AABB(x - 0.1, y, z - 0.1, x + 0.1, y2, z + 0.1);
@@ -132,8 +132,8 @@ public class LeafUtil {
     }
 
     /** Block tags can only be used once the integrated server is started */
-    public static boolean isLeafBlock(Block block, boolean useBlockTags) {
-        return (block instanceof LeavesBlock) || (useBlockTags && BlockTags.LEAVES.contains(block));
+    public static boolean isLeafBlock(BlockState block, boolean useBlockTags) {
+        return (block.getBlock() instanceof LeavesBlock) || (useBlockTags && block.is(BlockTags.LEAVES));
     }
 
     public static double[] averageColor(BufferedImage image) {

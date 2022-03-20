@@ -1,5 +1,5 @@
 modLoader = "javafml"
-loaderVersion = "[34,)"
+loaderVersion = "[40,)"
 issueTrackerURL = "https://github.com/Cheaterpaul/fallingleaves/issues"
 license = "LGPL-3.0"
 
