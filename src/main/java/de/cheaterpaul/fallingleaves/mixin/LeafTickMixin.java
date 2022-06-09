@@ -29,11 +29,13 @@ import de.cheaterpaul.fallingleaves.init.FallingLeavesConfig;
 import de.cheaterpaul.fallingleaves.modcompat.SereneSeasons;
 import de.cheaterpaul.fallingleaves.util.LeafUtil;
 import net.minecraft.core.BlockPos;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.LeavesBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.registries.ForgeRegistries;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -45,9 +47,9 @@ import java.util.Random;
 @Mixin(LeavesBlock.class)
 public abstract class LeafTickMixin {
 
-    @Inject(at = @At("HEAD"), method = "animateTick(Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/world/level/Level;Lnet/minecraft/core/BlockPos;Ljava/util/Random;)V")
-    private void animateTick(BlockState state, Level world, BlockPos pos, Random random, CallbackInfo ci) {
-        LeafSettingsEntry leafSettings = FallingLeavesConfig.LEAFSETTINGS.getLeafSetting(state.getBlock().getRegistryName());
+    @Inject(at = @At("HEAD"), method = "animateTick(Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/world/level/Level;Lnet/minecraft/core/BlockPos;Lnet/minecraft/util/RandomSource;)V")
+    private void animateTick(BlockState state, Level world, BlockPos pos, RandomSource random, CallbackInfo ci) {
+        LeafSettingsEntry leafSettings = FallingLeavesConfig.LEAFSETTINGS.getLeafSetting(ForgeRegistries.BLOCKS.getKey(state.getBlock()));
 
         // Every leaf block has a settings entry, but some blocks are considered leaves when they technically aren't
         // E.g. terrestria:sakura_log can be "leaf-logged" - in that case, we simply ignore them

@@ -7,6 +7,7 @@ import de.cheaterpaul.fallingleaves.modcompat.SereneSeasons;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraftforge.common.ForgeConfigSpec;
+import net.minecraft.world.level.dimension.BuiltinDimensionTypes;
 
 import java.util.List;
 
@@ -30,7 +31,7 @@ public class ClientConfig {
         dropFromPlayerPlacedBlocks = builder.comment("whether player placed blocks should also drop leaves").define("dropFromPlayerPlacedBlocks", true);
         minimumFreeSpaceBelow = builder.comment("how much room below the leaves block is needed for the leaves to spawn").defineInRange("minimumFreeSpaceBelow", 1, 1, 20);
         disableWind = builder.comment("disable wind effects").define("disableWind", false);
-        windlessDimension = builder.comment("windless dimensions").defineList("windlessDimension", Lists.newArrayList(DimensionType.NETHER_LOCATION.location().toString(), DimensionType.END_LOCATION.location().toString()), string -> string instanceof String && ResourceLocation.tryParse(((String) string)) != null);
+        windlessDimension = builder.comment("windless dimensions").defineList("windlessDimension", Lists.newArrayList(BuiltinDimensionTypes.NETHER.location().toString(), BuiltinDimensionTypes.END.location().toString()), string -> string instanceof String && ResourceLocation.tryParse(((String) string)) != null);
         SereneSeasons.registerConfig(builder);
     }
 

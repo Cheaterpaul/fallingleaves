@@ -1,9 +1,12 @@
 package de.cheaterpaul.fallingleaves.data;
 
+import com.google.common.hash.Hashing;
+import com.google.common.hash.HashingOutputStream;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import de.cheaterpaul.fallingleaves.config.LeafSettingsEntry;
+import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.HashCache;
@@ -12,7 +15,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.BufferedWriter;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.HashSet;
@@ -31,7 +36,7 @@ public class LeafSettingGenerator implements DataProvider {
     }
 
     @Override
-    public void run(HashCache cache) throws IOException {
+    public void run(CachedOutput cache) throws IOException {
         Path path = this.generator.getOutputFolder();
         Set<ResourceLocation> set = new HashSet<>();
         this.registerLeafSettingEntries((entry) -> {
@@ -51,19 +56,14 @@ public class LeafSettingGenerator implements DataProvider {
         return "Falling Leaves leaves settings generator";
     }
 
-    private void saveLeafSettingEntries(HashCache cache, JsonObject entryJson, Path path) {
+    @SuppressWarnings("UnstableApiUsage")
+    private void saveLeafSettingEntries(CachedOutput cache, JsonObject entryJson, Path path) {
         try {
             String s = GSON.toJson(entryJson);
-            @SuppressWarnings("UnstableApiUsage")
-            String s1 = SHA1.hashUnencodedChars(s).toString();
-            if (!Objects.equals(cache.getHash(path), s1) || !Files.exists(path)) {
-                Files.createDirectories(path.getParent());
-
-                try (BufferedWriter bufferedWriter = Files.newBufferedWriter(path)) {
-                    bufferedWriter.write(s);
-                }
-            }
-            cache.putNew(path, s1);
+            ByteArrayOutputStream bytearrayoutputstream = new ByteArrayOutputStream();
+            HashingOutputStream hashingoutputstream = new HashingOutputStream(Hashing.sha1(), bytearrayoutputstream);
+            hashingoutputstream.write(s.getBytes(StandardCharsets.UTF_8));
+            cache.writeIfNeeded(path, bytearrayoutputstream.toByteArray(), hashingoutputstream.hash());
         } catch (IOException ioExeption) {
             LOGGER.error("Couldn't save skill node {}", path, ioExeption);
         }

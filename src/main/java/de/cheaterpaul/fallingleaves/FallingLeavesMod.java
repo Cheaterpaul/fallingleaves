@@ -1,12 +1,15 @@
 package de.cheaterpaul.fallingleaves;
 
 import de.cheaterpaul.fallingleaves.data.LeafSettingGenerator;
+import de.cheaterpaul.fallingleaves.init.ClientMod;
 import de.cheaterpaul.fallingleaves.init.EventHandler;
 import de.cheaterpaul.fallingleaves.init.FallingLeavesConfig;
 import de.cheaterpaul.fallingleaves.init.Leaves;
 import de.cheaterpaul.fallingleaves.modcompat.SereneSeasons;
+import net.minecraft.SystemReport;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.ParticleFactoryRegisterEvent;
+import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.IExtensionPoint;
@@ -26,28 +29,11 @@ public class FallingLeavesMod {
     public static final Logger LOGGER = LogManager.getLogger(MOD_ID);
 
     public FallingLeavesMod() {
-        ModLoadingContext.get().registerExtensionPoint(IExtensionPoint.DisplayTest.class, () -> new IExtensionPoint.DisplayTest(() -> NetworkConstants.IGNORESERVERONLY, (a, b) -> true));
-        DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
-            IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
-            bus.addListener(this::gatherData);
-            bus.addListener(this::registerParticles);
-            if (SereneSeasons.setup()) {
-                bus.register(SereneSeasons.class);
-            }
-            FallingLeavesConfig.registerConfigs();
-        });
-
+        ModLoadingContext.get().registerExtensionPoint(IExtensionPoint.DisplayTest.class, () -> new IExtensionPoint.DisplayTest(() -> "", (incoming, isNetwork) -> true));
+        DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> ClientMod::setupClient);
         DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> EventHandler::new);
         DistExecutor.unsafeRunWhenOn(Dist.DEDICATED_SERVER, () -> () -> LOGGER.warn("Falling Leaves is a client only mod and should be removed from the mods list"));
     }
 
-    private void gatherData(final GatherDataEvent event) {
-        if (event.includeClient()) {
-            event.getGenerator().addProvider(new LeafSettingGenerator(event.getGenerator()));
-        }
-    }
 
-    private void registerParticles(ParticleFactoryRegisterEvent event) {
-        Leaves.registerParticles();
-    }
 }

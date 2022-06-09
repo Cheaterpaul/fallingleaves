@@ -8,7 +8,8 @@
     "LeafTickMixin",
     "MinecraftClientMixin",
     "ParticleEngineAccessor",
-    "ParticleManagerMixin"
+    "ParticleManagerMixin",
+    "TextureAtlasSpriteAccessor"
   ],
   "injectors": {
     "defaultRequire": 1

@@ -6,7 +6,7 @@ import de.cheaterpaul.fallingleaves.math.TriangularDistribution;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.ChatComponent;
 import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import org.apache.logging.log4j.LogManager;
@@ -32,7 +32,7 @@ public class Wind {
     public static void debug() {
         state = State.values()[(state.ordinal() + 1) % State.values().length];
         ChatComponent chatHud = Minecraft.getInstance().gui.getChat();
-        chatHud.addMessage(new TextComponent("set wind state to " + state));
+        chatHud.addMessage(Component.literal("set wind state to " + state));
     }
 
     public static void init() {

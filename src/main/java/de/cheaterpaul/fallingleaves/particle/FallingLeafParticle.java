@@ -24,15 +24,26 @@
 
 package de.cheaterpaul.fallingleaves.particle;
 
+import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.Lists;
+import de.cheaterpaul.fallingleaves.FallingLeavesMod;
 import de.cheaterpaul.fallingleaves.init.FallingLeavesConfig;
 import de.cheaterpaul.fallingleaves.util.Wind;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.*;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.SimpleParticleType;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.FluidTags;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import org.jetbrains.annotations.NotNull;
+
+import javax.annotation.Nullable;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  * TODO - Plenty of "Magic numbers" in this class that we may want to get rid of
@@ -147,15 +158,30 @@ public class FallingLeafParticle extends TextureSheetParticle {
 
     @OnlyIn(Dist.CLIENT)
     public static class DefaultFactory implements ParticleProvider<SimpleParticleType> {
-        private final SpriteSet provider;
+        private final ParticleEngine.MutableSpriteSet provider;
 
-        public DefaultFactory(SpriteSet provider) {
-            this.provider = provider;
+        public DefaultFactory() {
+            this.provider = new ParticleEngine.MutableSpriteSet();
+        }
+
+        public void rebind(TextureAtlasSprite sprite) {
+            this.provider.rebind(Lists.newArrayList(sprite));
+        }
+        public void rebind(List<TextureAtlasSprite> sprites) {
+            this.provider.rebind(sprites);
         }
 
         @Override
-        public Particle createParticle(SimpleParticleType parameters, ClientLevel world, double x, double y, double z, double r, double g, double b) {
+        public Particle createParticle(@Nullable SimpleParticleType parameters, @NotNull ClientLevel world, double x, double y, double z, double r, double g, double b) {
             return new FallingLeafParticle(world, x, y, z, r, g, b, this.provider);
         }
+    }
+
+    public static Set<ResourceLocation> getTextures() {
+        return ImmutableSet.of(loc("falling_leaf_1"),loc("falling_leaf_2"),loc("falling_leaf_3"),loc("falling_leaf_4"),loc("falling_leaf_5"));
+    }
+
+    protected static ResourceLocation loc(String path){
+        return new ResourceLocation(FallingLeavesMod.MOD_ID, "particle/" + path);
     }
 }

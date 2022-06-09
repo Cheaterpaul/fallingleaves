@@ -28,31 +28,25 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Map;
 
-@OnlyIn(Dist.CLIENT)
 public class TextureCache {
-    public static final class Data {
-        private final double[] color;
-        public final String resourcePack;
+    public record Data(double[] color) {
 
-        public Data(double[] color, String resourcePack) {
+        public Data(double[] color) {
             if (color.length != 3)
                 throw new IllegalArgumentException("texture color should have 3 components");
-
-            this.color = new double[3];
-            System.arraycopy(color, 0, this.color, 0, 3);
-            this.resourcePack = resourcePack;
+            this.color = color;
         }
 
         public double[] getColor() {
-            double[] copy = new double[3];
-            System.arraycopy(color, 0, copy, 0, 3);
-            return copy;
+            return Arrays.copyOf(color, color.length);
         }
     }
 
-    public static final HashMap<ResourceLocation, Data> INST = new HashMap<>();
+    public static final Map<ResourceLocation, Data> INST = new HashMap<>();
 
     private TextureCache() {}
 

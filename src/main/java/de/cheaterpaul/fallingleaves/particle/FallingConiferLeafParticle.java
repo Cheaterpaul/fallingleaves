@@ -24,14 +24,22 @@
 
 package de.cheaterpaul.fallingleaves.particle;
 
+import com.google.common.collect.ImmutableSet;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.SpriteSet;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+
+import java.util.Set;
 
 @OnlyIn(Dist.CLIENT)
 public class FallingConiferLeafParticle extends FallingLeafParticle {
     public FallingConiferLeafParticle(ClientLevel clientWorld, double x, double y, double z, double r, double g, double b, SpriteSet provider) {
         super(clientWorld, x, y, z, r, g, b, provider);
+    }
+
+    public static Set<ResourceLocation> getTextures() {
+        return ImmutableSet.of(loc("falling_leaf_conifer_1"),loc("falling_leaf_conifer_2"),loc("falling_leaf_conifer_3"));
     }
 }
