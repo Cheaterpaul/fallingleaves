@@ -12,17 +12,17 @@ buildscript {
 }
 plugins {
     id 'com.matthewprenger.cursegradle' version '1.2.0'
+    id "com.modrinth.minotaur" version "2.+"
+    id 'idea'
+    id 'eclipse'
 }
 apply plugin: 'net.minecraftforge.gradle'
-apply plugin: 'eclipse'
 apply plugin: 'org.spongepowered.mixin'
-apply from: 'https://raw.githubusercontent.com/SizableShrimp/Forge-Class-Remapper/main/classremapper.gradle'
 
 mixin {
     add sourceSets.main, "fallingleaves.refmap.json"
 }
 
-version = '1.0'
 group = 'de.cheaterpaul.fallingleaves'
 archivesBaseName = project.archives_base_name
 
@@ -30,11 +30,11 @@ java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
 ext.mod_version="Test"
 ext.type="test"
+ext.classification = "test"
 
 apply from: 'gradle/versioning.gradle'
 apply from: 'gradle/artifacts.gradle'
-apply from: 'gradle/maven.gradle'
-apply from: 'gradle/curse.gradle'
+apply from: 'gradle/deploy.gradle'
 
 println('Java: ' + System.getProperty('java.version') + ' JVM: ' + System.getProperty('java.vm.version') + '(' + System.getProperty('java.vendor') + ') Arch: ' + System.getProperty('os.arch'))
 minecraft {
