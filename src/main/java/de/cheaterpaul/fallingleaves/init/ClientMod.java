@@ -5,12 +5,10 @@ import de.cheaterpaul.fallingleaves.modcompat.SereneSeasons;
 import de.cheaterpaul.fallingleaves.particle.FallingConiferLeafParticle;
 import de.cheaterpaul.fallingleaves.particle.FallingLeafParticle;
 import net.minecraft.client.renderer.texture.TextureAtlas;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.client.event.TextureStitchEvent;
+import net.minecraftforge.data.event.GatherDataEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.forge.event.lifecycle.GatherDataEvent;
 
 public class ClientMod {
     private static void gatherData(final GatherDataEvent event) {

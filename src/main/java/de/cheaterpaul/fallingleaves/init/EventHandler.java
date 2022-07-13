@@ -26,11 +26,8 @@ package de.cheaterpaul.fallingleaves.init;
 
 import de.cheaterpaul.fallingleaves.config.LeafSettingsEntry;
 import de.cheaterpaul.fallingleaves.util.LeafUtil;
-import net.minecraft.client.renderer.texture.TextureAtlas;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.LeavesBlock;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -47,14 +44,14 @@ public class EventHandler {
      */
     @SubscribeEvent
     public void onAttackLeavesBlock(PlayerInteractEvent.LeftClickBlock e) {
-        if (e.getWorld().isClientSide) {
-            BlockState state = e.getWorld().getBlockState(e.getPos());
+        if (e.getLevel().isClientSide) {
+            BlockState state = e.getLevel().getBlockState(e.getPos());
             LeafSettingsEntry leafSettings = FallingLeavesConfig.LEAFSETTINGS.getLeafSetting(ForgeRegistries.BLOCKS.getKey(state.getBlock()));
             if (leafSettings != null || state.getBlock() instanceof LeavesBlock) {
                 // binomial distribution - extremes (0 or 3 leaves) are less likely
                 for (int i = 0; i < 3; i++) {
-                    if (e.getPlayer().getRandom().nextBoolean()) {
-                        LeafUtil.trySpawnLeafParticle(state, e.getWorld(), e.getPos(), e.getPlayer().getRandom(), leafSettings);
+                    if (e.getEntity().getRandom().nextBoolean()) {
+                        LeafUtil.trySpawnLeafParticle(state, e.getLevel(), e.getPos(), e.getEntity().getRandom(), leafSettings);
                     }
                 }
             }

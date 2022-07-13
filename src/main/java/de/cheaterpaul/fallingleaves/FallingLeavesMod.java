@@ -1,23 +1,12 @@
 package de.cheaterpaul.fallingleaves;
 
-import de.cheaterpaul.fallingleaves.data.LeafSettingGenerator;
 import de.cheaterpaul.fallingleaves.init.ClientMod;
 import de.cheaterpaul.fallingleaves.init.EventHandler;
-import de.cheaterpaul.fallingleaves.init.FallingLeavesConfig;
-import de.cheaterpaul.fallingleaves.init.Leaves;
-import de.cheaterpaul.fallingleaves.modcompat.SereneSeasons;
-import net.minecraft.SystemReport;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.ParticleFactoryRegisterEvent;
-import net.minecraftforge.common.ForgeMod;
-import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.IExtensionPoint;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.forge.event.lifecycle.GatherDataEvent;
-import net.minecraftforge.network.NetworkConstants;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

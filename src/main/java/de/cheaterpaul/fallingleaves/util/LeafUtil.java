@@ -24,9 +24,7 @@
 
 package de.cheaterpaul.fallingleaves.util;
 
-import com.mojang.authlib.minecraft.client.MinecraftClient;
 import com.mojang.blaze3d.platform.NativeImage;
-import de.cheaterpaul.fallingleaves.FallingLeavesMod;
 import de.cheaterpaul.fallingleaves.config.LeafSettingsEntry;
 import de.cheaterpaul.fallingleaves.init.FallingLeavesConfig;
 import de.cheaterpaul.fallingleaves.init.Leaves;
@@ -34,12 +32,12 @@ import de.cheaterpaul.fallingleaves.mixin.TextureAtlasSpriteAccessor;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.ParticleProvider;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.RandomSource;
@@ -49,18 +47,13 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.model.data.IModelData;
+import net.minecraftforge.client.model.data.ModelData;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.logging.log4j.LogManager;
 
 import javax.annotation.Nullable;
-import javax.imageio.ImageIO;
 import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.BufferedReader;
-import java.io.IOException;
 import java.util.List;
-import java.util.Random;
 
 @OnlyIn(Dist.CLIENT)
 public class LeafUtil {
@@ -78,12 +71,9 @@ public class LeafUtil {
 
             // read the bottom quad to determine whether we should color the texture
             BakedModel model = client.getBlockRenderer().getBlockModel(state);
-            IModelData modelData = model.getModelData(world, pos, state, net.minecraftforge.client.model.data.EmptyModelData.INSTANCE);
-            List<BakedQuad> quads = model.getQuads(state, null, random, modelData);
-            boolean shouldColor = quads.isEmpty() || quads.stream().anyMatch(BakedQuad::isTinted);
-
-            int blockColor = client.getBlockColors().getColor(state, world, pos, 0);
-            ResourceLocation texture = spriteToTexture(client.getModelManager().getBlockModelShaper().getTexture(state, world, pos));
+            ModelData modelData = model.getModelData(world, pos, state, net.minecraftforge.client.model.data.ModelData.EMPTY);
+            List<BakedQuad> quads = model.getQuads(state, null, random, modelData, RenderType.cutout());
+//            boolean shouldColor = quads.isEmpty() || quads.stream().anyMatch(BakedQuad::isTinted);
 
             double[] color = getBlockTextureColor(state, world, pos);
 
@@ -92,8 +82,9 @@ public class LeafUtil {
             double b = color[2];
 
             // Add the particle.
-            ParticleProvider<?> provicer = leafSettings == null || !leafSettings.isConiferBlock ?Leaves.falling_leaf:Leaves.falling_leaf_conifer;
-            var particle = provicer.createParticle(null,(ClientLevel) world,x, y, z, r, g, b );
+            ParticleProvider<?> provicer = leafSettings == null || !leafSettings.isConiferBlock ? Leaves.falling_leaf : Leaves.falling_leaf_conifer;
+            //noinspection ConstantConditions
+            var particle = provicer.createParticle(null, (ClientLevel) world, x, y, z, r, g, b);
             if (particle != null) {
                 Minecraft.getInstance().particleEngine.add(particle);
             }
