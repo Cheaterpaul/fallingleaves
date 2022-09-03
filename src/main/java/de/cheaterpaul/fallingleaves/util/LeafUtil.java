@@ -25,9 +25,11 @@
 package de.cheaterpaul.fallingleaves.util;
 
 import com.mojang.blaze3d.platform.NativeImage;
+import de.cheaterpaul.fallingleaves.FallingLeavesMod;
 import de.cheaterpaul.fallingleaves.config.LeafSettingsEntry;
 import de.cheaterpaul.fallingleaves.init.FallingLeavesConfig;
 import de.cheaterpaul.fallingleaves.init.Leaves;
+import de.cheaterpaul.fallingleaves.mixin.NativeImageAccessor;
 import de.cheaterpaul.fallingleaves.mixin.TextureAtlasSpriteAccessor;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
@@ -48,16 +50,17 @@ import net.minecraft.world.phys.AABB;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.model.data.ModelData;
-import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.lwjgl.system.MemoryUtil;
 
 import javax.annotation.Nullable;
-import java.awt.*;
 import java.util.List;
 
 @OnlyIn(Dist.CLIENT)
 public class LeafUtil {
 
+    private static final Logger LOGGER = LogManager.getLogger(FallingLeavesMod.class);
     private static final RandomSource renderRandom = RandomSource.create();
 
     public static void trySpawnLeafParticle(BlockState state, Level world, BlockPos pos, RandomSource random, @Nullable LeafSettingsEntry leafSettings) {
@@ -72,19 +75,17 @@ public class LeafUtil {
             // read the bottom quad to determine whether we should color the texture
             BakedModel model = client.getBlockRenderer().getBlockModel(state);
             ModelData modelData = model.getModelData(world, pos, state, net.minecraftforge.client.model.data.ModelData.EMPTY);
-            List<BakedQuad> quads = model.getQuads(state, null, random, modelData, RenderType.cutout());
-//            boolean shouldColor = quads.isEmpty() || quads.stream().anyMatch(BakedQuad::isTinted);
 
-            double[] color = getBlockTextureColor(state, world, pos);
+            double[] color = getBlockTextureColor(state, world, pos, modelData);
 
             double r = color[0];
             double g = color[1];
             double b = color[2];
 
             // Add the particle.
-            ParticleProvider<?> provicer = leafSettings == null || !leafSettings.isConiferBlock ? Leaves.falling_leaf : Leaves.falling_leaf_conifer;
+            ParticleProvider<?> provider = leafSettings == null || !leafSettings.isConiferBlock ? Leaves.falling_leaf : Leaves.falling_leaf_conifer;
             //noinspection ConstantConditions
-            var particle = provicer.createParticle(null, (ClientLevel) world, x, y, z, r, g, b);
+            var particle = provider.createParticle(null, (ClientLevel) world, x, y, z, r, g, b);
             if (particle != null) {
                 Minecraft.getInstance().particleEngine.add(particle);
             }
@@ -109,24 +110,41 @@ public class LeafUtil {
     }
 
     public static double[] averageColor(NativeImage image) {
+        if (image.format() != NativeImage.Format.RGBA) {
+            LOGGER.error("RGBA image required, was {}", image.format());
+            return new double[] {1, 1, 1};
+        }
+
+        long pixels = ((NativeImageAccessor) (Object)image).getPixels();
+
+        if (pixels == 0) {
+            LOGGER.error("image is not allocated");
+            return new double[] {1, 1, 1};
+        }
+
         double r = 0;
         double g = 0;
         double b = 0;
         int n = 0;
 
-        // TODO: This entire block feels like it could be simplified or broken down into
-        //       more manageable parts.
-        for (int y = 0; y < image.getHeight(); y++) {
-            for (int x = 0; x < image.getWidth(); x++) {
-                Color c = new Color(image.getPixelRGBA(x, y), true);
+        int width = image.getWidth();
+        int height = image.getHeight();
 
-                // Only take completely opaque pixels into account
-                if (c.getAlpha() == 255) {
-                    r += c.getRed();
-                    g += c.getGreen();
-                    b += c.getBlue();
-                    n++;
-                }
+        // add up all opaque color values (this variant is much faster than using image.getPixelColor(x, y))
+        for (int i = 0; i < width * height; i++) {
+            int c = MemoryUtil.memGetInt(pixels + 4L * i);
+
+            // RGBA format
+            int cr = (c       & 255);
+            int cg = (c >> 8  & 255);
+            int cb = (c >> 16 & 255);
+            int ca = (c >> 24 & 255);
+
+            if (ca != 0) {
+                r += cr;
+                g += cg;
+                b += cb;
+                n++;
             }
         }
 
@@ -142,36 +160,24 @@ public class LeafUtil {
         return new ResourceLocation(sprite.getName().getNamespace(), "textures/" + texture + ".png");
     }
 
-    public static double[] getBlockTextureColor(BlockState state, Level world, BlockPos pos) {
+    public static double[] getBlockTextureColor(BlockState state, Level world, BlockPos pos, ModelData modelData) {
         Minecraft client = Minecraft.getInstance();
         BakedModel model = client.getBlockRenderer().getBlockModel(state);
 
         renderRandom.setSeed(state.getSeed(pos));
-        List<BakedQuad> quads = model.getQuads(state, Direction.DOWN, renderRandom);
+        List<BakedQuad> quads = model.getQuads(state, Direction.DOWN, renderRandom, modelData, RenderType.cutout());
 
         TextureAtlasSprite sprite;
         boolean shouldColor;
 
         // read data from the first bottom quad if possible
         if (!quads.isEmpty()) {
-            boolean useFirstQuad = true;
-
-            ResourceLocation id = ForgeRegistries.BLOCKS.getKey(state.getBlock());
-            if (id.getNamespace().equals("byg")) {
-                /*
-                 * some BYG leaves have their actual tinted leaf texture in an "overlay" that comes second, full list:
-                 * flowering_orchard_leaves, joshua_leaves, mahogany_leaves, maple_leaves, orchard_leaves,
-                 * rainbow_eucalyptus_leaves, ripe_joshua_leaves, ripe_orchard_leaves, willow_leaves
-                 */
-                useFirstQuad = false;
-            }
-
-            BakedQuad quad = quads.get(useFirstQuad ? 0 : quads.size() - 1);
+            BakedQuad quad = quads.get(0);
             sprite = quad.getSprite();
             shouldColor = quad.isTinted();
         } else {
             // fall back to block breaking particle
-            sprite = model.getParticleIcon();
+            sprite = model.getParticleIcon(modelData);
             shouldColor = true;
         }
 

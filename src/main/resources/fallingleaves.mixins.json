@@ -7,6 +7,7 @@
   "client": [
     "LeafTickMixin",
     "MinecraftClientMixin",
+    "NativeImageAccessor",
     "ParticleEngineAccessor",
     "ParticleManagerMixin",
     "TextureAtlasSpriteAccessor"
