@@ -2,24 +2,12 @@ package de.cheaterpaul.fallingleaves.config;
 
 import net.minecraft.resources.ResourceLocation;
 
-public class LeafSettingsEntry {
-
-    public final ResourceLocation id;
-    public final double spawnRateFactor;
-    public final boolean isConiferBlock;
-
-    public LeafSettingsEntry(ResourceLocation identifier, double spawnRateFactor, boolean isConiferBlock) {
-        this.id = identifier;
-        this.spawnRateFactor = spawnRateFactor;
-        this.isConiferBlock = isConiferBlock;
+public record LeafSettingsEntry(ResourceLocation id, double spawnRateFactor, ResourceLocation leafType, boolean considerAsConifer) {
+    public LeafSettingsEntry(ResourceLocation id, double spawnRateFactor, boolean isConiferBlock) {
+        this(id, spawnRateFactor, id, isConiferBlock);
     }
 
-    @Override
-    public String toString() {
-        return "LeafSettingsEntry{" +
-                "id=" + id +
-                ", spawnRateFactor=" + spawnRateFactor +
-                ", isConiferBlock=" + isConiferBlock +
-                '}';
+    public LeafSettingsEntry(ResourceLocation id, double spawnRateFactor) {
+        this(id, spawnRateFactor, id, false);
     }
 }

@@ -1,4 +1,5 @@
 {
   "spawnrate": 1.8,
-  "isConifer": false
+  "leaf_type": "traverse:brown_autumnal_leaves",
+  "consider_as_conifer": false
 }

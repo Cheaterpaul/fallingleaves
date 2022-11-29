@@ -41,8 +41,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import java.util.Random;
-
 @OnlyIn(Dist.CLIENT)
 @Mixin(LeavesBlock.class)
 public abstract class LeafTickMixin {
@@ -62,8 +60,8 @@ public abstract class LeafTickMixin {
         double spawnChance = 1;
         double modifier = FallingLeavesConfig.CONFIG.leafSpawnRate.get();
         if (leafSettings != null) {
-            spawnChance = leafSettings.spawnRateFactor;
-            if (leafSettings.isConiferBlock) {
+            spawnChance = leafSettings.spawnRateFactor();
+            if (leafSettings.considerAsConifer()) {
                 modifier = FallingLeavesConfig.CONFIG.coniferLeafSpawnRate.get();
             }
         }

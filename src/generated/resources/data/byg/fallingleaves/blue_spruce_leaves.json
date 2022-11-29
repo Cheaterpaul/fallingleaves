@@ -1,4 +1,5 @@
 {
   "spawnrate": 1.0,
-  "isConifer": true
+  "leaf_type": "byg:blue_spruce_leaves",
+  "consider_as_conifer": true
 }

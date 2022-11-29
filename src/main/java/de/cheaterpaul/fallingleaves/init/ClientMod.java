@@ -1,16 +1,27 @@
 package de.cheaterpaul.fallingleaves.init;
 
 import de.cheaterpaul.fallingleaves.data.LeafSettingGenerator;
+import de.cheaterpaul.fallingleaves.data.LeafTypeLoader;
 import de.cheaterpaul.fallingleaves.modcompat.SereneSeasons;
-import de.cheaterpaul.fallingleaves.particle.FallingConiferLeafParticle;
-import de.cheaterpaul.fallingleaves.particle.FallingLeafParticle;
-import net.minecraft.client.renderer.texture.TextureAtlas;
+import de.cheaterpaul.fallingleaves.util.TextureCache;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.particle.SpriteSet;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraftforge.client.event.RegisterClientReloadListenersEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.data.event.GatherDataEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 public class ClientMod {
+
+    public static final ResourceLocation DEFAULT = new ResourceLocation("fallingleaves", "default");
+    public static final ResourceLocation CONIFER = new ResourceLocation("fallingleaves", "conifer");
+    private static LeafTypeLoader leafTypeLoader;
+
+    public static SpriteSet getSpriteForLeafType(ResourceLocation leafType) {
+        return leafTypeLoader.getSpriteSet(leafType);
+    }
     private static void gatherData(final GatherDataEvent event) {
         if (event.includeClient()) {
             event.getGenerator().addProvider(event.includeServer(), new LeafSettingGenerator(event.getGenerator()));
@@ -20,25 +31,20 @@ public class ClientMod {
     public static void setupClient(){
         IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
         bus.addListener(ClientMod::gatherData);
-        bus.addListener(ClientMod::onTextureAtlasPre);
-        bus.addListener(ClientMod::onTextureAtlasPost);
+        bus.addListener(ClientMod::registerReloadListeners);
+        bus.addListener(ClientMod::registerReloadListeners);
+        bus.addListener(ClientMod::onReload);
         if (SereneSeasons.setup()) {
             bus.register(SereneSeasons.class);
         }
         FallingLeavesConfig.registerConfigs();
     }
 
-    public static void onTextureAtlasPre(TextureStitchEvent.Pre event){
-        if (event.getAtlas().location().equals(TextureAtlas.LOCATION_PARTICLES)) {
-            FallingLeafParticle.getTextures().forEach(event::addSprite);
-            FallingConiferLeafParticle.getTextures().forEach(event::addSprite);
-        }
+    public static void registerReloadListeners(RegisterClientReloadListenersEvent event) {
+        event.registerReloadListener(leafTypeLoader = new LeafTypeLoader(Minecraft.getInstance().getTextureManager()));
     }
 
-    public static void onTextureAtlasPost(TextureStitchEvent.Post event){
-        if (event.getAtlas().location().equals(TextureAtlas.LOCATION_PARTICLES)) {
-            Leaves.falling_leaf.rebind(FallingLeafParticle.getTextures().stream().map(loc -> event.getAtlas().getSprite(loc)).toList());
-            Leaves.falling_leaf_conifer.rebind(FallingConiferLeafParticle.getTextures().stream().map(loc -> event.getAtlas().getSprite(loc)).toList());
-        }
+    public static void onReload(TextureStitchEvent.Post event) {
+        TextureCache.INST.clear();
     }
 }

@@ -1,4 +1,5 @@
 {
   "spawnrate": 0.0,
-  "isConifer": false
+  "leaf_type": "terrestria:japenese_maple_shrub_leaves",
+  "consider_as_conifer": false
 }

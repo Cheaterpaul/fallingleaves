@@ -27,13 +27,14 @@ package de.cheaterpaul.fallingleaves.util;
 import com.mojang.blaze3d.platform.NativeImage;
 import de.cheaterpaul.fallingleaves.FallingLeavesMod;
 import de.cheaterpaul.fallingleaves.config.LeafSettingsEntry;
+import de.cheaterpaul.fallingleaves.init.ClientMod;
 import de.cheaterpaul.fallingleaves.init.FallingLeavesConfig;
 import de.cheaterpaul.fallingleaves.init.Leaves;
 import de.cheaterpaul.fallingleaves.mixin.NativeImageAccessor;
 import de.cheaterpaul.fallingleaves.mixin.TextureAtlasSpriteAccessor;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.client.particle.ParticleProvider;
+import net.minecraft.client.particle.SpriteSet;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -50,6 +51,7 @@ import net.minecraft.world.phys.AABB;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.model.data.ModelData;
+import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.lwjgl.system.MemoryUtil;
@@ -83,13 +85,20 @@ public class LeafUtil {
             double b = color[2];
 
             // Add the particle.
-            ParticleProvider<?> provider = leafSettings == null || !leafSettings.isConiferBlock ? Leaves.falling_leaf : Leaves.falling_leaf_conifer;
             //noinspection ConstantConditions
-            var particle = provider.createParticle(null, (ClientLevel) world, x, y, z, r, g, b);
+            var particle = Leaves.falling_leaf.createParticle(null, (ClientLevel) world, x, y, z, r, g, b, getSpriteSetForSettings(state, leafSettings));
             if (particle != null) {
                 Minecraft.getInstance().particleEngine.add(particle);
             }
         }
+    }
+
+    private static SpriteSet getSpriteSetForSettings(BlockState blockState, @Nullable LeafSettingsEntry entry) {
+        var set = ClientMod.getSpriteForLeafType(entry == null ? ForgeRegistries.BLOCKS.getKey(blockState.getBlock()) : entry.leafType());
+        if (set == null) {
+            set = ClientMod.getSpriteForLeafType(entry == null || !entry.considerAsConifer()? ClientMod.DEFAULT : ClientMod.CONIFER);
+        }
+        return set;
     }
 
     private static boolean shouldSpawnParticle(Level world, BlockPos pos, double x, double y, double z) {
@@ -153,11 +162,6 @@ public class LeafUtil {
                 (g / n) / 255.0,
                 (b / n) / 255.0
         };
-    }
-
-    public static ResourceLocation spriteToTexture(TextureAtlasSprite sprite) {
-        String texture = sprite.getName().getPath(); // e.g. block/sakura_leaves
-        return new ResourceLocation(sprite.getName().getNamespace(), "textures/" + texture + ".png");
     }
 
     public static double[] getBlockTextureColor(BlockState state, Level world, BlockPos pos, ModelData modelData) {

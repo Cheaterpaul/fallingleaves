@@ -1,4 +1,5 @@
 {
   "spawnrate": 1.4,
-  "isConifer": false
+  "leaf_type": "byg:skyris_leaves",
+  "consider_as_conifer": false
 }

@@ -24,26 +24,27 @@
 
 package de.cheaterpaul.fallingleaves.particle;
 
-import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Lists;
-import de.cheaterpaul.fallingleaves.FallingLeavesMod;
+import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.BufferBuilder;
+import com.mojang.blaze3d.vertex.DefaultVertexFormat;
+import com.mojang.blaze3d.vertex.Tesselator;
+import com.mojang.blaze3d.vertex.VertexFormat;
+import de.cheaterpaul.fallingleaves.data.LeafTypeLoader;
+import de.cheaterpaul.fallingleaves.init.ClientMod;
 import de.cheaterpaul.fallingleaves.init.FallingLeavesConfig;
 import de.cheaterpaul.fallingleaves.util.Wind;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.*;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.SimpleParticleType;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.FluidTags;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 /**
  * TODO - Plenty of "Magic numbers" in this class that we may want to get rid of
@@ -52,6 +53,24 @@ import java.util.Set;
 
 @OnlyIn(Dist.CLIENT)
 public class FallingLeafParticle extends TextureSheetParticle {
+
+    public static ParticleRenderType LEAVES_SHEET = new ParticleRenderType() {
+        public void begin(BufferBuilder p_107455_, TextureManager p_107456_) {
+            RenderSystem.depthMask(true);
+            RenderSystem.setShaderTexture(0, LeafTypeLoader.LEAVES_ATLAS);
+            RenderSystem.enableBlend();
+            RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+            p_107455_.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.PARTICLE);
+        }
+
+        public void end(Tesselator p_107458_) {
+            p_107458_.end();
+        }
+
+        public String toString() {
+            return "FALLINGLEAVES_PARTICLE_SHEET_TRANSLUCENT";
+        }
+    };
 
     protected static final float TAU = (float) (2 * Math.PI); // 1 rotation
 
@@ -153,35 +172,19 @@ public class FallingLeafParticle extends TextureSheetParticle {
 
     @Override
     public ParticleRenderType getRenderType() {
-        return ParticleRenderType.PARTICLE_SHEET_TRANSLUCENT;
+        return LEAVES_SHEET;
     }
 
     @OnlyIn(Dist.CLIENT)
-    public static class DefaultFactory implements ParticleProvider<SimpleParticleType> {
-        private final ParticleEngine.MutableSpriteSet provider;
-
-        public DefaultFactory() {
-            this.provider = new ParticleEngine.MutableSpriteSet();
-        }
-
-        public void rebind(TextureAtlasSprite sprite) {
-            this.provider.rebind(Lists.newArrayList(sprite));
-        }
-        public void rebind(List<TextureAtlasSprite> sprites) {
-            this.provider.rebind(sprites);
-        }
-
+    public static class LeavesParticleFactory implements ParticleProvider<SimpleParticleType> {
         @Override
         public Particle createParticle(@Nullable SimpleParticleType parameters, @NotNull ClientLevel world, double x, double y, double z, double r, double g, double b) {
-            return new FallingLeafParticle(world, x, y, z, r, g, b, this.provider);
+            return new FallingLeafParticle(world, x, y, z, r, g, b, ClientMod.getSpriteForLeafType(ClientMod.DEFAULT));
         }
-    }
 
-    public static Set<ResourceLocation> getTextures() {
-        return ImmutableSet.of(loc("falling_leaf_1"),loc("falling_leaf_2"),loc("falling_leaf_3"),loc("falling_leaf_4"),loc("falling_leaf_5"));
-    }
+        public Particle createParticle(@Nullable SimpleParticleType parameters, @NotNull ClientLevel world, double x, double y, double z, double r, double g, double b, SpriteSet spriteSet) {
+            return new FallingLeafParticle(world, x, y, z, r, g, b, spriteSet);
+        }
 
-    protected static ResourceLocation loc(String path){
-        return new ResourceLocation(FallingLeavesMod.MOD_ID, "particle/" + path);
     }
 }
