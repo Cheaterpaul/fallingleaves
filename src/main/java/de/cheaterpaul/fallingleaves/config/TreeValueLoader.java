@@ -24,7 +24,7 @@ public class TreeValueLoader extends SimpleJsonResourceReloadListener {
     private Map<ResourceLocation, LeafSettingsEntry> treeLeaveSizeValues = new HashMap<>();
 
     public TreeValueLoader() {
-        super(GSON, "fallingleaves");
+        super(GSON, "fallingleaves/settings");
     }
 
     @Override

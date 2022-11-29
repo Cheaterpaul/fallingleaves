@@ -1,5 +1,7 @@
 package de.cheaterpaul.fallingleaves.init;
 
+import de.cheaterpaul.fallingleaves.config.LeafSettingsEntry;
+import de.cheaterpaul.fallingleaves.config.TreeValueLoader;
 import de.cheaterpaul.fallingleaves.data.LeafSettingGenerator;
 import de.cheaterpaul.fallingleaves.data.LeafTypeLoader;
 import de.cheaterpaul.fallingleaves.modcompat.SereneSeasons;
@@ -18,10 +20,16 @@ public class ClientMod {
     public static final ResourceLocation DEFAULT = new ResourceLocation("fallingleaves", "default");
     public static final ResourceLocation CONIFER = new ResourceLocation("fallingleaves", "conifer");
     private static LeafTypeLoader leafTypeLoader;
+    private static TreeValueLoader treeValueLoader;
 
     public static SpriteSet getSpriteForLeafType(ResourceLocation leafType) {
         return leafTypeLoader.getSpriteSet(leafType);
     }
+
+    public static LeafSettingsEntry getLeafSetting(ResourceLocation location) {
+        return treeValueLoader.getLeafSetting(location);
+    }
+
     private static void gatherData(final GatherDataEvent event) {
         if (event.includeClient()) {
             event.getGenerator().addProvider(event.includeServer(), new LeafSettingGenerator(event.getGenerator()));
@@ -42,6 +50,7 @@ public class ClientMod {
 
     public static void registerReloadListeners(RegisterClientReloadListenersEvent event) {
         event.registerReloadListener(leafTypeLoader = new LeafTypeLoader(Minecraft.getInstance().getTextureManager()));
+        event.registerReloadListener(treeValueLoader = new TreeValueLoader());
     }
 
     public static void onReload(TextureStitchEvent.Post event) {

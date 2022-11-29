@@ -43,7 +43,7 @@ public class LeafSettingGenerator implements DataProvider {
                 object.addProperty("spawnrate", entry.spawnRateFactor());
                 object.addProperty("leaf_type", entry.leafType().toString());
                 object.addProperty("consider_as_conifer", entry.considerAsConifer());
-                this.saveLeafSettingEntries(cache, object, path.resolve("data/" + entry.id().getNamespace() + "/fallingleaves/" + entry.id().getPath() + ".json"));
+                this.saveLeafSettingEntries(cache, object, path.resolve("assets/" + entry.id().getNamespace() + "/fallingleaves/settings/" + entry.id().getPath() + ".json"));
             }
         });
     }

@@ -42,8 +42,8 @@ public class LeafTypeLoader implements PreparableReloadListener {
     }
     @Override
     public @NotNull CompletableFuture<Void> reload(@NotNull PreparationBarrier p_10638_, @NotNull ResourceManager p_10639_, @NotNull ProfilerFiller p_10640_, @NotNull ProfilerFiller p_10641_, @NotNull Executor p_10642_, @NotNull Executor p_10643_) {
-        return CompletableFuture.supplyAsync(() -> p_10639_.listResources("leavetypes", name -> name.getPath().endsWith(".json")).entrySet()).thenApplyAsync(list -> {
-            Map<ResourceLocation, List<ResourceLocation>> textures = list.stream().collect(Collectors.toMap(entry -> new ResourceLocation(entry.getKey().getNamespace(), entry.getKey().getPath().substring(11, entry.getKey().getPath().length() - 5)), entry -> {
+        return CompletableFuture.supplyAsync(() -> p_10639_.listResources("fallingleaves/leavetypes", name -> name.getPath().endsWith(".json")).entrySet()).thenApplyAsync(list -> {
+            Map<ResourceLocation, List<ResourceLocation>> textures = list.stream().collect(Collectors.toMap(entry -> new ResourceLocation(entry.getKey().getNamespace(), entry.getKey().getPath().substring(25, entry.getKey().getPath().length() - 5)), entry -> {
                 try (Reader reader = entry.getValue().openAsReader()) {
                     JsonObject object = GsonHelper.parse(reader);
                     return StreamSupport.stream(object.get("textures").getAsJsonArray().spliterator(), false).map(JsonElement::getAsString).map(ResourceLocation::new).map(loc -> new ResourceLocation(loc.getNamespace(), "particle/" + loc.getPath())).toList();
