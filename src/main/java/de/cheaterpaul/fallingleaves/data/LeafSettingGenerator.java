@@ -12,6 +12,7 @@ import net.minecraft.data.DataProvider;
 import net.minecraft.resources.ResourceLocation;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -32,7 +33,7 @@ public class LeafSettingGenerator implements DataProvider {
     }
 
     @Override
-    public void run(CachedOutput cache) throws IOException {
+    public void run(@NotNull CachedOutput cache) {
         Path path = this.generator.getOutputFolder();
         Set<ResourceLocation> set = new HashSet<>();
         this.registerLeafSettingEntries((entry) -> {

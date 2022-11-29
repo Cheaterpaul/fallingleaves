@@ -1,17 +1,13 @@
 package de.cheaterpaul.fallingleaves.config;
 
 import com.google.common.collect.Lists;
-import de.cheaterpaul.fallingleaves.FallingLeavesMod;
-import de.cheaterpaul.fallingleaves.init.FallingLeavesConfig;
 import de.cheaterpaul.fallingleaves.modcompat.SereneSeasons;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.level.dimension.DimensionType;
-import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraft.world.level.dimension.BuiltinDimensionTypes;
+import net.minecraftforge.common.ForgeConfigSpec;
 
 import java.util.List;
 
-@SuppressWarnings({"FieldMayBeFinal", "CanBeFinal"})
 public class ClientConfig {
 
     public final ForgeConfigSpec.IntValue leafSize;

@@ -29,9 +29,9 @@ import de.cheaterpaul.fallingleaves.FallingLeavesMod;
 import de.cheaterpaul.fallingleaves.config.LeafSettingsEntry;
 import de.cheaterpaul.fallingleaves.init.ClientMod;
 import de.cheaterpaul.fallingleaves.init.FallingLeavesConfig;
-import de.cheaterpaul.fallingleaves.init.Leaves;
 import de.cheaterpaul.fallingleaves.mixin.NativeImageAccessor;
 import de.cheaterpaul.fallingleaves.mixin.TextureAtlasSpriteAccessor;
+import de.cheaterpaul.fallingleaves.particle.FallingLeafParticle;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.SpriteSet;
@@ -64,6 +64,7 @@ public class LeafUtil {
 
     private static final Logger LOGGER = LogManager.getLogger(FallingLeavesMod.class);
     private static final RandomSource renderRandom = RandomSource.create();
+    private static final FallingLeafParticle.LeavesParticleFactory factory = new FallingLeafParticle.LeavesParticleFactory();
 
     public static void trySpawnLeafParticle(BlockState state, Level world, BlockPos pos, RandomSource random, @Nullable LeafSettingsEntry leafSettings) {
         // Particle position
@@ -86,7 +87,7 @@ public class LeafUtil {
 
             // Add the particle.
             //noinspection ConstantConditions
-            var particle = Leaves.falling_leaf.createParticle(null, (ClientLevel) world, x, y, z, r, g, b, getSpriteSetForSettings(state, leafSettings));
+            var particle = factory.createParticle(null, (ClientLevel) world, x, y, z, r, g, b, getSpriteSetForSettings(state, leafSettings));
             if (particle != null) {
                 Minecraft.getInstance().particleEngine.add(particle);
             }

@@ -1,6 +1,7 @@
-package de.cheaterpaul.fallingleaves.config;
+package de.cheaterpaul.fallingleaves.data;
 
 import com.google.gson.*;
+import de.cheaterpaul.fallingleaves.config.LeafSettingsEntry;
 import de.cheaterpaul.fallingleaves.init.ClientMod;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
@@ -17,13 +18,13 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-public class TreeValueLoader extends SimpleJsonResourceReloadListener {
+public class LeafSettingLoader extends SimpleJsonResourceReloadListener {
 
     private static final Logger LOGGER = LogManager.getLogger();
     private static final Gson GSON = new GsonBuilder().create();
     private Map<ResourceLocation, LeafSettingsEntry> treeLeaveSizeValues = new HashMap<>();
 
-    public TreeValueLoader() {
+    public LeafSettingLoader() {
         super(GSON, "fallingleaves/settings");
     }
 
