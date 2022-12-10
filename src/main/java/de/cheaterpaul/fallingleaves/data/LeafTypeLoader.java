@@ -3,20 +3,22 @@ package de.cheaterpaul.fallingleaves.data;
 import com.google.common.collect.Maps;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.mojang.logging.LogUtils;
 import net.minecraft.client.particle.ParticleEngine;
 import net.minecraft.client.particle.SpriteSet;
-import net.minecraft.client.renderer.texture.MissingTextureAtlasSprite;
+import net.minecraft.client.renderer.texture.SpriteLoader;
 import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureManager;
+import net.minecraft.resources.FileToIdConverter;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.PreparableReloadListener;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.util.profiling.ProfilerFiller;
-import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.slf4j.Logger;
 
 import java.io.IOException;
 import java.io.Reader;
@@ -28,7 +30,10 @@ import java.util.stream.StreamSupport;
 
 public class LeafTypeLoader implements PreparableReloadListener {
 
+    private static final Logger LOGGER = LogUtils.getLogger();
     public static final ResourceLocation LEAVES_ATLAS = new ResourceLocation("fallingleaves", "leaves");
+    private static final FileToIdConverter PARTICLE_LISTER = FileToIdConverter.json("fallingleaves/leaftypes");
+
     private final TextureAtlas textureAtlas;
     private final Map<ResourceLocation, ParticleEngine.MutableSpriteSet> spriteSets = Maps.newHashMap();
 
@@ -41,32 +46,58 @@ public class LeafTypeLoader implements PreparableReloadListener {
         manager.register(this.textureAtlas.location(), this.textureAtlas);
     }
     @Override
-    public @NotNull CompletableFuture<Void> reload(@NotNull PreparationBarrier p_10638_, @NotNull ResourceManager p_10639_, @NotNull ProfilerFiller p_10640_, @NotNull ProfilerFiller p_10641_, @NotNull Executor p_10642_, @NotNull Executor p_10643_) {
-        return CompletableFuture.supplyAsync(() -> p_10639_.listResources("fallingleaves/leaftypes", name -> name.getPath().endsWith(".json")).entrySet()).thenApplyAsync(list -> {
-            Map<ResourceLocation, List<ResourceLocation>> textures = list.stream().collect(Collectors.toMap(entry -> new ResourceLocation(entry.getKey().getNamespace(), entry.getKey().getPath().substring(24, entry.getKey().getPath().length() - 5)), entry -> {
+    public @NotNull CompletableFuture<Void> reload(@NotNull PreparationBarrier stage, @NotNull ResourceManager resourceManager, @NotNull ProfilerFiller p_10640_, @NotNull ProfilerFiller p_10641_, @NotNull Executor pBackgroundExecutor, @NotNull Executor p_10643_) {
+        record LeafType(ResourceLocation type, Collection<ResourceLocation> textures) {
+            public LeafType(ResourceLocation type) {
+                this(type, Collections.emptyList());
+            }
+        }
+        CompletableFuture<Collection<LeafType>> textures = CompletableFuture.supplyAsync(() -> PARTICLE_LISTER.listMatchingResources(resourceManager).entrySet(), pBackgroundExecutor).thenApplyAsync(list -> {
+            return list.stream().map(entry -> {
+                var key = PARTICLE_LISTER.fileToId(entry.getKey());
                 try (Reader reader = entry.getValue().openAsReader()) {
                     JsonObject object = GsonHelper.parse(reader);
-                    return StreamSupport.stream(object.get("textures").getAsJsonArray().spliterator(), false).map(JsonElement::getAsString).map(ResourceLocation::new).map(loc -> new ResourceLocation(loc.getNamespace(), "particle/" + loc.getPath())).toList();
+                    return new LeafType(key, StreamSupport.stream(object.get("textures").getAsJsonArray().spliterator(), false).map(JsonElement::getAsString).map(ResourceLocation::new).toList());
                 } catch (IOException e) {
-                    return Collections.emptyList();
+                    return new LeafType(key);
                 }
-            }));
-            return Pair.of(textures, this.textureAtlas.prepareToStitch(p_10639_, textures.values().stream().flatMap(Collection::stream), p_10640_, 0));
-        }, p_10642_).thenCompose(p_10638_::wait).thenAcceptAsync(preparations -> {
-            this.textureAtlas.reload(preparations.getValue());
-            TextureAtlasSprite missingSprite = this.textureAtlas.getSprite(MissingTextureAtlasSprite.getLocation());
+            }).collect(Collectors.toList());
+        });
+        CompletableFuture<SpriteLoader.Preparations> preparations = SpriteLoader.create(this.textureAtlas).loadAndStitch(resourceManager, LEAVES_ATLAS, 0, pBackgroundExecutor).thenCompose(SpriteLoader.Preparations::waitForUpload);
+        return CompletableFuture.allOf(textures, preparations).thenCompose(stage::wait).thenAcceptAsync(param -> {
+            SpriteLoader.Preparations spriteloader$preparations = preparations.join();
+            this.textureAtlas.upload(spriteloader$preparations);
+            Set<ResourceLocation> set = new HashSet<>();
             Set<ResourceLocation> existingSprites = new HashSet<>(this.spriteSets.keySet());
-            preparations.getKey().forEach((key, value) -> {
-                List<TextureAtlasSprite> sprites = value.isEmpty() ? List.of(missingSprite) : value.stream().map(this.textureAtlas::getSprite).toList();
-                ParticleEngine.MutableSpriteSet mutableSpriteSet = this.spriteSets.get(key);
-                existingSprites.remove(key);
-                if (mutableSpriteSet == null) {
-                    mutableSpriteSet = new ParticleEngine.MutableSpriteSet();
-                    this.spriteSets.put(key, mutableSpriteSet);
+            TextureAtlasSprite textureatlassprite = spriteloader$preparations.missing();
+            textures.join().forEach(leafType -> {
+                if (!leafType.textures.isEmpty()) {
+                    List<TextureAtlasSprite> list = new ArrayList<>();
+
+                    for (ResourceLocation resourceLocation : leafType.textures) {
+                        TextureAtlasSprite sprite = spriteloader$preparations.regions().get(resourceLocation);
+                        if (sprite == null) {
+                            set.add(resourceLocation);
+                            list.add(textureatlassprite);
+                        } else {
+                            list.add(sprite);
+                        }
+                    }
+
+                    ParticleEngine.MutableSpriteSet mutableSpriteSet = this.spriteSets.get(leafType.type);
+                    existingSprites.remove(leafType.type);
+                    if (mutableSpriteSet == null) {
+                        mutableSpriteSet = new ParticleEngine.MutableSpriteSet();
+                        this.spriteSets.put(leafType.type, mutableSpriteSet);
+                    }
+                    mutableSpriteSet.rebind(list);
                 }
-                mutableSpriteSet.rebind(sprites);
+
             });
             existingSprites.forEach(this.spriteSets::remove);
+            if (!set.isEmpty()) {
+                LOGGER.warn("Missing particle sprites: {}", set.stream().sorted().map(ResourceLocation::toString).collect(Collectors.joining(",")));
+            }
         }, p_10643_);
     }
 

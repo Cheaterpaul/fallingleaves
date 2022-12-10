@@ -9,8 +9,7 @@
     "MinecraftClientMixin",
     "NativeImageAccessor",
     "ParticleEngineAccessor",
-    "ParticleManagerMixin",
-    "TextureAtlasSpriteAccessor"
+    "ParticleManagerMixin"
   ],
   "injectors": {
     "defaultRequire": 1

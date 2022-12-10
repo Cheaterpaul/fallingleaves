@@ -31,9 +31,7 @@ public class ClientMod {
     }
 
     private static void gatherData(final GatherDataEvent event) {
-        if (event.includeClient()) {
-            event.getGenerator().addProvider(event.includeServer(), new LeafSettingGenerator(event.getGenerator()));
-        }
+        event.getGenerator().addProvider(event.includeClient(), new LeafSettingGenerator(event.getGenerator().getPackOutput()));
     }
 
     public static void setupClient(){

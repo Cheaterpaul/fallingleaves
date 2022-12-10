@@ -30,13 +30,13 @@ import de.cheaterpaul.fallingleaves.config.LeafSettingsEntry;
 import de.cheaterpaul.fallingleaves.init.ClientMod;
 import de.cheaterpaul.fallingleaves.init.FallingLeavesConfig;
 import de.cheaterpaul.fallingleaves.mixin.NativeImageAccessor;
-import de.cheaterpaul.fallingleaves.mixin.TextureAtlasSpriteAccessor;
 import de.cheaterpaul.fallingleaves.particle.FallingLeafParticle;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.SpriteSet;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.BakedQuad;
+import net.minecraft.client.renderer.texture.SpriteContents;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.BlockPos;
@@ -186,8 +186,9 @@ public class LeafUtil {
             shouldColor = true;
         }
 
-        ResourceLocation spriteId = sprite.getName();
-        NativeImage texture = ((TextureAtlasSpriteAccessor) sprite).getMainImage()[0]; // directly extract texture
+        SpriteContents contents = sprite.contents();
+        ResourceLocation spriteId = contents.name();
+        NativeImage texture = contents.byMipLevel[0]; // directly extract texture
         int blockColor = (shouldColor ? client.getBlockColors().getColor(state, world, pos, 0) : -1);
 
         return calculateLeafColor(spriteId, texture, blockColor);

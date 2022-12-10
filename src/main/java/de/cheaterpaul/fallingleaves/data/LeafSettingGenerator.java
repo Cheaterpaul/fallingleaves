@@ -1,70 +1,56 @@
 package de.cheaterpaul.fallingleaves.data;
 
-import com.google.common.hash.Hashing;
-import com.google.common.hash.HashingOutputStream;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonObject;
 import de.cheaterpaul.fallingleaves.config.LeafSettingsEntry;
 import net.minecraft.data.CachedOutput;
-import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DataProvider;
+import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 
 public class LeafSettingGenerator implements DataProvider {
 
     private static final Logger LOGGER = LogManager.getLogger();
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
-    protected final DataGenerator generator;
+    private final PackOutput.PathProvider pathProvider;
 
-    public LeafSettingGenerator(DataGenerator generatorIn) {
-        this.generator = generatorIn;
+    public LeafSettingGenerator(PackOutput packOutput) {
+        this.pathProvider = packOutput.createPathProvider(PackOutput.Target.RESOURCE_PACK, "fallingleaves/settings");
     }
 
     @Override
-    public void run(@NotNull CachedOutput cache) {
-        Path path = this.generator.getOutputFolder();
-        Set<ResourceLocation> set = new HashSet<>();
-        this.registerLeafSettingEntries((entry) -> {
-            if (!set.add(entry.id())) {
-                throw new IllegalStateException("Duplicate leaf setting entry " + entry.id());
-            } else {
-                JsonObject object = new JsonObject();
-                object.addProperty("spawnrate", entry.spawnRateFactor());
-                object.addProperty("leaf_type", entry.leafType().toString());
-                object.addProperty("consider_as_conifer", entry.considerAsConifer());
-                this.saveLeafSettingEntries(cache, object, path.resolve("assets/" + entry.id().getNamespace() + "/fallingleaves/settings/" + entry.id().getPath() + ".json"));
-            }
+    public @NotNull CompletableFuture<?> run(@NotNull CachedOutput cache) {
+        return CompletableFuture.supplyAsync(() -> {
+            Set<ResourceLocation> set = new HashSet<>();
+            List<CompletableFuture<?>> list = new ArrayList<>();
+            Consumer<LeafSettingsEntry> consumer = entry -> {
+                if (!set.add(entry.id())){
+                    throw new IllegalStateException("Duplicate leaf setting entry " + entry.id());
+                } else {
+                    Path path = this.pathProvider.json(entry.id());
+                    list.add(DataProvider.saveStable(cache, entry.serializeToJson(), path));
+                }
+            };
+            this.registerLeafSettingEntries(consumer);
+
+            return CompletableFuture.allOf(list.toArray(CompletableFuture[]::new));
         });
     }
 
     @Override
-    public String getName() {
-        return "Falling Leaves leaves settings generator";
-    }
-
-    @SuppressWarnings("UnstableApiUsage")
-    private void saveLeafSettingEntries(CachedOutput cache, JsonObject entryJson, Path path) {
-        try {
-            String s = GSON.toJson(entryJson);
-            ByteArrayOutputStream bytearrayoutputstream = new ByteArrayOutputStream();
-            HashingOutputStream hashingoutputstream = new HashingOutputStream(Hashing.sha1(), bytearrayoutputstream);
-            hashingoutputstream.write(s.getBytes(StandardCharsets.UTF_8));
-            cache.writeIfNeeded(path, bytearrayoutputstream.toByteArray(), hashingoutputstream.hash());
-        } catch (IOException ioExeption) {
-            LOGGER.error("Couldn't save skill node {}", path, ioExeption);
-        }
+    public @NotNull String getName() {
+        return "leave settings generator";
     }
 
     protected void registerLeafSettingEntries(Consumer<LeafSettingsEntry> consumer) {
