@@ -131,7 +131,7 @@ public class FallingLeafParticle extends TextureSheetParticle {
             return;
         }
 
-        if (this.level.getFluidState(new BlockPos(x, y, z)).is(FluidTags.WATER)) {
+        if (this.level.getFluidState(new BlockPos((int) x, (int) y, (int) z)).is(FluidTags.WATER)) {
             // float on water
             yd = 0.0;
             rotateTime = 0;
