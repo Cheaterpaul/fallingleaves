@@ -57,6 +57,7 @@ public class LeafSettingGenerator implements DataProvider {
         //minecraft
         consumer.accept(new LeafSettingsEntry(new ResourceLocation("minecraft","spruce_leaves"),1,true));
         consumer.accept(new LeafSettingsEntry(new ResourceLocation("minecraft","jungle_leaves"),0));
+        consumer.accept(new LeafSettingsEntry(new ResourceLocation("minecraft","cherry_leaves"),0));
         //byg
         consumer.accept(new LeafSettingsEntry(new ResourceLocation("byg","blue_spruce_leaves"),1,true));
         consumer.accept(new LeafSettingsEntry(new ResourceLocation("byg","cypress_leaves"),1,true));
