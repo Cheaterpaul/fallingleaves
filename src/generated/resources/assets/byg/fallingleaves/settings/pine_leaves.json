@@ -1,5 +1,5 @@
 {
-  "spawnrate": 1.0,
+  "consider_as_conifer": true,
   "leaf_type": "byg:pine_leaves",
-  "consider_as_conifer": true
+  "spawnrate": 1.0
 }

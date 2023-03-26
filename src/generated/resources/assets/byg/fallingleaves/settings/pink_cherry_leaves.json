@@ -1,5 +1,5 @@
 {
-  "spawnrate": 1.4,
+  "consider_as_conifer": false,
   "leaf_type": "byg:pink_cherry_leaves",
-  "consider_as_conifer": false
+  "spawnrate": 1.4
 }
