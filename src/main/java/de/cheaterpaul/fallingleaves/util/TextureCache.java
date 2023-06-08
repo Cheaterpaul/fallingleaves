@@ -25,8 +25,6 @@
 package de.cheaterpaul.fallingleaves.util;
 
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -35,10 +33,9 @@ import java.util.Map;
 public class TextureCache {
     public record Data(double[] color) {
 
-        public Data(double[] color) {
+        public Data {
             if (color.length != 3)
                 throw new IllegalArgumentException("texture color should have 3 components");
-            this.color = color;
         }
 
         public double[] getColor() {

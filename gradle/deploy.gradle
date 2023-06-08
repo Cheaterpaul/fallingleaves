@@ -2,7 +2,7 @@ apply from: 'gradle/maven.gradle'
 apply from: 'gradle/curse.gradle'
 apply from: 'gradle/modrinth.gradle'
 
-task checkIfPublicVersion{
+tasks.register('checkIfPublicVersion') {
     doFirst {
         if (project.classification != "public") {
             throw new PublishException("Trying to publish a version that is not intended for public release")

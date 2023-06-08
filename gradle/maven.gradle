@@ -3,7 +3,7 @@
  */
 
 apply plugin: 'maven-publish'
-tasks.withType(GenerateModuleMetadata) {
+tasks.withType(GenerateModuleMetadata).configureEach {
     enabled = false
 }
 

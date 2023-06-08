@@ -6,21 +6,23 @@
  developers like to distribute.
 */
 
-task sourcesJar(type: Jar, dependsOn: classes) {
+tasks.register('sourcesJar', Jar) {
+    dependsOn classes
 
     description = 'Creates a JAR containing the source code.'
     from sourceSets.main.allSource
     classifier = 'sources'
 }
 
-task javadocJar(type: Jar, dependsOn: javadoc) {
+tasks.register('javadocJar', Jar) {
+    dependsOn javadoc
 
     description = 'Creates a JAR containing the JavaDocs.'
     from javadoc.destinationDir
     classifier = 'javadoc'
 }
 
-task deobfJar(type: Jar) {
+tasks.register('deobfJar', Jar) {
 
     description = 'Creates a JAR containing the non-obfuscated compiled code.'
     from sourceSets.main.output

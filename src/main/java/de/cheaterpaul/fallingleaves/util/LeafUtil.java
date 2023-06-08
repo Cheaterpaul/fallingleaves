@@ -86,7 +86,6 @@ public class LeafUtil {
             double b = color[2];
 
             // Add the particle.
-            //noinspection ConstantConditions
             var particle = factory.createParticle(null, (ClientLevel) world, x, y, z, r, g, b, getSpriteSetForSettings(state, leafSettings));
             if (particle != null) {
                 Minecraft.getInstance().particleEngine.add(particle);

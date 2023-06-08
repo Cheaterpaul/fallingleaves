@@ -54,8 +54,8 @@ import javax.annotation.Nullable;
 @OnlyIn(Dist.CLIENT)
 public class FallingLeafParticle extends TextureSheetParticle {
 
-    public static ParticleRenderType LEAVES_SHEET = new ParticleRenderType() {
-        public void begin(BufferBuilder p_107455_, TextureManager p_107456_) {
+    public static final ParticleRenderType LEAVES_SHEET = new ParticleRenderType() {
+        public void begin(BufferBuilder p_107455_, @NotNull TextureManager p_107456_) {
             RenderSystem.depthMask(true);
             RenderSystem.setShaderTexture(0, LeafTypeLoader.LEAVES_ATLAS);
             RenderSystem.enableBlend();
@@ -171,7 +171,7 @@ public class FallingLeafParticle extends TextureSheetParticle {
     }
 
     @Override
-    public ParticleRenderType getRenderType() {
+    public @NotNull ParticleRenderType getRenderType() {
         return LEAVES_SHEET;
     }
 

@@ -18,8 +18,8 @@ public class Wind {
     private static final Logger LOGGER = LogManager.getLogger();
     public static float windX;
     public static float windZ;
-    protected static Random rng = new Random();
-    protected static float TAU = (float) (2 * Math.PI);
+    protected static final Random rng = new Random();
+    protected static final float TAU = (float) (2 * Math.PI);
     protected static SmoothNoise velocityNoise;
     protected static SmoothNoise directionTrendNoise;
     protected static SmoothNoise directionNoise;
@@ -104,7 +104,7 @@ public class Wind {
         float strength = velocityNoise.getNoise();
         float direction = directionTrendNoise.getLerp() + directionNoise.getNoise();
 
-        /**
+        /*
          LOGGER.printf(Level.DEBUG, "state %s strength %.2f -> %.2f direction var %.2f° -> %.2f°, trend %.2f° -> %.2f°",
          state.toString(),
          strengthNoise.getNoise(),
@@ -113,7 +113,7 @@ public class Wind {
          directionNoise.getRightNoise() * 360.0 / TAU,
          directionTrendNoise.getLerp() * 360.0 / TAU,
          directionTrendNoise.getRightNoise() * 360.0 / TAU);
-         /**/
+         */
 
         // calculate wind velocity (in blocks / tick)
         windX = strength * Mth.cos(direction);
@@ -125,9 +125,9 @@ public class Wind {
         WINDY(0.05f, 0.3f, 0.7f),
         STORMY(0.05f, 0.6f, 1.1f);
 
-        public TriangularDistribution velocityDistribution;
+        public final TriangularDistribution velocityDistribution;
 
-        State(float minSpeed, float likelySpeed, float maxSpeed) {
+        State(@SuppressWarnings("SameParameterValue") float minSpeed, float likelySpeed, float maxSpeed) {
             this.velocityDistribution = new TriangularDistribution(minSpeed, maxSpeed, likelySpeed, rng);
         }
     }
