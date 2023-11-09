@@ -4,7 +4,7 @@ import de.cheaterpaul.fallingleaves.config.LeafSettingsEntry;
 import de.cheaterpaul.fallingleaves.data.LeafSettingGenerator;
 import de.cheaterpaul.fallingleaves.data.LeafSettingLoader;
 import de.cheaterpaul.fallingleaves.data.LeafTypeLoader;
-import de.cheaterpaul.fallingleaves.modcompat.SereneSeasons;
+//import de.cheaterpaul.fallingleaves.modcompat.SereneSeasons;
 import de.cheaterpaul.fallingleaves.util.TextureCache;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.SpriteSet;
@@ -40,9 +40,9 @@ public class ClientMod {
         bus.addListener(ClientMod::registerReloadListeners);
         bus.addListener(ClientMod::registerReloadListeners);
         bus.addListener(ClientMod::onReload);
-        if (SereneSeasons.setup()) {
-            bus.register(SereneSeasons.class);
-        }
+//        if (SereneSeasons.setup()) {
+//            bus.register(SereneSeasons.class);
+//        }
         FallingLeavesConfig.registerConfigs();
     }
 

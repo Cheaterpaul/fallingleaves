@@ -1,31 +1,26 @@
 modLoader = "javafml"
-loaderVersion = "[46,)"
-issueTrackerURL = "https://github.com/Cheaterpaul/fallingleaves/issues"
-license = "LGPL-3.0"
+loaderVersion = "${loader_version_range}"
+issueTrackerURL = "${mod_issue_tracker_url}"
+license = "${mod_license}"
 displayTest="IGNORE_ALL_VERSION"
 
 [[mods]]
-modId = "fallingleaves"
-version = "${version}"
-displayName = "Falling Leaves"
+modId = "${mod_id}"
+version = "${mod_version}"
+displayName = "${mod_name}"
 logoFile = "logo.png"
-credits = "Thanks to Fourmisain, BrekiTomasson and RandomMcSomethin who developed this mod for fabric and published the source code with MIT licence"
-authors = "Cheaterpaul, Fourmisain, BrekiTomasson and RandomMcSomethin"
-description = '''How the gentle wind
-    beckons through the leaves
-    as autumn colors fall,
-    dancing in a swirl
-    of golden memories:
-    the loveliest lies of all.'''
-[[dependencies.fallingleaves]] #optional
+credits = "${mod_credits}"
+authors = "${mod_authors}"
+description = '''${mod_description}'''
+[[dependencies.${mod_id}]] #optional
 modId = "forge" #mandatory
 mandatory = true #mandatory
-versionRange = "[${forge_version},)" #mandatory
+versionRange = "${forge_version}" #mandatory
 ordering = "NONE"
 side = "CLIENT"
-[[dependencies.fallingleaves]]
+[[dependencies.${mod_id}]]
 modId = "minecraft"
 mandatory = true
-versionRange = "[${mcversion},)"
+versionRange = "${minecraft_version_range}"
 ordering = "NONE"
 side = "CLIENT"
