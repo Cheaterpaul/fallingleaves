@@ -2,10 +2,10 @@
 package de.cheaterpaul.fallingleaves.modcompat;
 
 import net.minecraft.world.level.Level;
-import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.ModList;
-import net.minecraftforge.fml.event.config.ModConfigEvent;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.ModList;
+import net.neoforged.fml.event.config.ModConfigEvent;
+import net.neoforged.neoforge.common.ModConfigSpec;
 
 public class SereneSeasons {
 
@@ -20,7 +20,7 @@ public class SereneSeasons {
         return config == null ? 1 : config.getModifier(level);
     }
 
-    public static void registerConfig(ForgeConfigSpec.Builder builder) {
+    public static void registerConfig(ModConfigSpec.Builder builder) {
         if (isEnabled) {
             config = new SereneSeasonsConfig(builder);
         }

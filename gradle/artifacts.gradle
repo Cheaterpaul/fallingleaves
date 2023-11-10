@@ -22,13 +22,6 @@ tasks.register('javadocJar', Jar) {
     archiveClassifier = 'javadoc'
 }
 
-tasks.register('deobfJar', Jar) {
-
-    description = 'Creates a JAR containing the non-obfuscated compiled code.'
-    from sourceSets.main.output
-    archiveClassifier = "deobf"
-}
-
 //task forgelibJar(type: Jar) {
 //    description = 'Creates a compiled JAR which also contains raw sources.'
 //    from sourceSets.main.output
@@ -41,6 +34,5 @@ artifacts {
 
     archives sourcesJar
     archives javadocJar
-    archives deobfJar
 //    archives forgelibJar
 }

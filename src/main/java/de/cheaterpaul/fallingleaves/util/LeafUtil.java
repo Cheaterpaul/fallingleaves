@@ -48,14 +48,13 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.LeavesBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.model.data.ModelData;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.neoforge.client.model.data.ModelData;
+import net.neoforged.neoforge.registries.ForgeRegistries;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.lwjgl.system.MemoryUtil;
-
 import javax.annotation.Nullable;
 import java.util.List;
 
@@ -77,7 +76,7 @@ public class LeafUtil {
 
             // read the bottom quad to determine whether we should color the texture
             BakedModel model = client.getBlockRenderer().getBlockModel(state);
-            ModelData modelData = model.getModelData(world, pos, state, net.minecraftforge.client.model.data.ModelData.EMPTY);
+            ModelData modelData = model.getModelData(world, pos, state, ModelData.EMPTY);
 
             double[] color = getBlockTextureColor(state, world, pos, modelData);
 

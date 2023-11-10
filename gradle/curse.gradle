@@ -1,10 +1,6 @@
 
 curseforge {
-    if (project.hasProperty("CURSEFORGE_API")) {
-        apiKey = project.CURSEFORGE_API
-    } else {
-        apiKey = "DUMMY"
-    }
+    apiKey = project.hasProperty("CURSEFORGE_API") ? project.CURSEFORGE_API : ""
     project {
         id = project.curseforge_id
 
@@ -18,6 +14,9 @@ curseforge {
             changelog = "This version should not be used in your 'productive' world. It contains the latest features, but also the latest bugs.\n Probably not all features are finished.\n To see what might have changed browse the latest commits."
         }
         addGameVersion project.minecraft_version
+        addGameVersion "neoforge"
+        addGameVersion "Client"
+
 
         mainArtifact(jar) {
             displayName = "FallingLeaves(Forge)-${project.minecraft_version}-${project.mod_version}"

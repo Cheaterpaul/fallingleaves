@@ -1,14 +1,9 @@
 plugins {
-    id 'net.minecraftforge.gradle' version '6.0+'
-    id 'com.matthewprenger.cursegradle' version '1.2.0'
+    id 'com.matthewprenger.cursegradle' version '1.4.0+'
     id "com.modrinth.minotaur" version "2.+"
     id 'idea'
     id 'eclipse'
-    id 'org.spongepowered.mixin' version '0.7.+'
-}
-
-mixin {
-    add sourceSets.main, "fallingleaves.refmap.json"
+    id 'net.neoforged.gradle.userdev' version '7.0.+'
 }
 
 ext.mod_version="Test"
@@ -29,45 +24,30 @@ apply from: 'gradle/deploy.gradle'
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
 println('Java: ' + System.getProperty('java.version') + ' JVM: ' + System.getProperty('java.vm.version') + '(' + System.getProperty('java.vendor') + ') Arch: ' + System.getProperty('os.arch'))
-minecraft {
-    mappings channel: mapping_channel, version: mapping_version
+//    mappings channel: mapping_channel, version: mapping_version
+minecraft.accessTransformers.file rootProject.file('src/main/resources/META-INF/accesstransformer.cfg')
+runs {
+    configureEach {
+        systemProperty 'forge.logging.markers', 'REGISTRIES'
+        systemProperty 'forge.logging.console.level', 'debug'
 
-    accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
-    copyIdeResources = true
+        modSource project.sourceSets.main
+    }
+    client {
+        systemProperty 'forge.enabledGameTestNamespaces', project.mod_id
+    }
 
-    // Default run configurations.
-    // These can be tweaked, removed, or duplicated as needed.
-    runs {
-        configureEach {
-            workingDirectory project.file("run/${it.name}")
+    server {
+        systemProperty 'forge.enabledGameTestNamespaces', project.mod_id
+        programArgument '--nogui'
+    }
 
-            property 'forge.logging.markers', 'REGISTRIES'
-            property 'forge.logging.console.level', 'debug'
+    gameTestServer {
+        systemProperty 'forge.enabledGameTestNamespaces', project.mod_id
+    }
 
-            mods {
-                "${mod_id}" {
-                    source sourceSets.main
-                }
-            }
-        }
-        client {
-            property 'mixin.debug.export', 'true'
-            arg "-mixin.config=fallingleaves.mixins.json"
-        }
-
-        client2 {
-            parent runs.client
-            taskName 'runClient2'
-            args "-mixin.config=fallingleaves.mixins.json", '--username', 'Dev2'
-        }
-
-        server {
-            arg "-mixin.config=fallingleaves.mixins.json"
-        }
-
-        data {
-            args "-mixin.config=fallingleaves.mixins.json", '--mod', project.mod_id , '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
-        }
+    data {
+        programArguments.addAll '--mod', project.mod_id, '--all', '--output', file('src/generated/resources/').getAbsolutePath(), '--existing', file('src/main/resources/').getAbsolutePath()
     }
 }
 
@@ -84,10 +64,7 @@ repositories {
 
 
 dependencies {
-    minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
-    if (System.getProperty("idea.sync.active") != "true") {
-        annotationProcessor 'org.spongepowered:mixin:0.8.4:processor'
-    }
+    implementation "net.neoforged:neoforge:${forge_version}"
     //Serene Seasons API
 //    compileOnly fg.deobf("curse.maven:serene-seasons-api-291874:3582838")
     //Serene Seasons Full for testing
@@ -103,13 +80,9 @@ tasks.named('jar', Jar).configure {
                 'Implementation-Title'    : project.name,
                 'Implementation-Version'  : project.jar.archiveVersion,
                 'Implementation-Vendor'   : mod_authors,
-                'Implementation-Timestamp': new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
-                "MixinConfigs": "fallingleaves.mixins.json"
+                'Implementation-Timestamp': new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
         ])
     }
-
-    // This is the preferred method to reobfuscate your jar file
-    finalizedBy 'reobfJar'
 }
 
 tasks.withType(ProcessResources).configureEach {

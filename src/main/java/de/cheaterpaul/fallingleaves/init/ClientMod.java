@@ -9,11 +9,11 @@ import de.cheaterpaul.fallingleaves.util.TextureCache;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.SpriteSet;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.client.event.RegisterClientReloadListenersEvent;
-import net.minecraftforge.client.event.TextureStitchEvent;
-import net.minecraftforge.data.event.GatherDataEvent;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.neoforged.neoforge.client.event.RegisterClientReloadListenersEvent;
+import net.neoforged.neoforge.client.event.TextureAtlasStitchedEvent;
+import net.neoforged.neoforge.data.event.GatherDataEvent;
 
 public class ClientMod {
 
@@ -51,7 +51,7 @@ public class ClientMod {
         event.registerReloadListener(treeValueLoader = new LeafSettingLoader());
     }
 
-    public static void onReload(TextureStitchEvent.Post event) {
+    public static void onReload(TextureAtlasStitchedEvent event) {
         TextureCache.INST.clear();
     }
 }

@@ -1,10 +1,12 @@
-Falling Leaves for Minecraft 1.20 - Forge [![](http://cf.way2muchnoise.eu/short_463155_downloads.svg)](https://www.curseforge.com/minecraft/mc-mods/falling-leaves-forge) [![](https://img.shields.io/modrinth/dt/enchantmentmachine?color=00AF5C&label=modrinth&style=flat&logo=modrinth)](https://modrinth.com/mod/fallingleavesforge) [![License: LGPL v3](https://img.shields.io/badge/License-LGPL%20v3-blue.svg)](https://www.gnu.org/licenses/lgpl-3.0) [![](https://badgen.net/maven/v/metadata-url/https/maven.paube.de/releases/de/cheaterpaul/fallingleaves/Fallingleaves/maven-metadata.xml)](https://maven.paube.de/#/releases/de/cheaterpaul/fallingleaves/Fallingleaves)
+Falling Leaves for Minecraft 1.20.2 - NeoForge [![](http://cf.way2muchnoise.eu/short_463155_downloads.svg)](https://www.curseforge.com/minecraft/mc-mods/falling-leaves-forge) [![](https://img.shields.io/modrinth/dt/enchantmentmachine?color=00AF5C&label=modrinth&style=flat&logo=modrinth)](https://modrinth.com/mod/fallingleavesforge) [![License: LGPL v3](https://img.shields.io/badge/License-LGPL%20v3-blue.svg)](https://www.gnu.org/licenses/lgpl-3.0) [![](https://badgen.net/maven/v/metadata-url/https/maven.paube.de/releases/de/cheaterpaul/fallingleaves/Fallingleaves/maven-metadata.xml)](https://maven.paube.de/#/releases/de/cheaterpaul/fallingleaves/Fallingleaves)
 ===================================
 
 ## Mod Description
 
-This Forge mod for Minecraft 1.20.x adds a neat little particle effect to leaf blocks. Users can configure which types
+This NeoForge mod for Minecraft 1.20.x adds a neat little particle effect to leaf blocks. Users can configure which types
 of leaf blocks will drop leaves and the frequency that these leaves are dropped at.
+
+Versions until 1.20.1 require Minecraft Forge.
 
 ![](https://i.imgur.com/Tek7xJe.gif)
 

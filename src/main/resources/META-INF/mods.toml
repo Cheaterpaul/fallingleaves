@@ -12,8 +12,10 @@ logoFile = "logo.png"
 credits = "${mod_credits}"
 authors = "${mod_authors}"
 description = '''${mod_description}'''
+[[mixins]]
+config = "fallingleaves.mixins.json"
 [[dependencies.${mod_id}]] #optional
-modId = "forge" #mandatory
+modId = "neoforge" #mandatory
 mandatory = true #mandatory
 versionRange = "${forge_version}" #mandatory
 ordering = "NONE"

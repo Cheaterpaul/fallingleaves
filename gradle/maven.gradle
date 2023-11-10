@@ -56,7 +56,6 @@ publishing {
             }
             artifact sourcesJar
             artifact javadocJar
-            artifact deobfJar
         }
     }
 

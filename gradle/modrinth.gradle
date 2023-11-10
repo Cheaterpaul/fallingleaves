@@ -7,5 +7,5 @@ modrinth {
     versionName = "FallingLeaves-${project.minecraft_version}-${project.mod_version}"
     uploadFile = jar
     gameVersions = [project.minecraft_version]
-    loaders = ['forge']
+    loaders = ['neoforge']
 }
