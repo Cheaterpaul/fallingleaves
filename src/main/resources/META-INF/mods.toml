@@ -17,7 +17,7 @@ config = "fallingleaves.mixins.json"
 [[dependencies.${mod_id}]] #optional
 modId = "neoforge" #mandatory
 mandatory = true #mandatory
-versionRange = "${forge_version}" #mandatory
+versionRange = "${forge_version_range}" #mandatory
 ordering = "NONE"
 side = "CLIENT"
 [[dependencies.${mod_id}]]
