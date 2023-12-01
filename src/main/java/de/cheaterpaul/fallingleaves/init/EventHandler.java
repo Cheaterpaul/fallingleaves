@@ -26,12 +26,12 @@ package de.cheaterpaul.fallingleaves.init;
 
 import de.cheaterpaul.fallingleaves.config.LeafSettingsEntry;
 import de.cheaterpaul.fallingleaves.util.LeafUtil;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.level.block.LeavesBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
-import net.neoforged.neoforge.registries.ForgeRegistries;
 
 public class EventHandler {
 
@@ -46,7 +46,7 @@ public class EventHandler {
     public void onAttackLeavesBlock(PlayerInteractEvent.LeftClickBlock e) {
         if (e.getLevel().isClientSide) {
             BlockState state = e.getLevel().getBlockState(e.getPos());
-            LeafSettingsEntry leafSettings = ClientMod.getLeafSetting(ForgeRegistries.BLOCKS.getKey(state.getBlock()));
+            LeafSettingsEntry leafSettings = ClientMod.getLeafSetting(BuiltInRegistries.BLOCK.getKey(state.getBlock()));
             if (leafSettings != null || state.getBlock() instanceof LeavesBlock) {
                 // binomial distribution - extremes (0 or 3 leaves) are less likely
                 for (int i = 0; i < 3; i++) {

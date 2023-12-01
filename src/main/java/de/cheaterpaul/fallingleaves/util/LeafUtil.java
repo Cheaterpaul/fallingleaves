@@ -41,6 +41,7 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.RandomSource;
@@ -51,7 +52,6 @@ import net.minecraft.world.phys.AABB;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.client.model.data.ModelData;
-import net.neoforged.neoforge.registries.ForgeRegistries;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.lwjgl.system.MemoryUtil;
@@ -93,7 +93,7 @@ public class LeafUtil {
     }
 
     private static SpriteSet getSpriteSetForSettings(BlockState blockState, @Nullable LeafSettingsEntry entry) {
-        var set = ClientMod.getSpriteForLeafType(entry == null ? ForgeRegistries.BLOCKS.getKey(blockState.getBlock()) : entry.leafType());
+        var set = ClientMod.getSpriteForLeafType(entry == null ? BuiltInRegistries.BLOCK.getKey(blockState.getBlock()) : entry.leafType());
         if (set == null) {
             set = ClientMod.getSpriteForLeafType(entry == null || !entry.considerAsConifer()? ClientMod.DEFAULT : ClientMod.CONIFER);
         }
