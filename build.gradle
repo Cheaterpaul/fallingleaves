@@ -64,10 +64,8 @@ repositories {
 
 dependencies {
     implementation "net.neoforged:neoforge:${forge_version}"
-    //Serene Seasons API
-//    compileOnly fg.deobf("curse.maven:serene-seasons-api-291874:3582838")
-    //Serene Seasons Full for testing
-//    runtimeOnly fg.deobf("curse.maven:serene-seasons-291874:3582836")
+    implementation "curse.maven:serene-seasons-291874:5106254"
+    implementation "curse.maven:glitchcore-955399:5088442"
 }
 
 tasks.named('jar', Jar).configure {

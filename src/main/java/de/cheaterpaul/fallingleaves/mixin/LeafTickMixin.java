@@ -28,6 +28,7 @@ import de.cheaterpaul.fallingleaves.config.LeafSettingsEntry;
 import de.cheaterpaul.fallingleaves.init.ClientMod;
 import de.cheaterpaul.fallingleaves.init.FallingLeavesConfig;
 //import de.cheaterpaul.fallingleaves.modcompat.SereneSeasons;
+import de.cheaterpaul.fallingleaves.modcompat.SereneSeasons;
 import de.cheaterpaul.fallingleaves.util.LeafUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -68,7 +69,7 @@ public abstract class LeafTickMixin {
         }
         modifier = modifier / 10f / 75f;
         spawnChance *= modifier;
-//        spawnChance *= SereneSeasons.getModifier(world);
+        spawnChance *= SereneSeasons.getModifier(world);
 
         while (spawnChance > 0) {
             if (random.nextDouble() < spawnChance) {

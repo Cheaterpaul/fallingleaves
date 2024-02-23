@@ -1,4 +1,3 @@
-/*
 package de.cheaterpaul.fallingleaves.modcompat;
 
 import net.minecraft.world.level.Level;
@@ -40,4 +39,3 @@ public class SereneSeasons {
         }
     }
 }
-*/

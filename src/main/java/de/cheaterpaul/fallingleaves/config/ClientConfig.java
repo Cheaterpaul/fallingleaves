@@ -2,6 +2,7 @@ package de.cheaterpaul.fallingleaves.config;
 
 import com.google.common.collect.Lists;
 //import de.cheaterpaul.fallingleaves.modcompat.SereneSeasons;
+import de.cheaterpaul.fallingleaves.modcompat.SereneSeasons;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.dimension.BuiltinDimensionTypes;
 import net.neoforged.neoforge.common.ModConfigSpec;
@@ -27,7 +28,7 @@ public class ClientConfig {
         minimumFreeSpaceBelow = builder.comment("how much room below the leaves block is needed for the leaves to spawn").defineInRange("minimumFreeSpaceBelow", 1, 1, 20);
         disableWind = builder.comment("disable wind effects").define("disableWind", false);
         windlessDimension = builder.comment("windless dimensions").defineList("windlessDimension", Lists.newArrayList(BuiltinDimensionTypes.NETHER.location().toString(), BuiltinDimensionTypes.END.location().toString()), string -> string instanceof String && ResourceLocation.tryParse(((String) string)) != null);
-//        SereneSeasons.registerConfig(builder);
+        SereneSeasons.registerConfig(builder);
     }
 
 }

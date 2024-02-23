@@ -1,4 +1,3 @@
-/*
 package de.cheaterpaul.fallingleaves.modcompat;
 
 import com.google.common.collect.Lists;
@@ -67,4 +66,3 @@ public class SereneSeasonsConfig {
         return Pair.of(season, modifier);
     }
 }
-*/
