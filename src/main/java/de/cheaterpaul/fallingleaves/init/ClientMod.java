@@ -10,9 +10,9 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.SpriteSet;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.bus.api.IEventBus;
-import net.neoforged.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.neoforged.neoforge.client.event.RegisterClientReloadListenersEvent;
 import net.neoforged.neoforge.client.event.TextureAtlasStitchedEvent;
+import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 
 public class ClientMod {
@@ -34,16 +34,16 @@ public class ClientMod {
         event.getGenerator().addProvider(event.includeClient(), new LeafSettingGenerator(event.getGenerator().getPackOutput()));
     }
 
-    public static void setupClient(){
-        IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
-        bus.addListener(ClientMod::gatherData);
-        bus.addListener(ClientMod::registerReloadListeners);
-        bus.addListener(ClientMod::registerReloadListeners);
-        bus.addListener(ClientMod::onReload);
+    public static void setupClient(IEventBus modBus){
+        modBus.addListener(ClientMod::gatherData);
+        modBus.addListener(ClientMod::registerReloadListeners);
+        modBus.addListener(ClientMod::registerReloadListeners);
+        modBus.addListener(ClientMod::onReload);
 //        if (SereneSeasons.setup()) {
 //            bus.register(SereneSeasons.class);
 //        }
         FallingLeavesConfig.registerConfigs();
+        NeoForge.EVENT_BUS.register(new EventHandler());
     }
 
     public static void registerReloadListeners(RegisterClientReloadListenersEvent event) {

@@ -35,10 +35,6 @@ import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 
 public class EventHandler {
 
-    public EventHandler() {
-        NeoForge.EVENT_BUS.register(this);
-    }
-
     /**
      * Spawn between 0 and 3 leaves on hitting a leaf block
      */
