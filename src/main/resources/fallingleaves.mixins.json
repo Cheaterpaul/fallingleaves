@@ -3,6 +3,7 @@
   "minVersion": "0.8.5",
   "package": "de.cheaterpaul.fallingleaves.mixin",
   "compatibilityLevel": "JAVA_17",
+  "refmap": "fallingleaves.refmap.json",
   "client": [
     "LeafTickMixin",
     "MinecraftClientMixin",

@@ -13,17 +13,15 @@ credits = "${mod_credits}"
 authors = "${mod_authors}"
 description = '''${mod_description}'''
 displayTest="IGNORE_ALL_VERSION"
-[[mixins]]
-config = "fallingleaves.mixins.json"
-[[dependencies.${mod_id}]] #optional
-modId = "neoforge" #mandatory
-type = "required"
+[[dependencies."${mod_id}"]] #optional
+modId = "forge" #mandatory
+mandatory = true
 versionRange = "${forge_version_range}" #mandatory
 ordering = "NONE"
 side = "CLIENT"
-[[dependencies.${mod_id}]]
+[[dependencies."${mod_id}"]]
 modId = "minecraft"
-type = "required"
+mandatory = true
 versionRange = "${minecraft_version_range}"
 ordering = "NONE"
 side = "CLIENT"

@@ -10,11 +10,11 @@ import de.cheaterpaul.fallingleaves.util.TextureCache;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.SpriteSet;
 import net.minecraft.resources.ResourceLocation;
-import net.neoforged.bus.api.IEventBus;
-import net.neoforged.neoforge.client.event.RegisterClientReloadListenersEvent;
-import net.neoforged.neoforge.client.event.TextureAtlasStitchedEvent;
-import net.neoforged.neoforge.common.NeoForge;
-import net.neoforged.neoforge.data.event.GatherDataEvent;
+import net.minecraftforge.client.event.RegisterClientReloadListenersEvent;
+import net.minecraftforge.client.event.TextureStitchEvent;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.data.event.GatherDataEvent;
+import net.minecraftforge.eventbus.api.IEventBus;
 
 public class ClientMod {
 
@@ -44,7 +44,7 @@ public class ClientMod {
             modBus.register(SereneSeasons.class);
         }
         FallingLeavesConfig.registerConfigs();
-        NeoForge.EVENT_BUS.register(new EventHandler());
+        MinecraftForge.EVENT_BUS.register(new EventHandler());
     }
 
     public static void registerReloadListeners(RegisterClientReloadListenersEvent event) {
@@ -52,7 +52,7 @@ public class ClientMod {
         event.registerReloadListener(treeValueLoader = new LeafSettingLoader());
     }
 
-    public static void onReload(TextureAtlasStitchedEvent event) {
+    public static void onReload(TextureStitchEvent.Post event) {
         TextureCache.INST.clear();
     }
 }

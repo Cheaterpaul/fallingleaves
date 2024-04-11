@@ -2,7 +2,7 @@ package de.cheaterpaul.fallingleaves.modcompat;
 
 import com.google.common.collect.Lists;
 import net.minecraft.world.level.Level;
-import net.neoforged.neoforge.common.ModConfigSpec;
+import net.minecraftforge.common.ForgeConfigSpec;
 import org.apache.commons.lang3.tuple.Pair;
 import sereneseasons.api.season.ISeasonState;
 import sereneseasons.api.season.Season;
@@ -14,11 +14,11 @@ import java.util.stream.Stream;
 
 public class SereneSeasonsConfig {
 
-    private final ModConfigSpec.ConfigValue<List<? extends String>> seasonFallRate;
+    private final ForgeConfigSpec.ConfigValue<List<? extends String>> seasonFallRate;
 
     private Map<Enum<?>, Float> enabledSeasons = new HashMap<>();
 
-    public SereneSeasonsConfig(ModConfigSpec.Builder builder) {
+    public SereneSeasonsConfig(ForgeConfigSpec.Builder builder) {
         builder.push("Serene Seasons");
 
         seasonFallRate = builder.comment("spawnrate modifier per season/subseason", "Format: '<season>:<modifier>'; eg 'SUMMER:0.23'","Subseasons override seasons", "Allowed seasons: " + Stream.concat(Arrays.stream(Season.values()), Arrays.stream(Season.SubSeason.values())).map(Enum::name).collect(Collectors.joining(","))).defineList("seasonFallRate", defaults(), string -> string instanceof String && exists(((String) string)));
