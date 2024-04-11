@@ -27,6 +27,7 @@ package de.cheaterpaul.fallingleaves.util;
 import com.mojang.blaze3d.platform.NativeImage;
 import de.cheaterpaul.fallingleaves.FallingLeavesMod;
 import de.cheaterpaul.fallingleaves.config.LeafSettingsEntry;
+import de.cheaterpaul.fallingleaves.data.LeafTypeLoader;
 import de.cheaterpaul.fallingleaves.init.ClientMod;
 import de.cheaterpaul.fallingleaves.init.FallingLeavesConfig;
 import de.cheaterpaul.fallingleaves.mixin.NativeImageAccessor;
@@ -57,6 +58,7 @@ import org.apache.logging.log4j.Logger;
 import org.lwjgl.system.MemoryUtil;
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.Optional;
 
 @OnlyIn(Dist.CLIENT)
 public class LeafUtil {
@@ -92,12 +94,8 @@ public class LeafUtil {
         }
     }
 
-    private static SpriteSet getSpriteSetForSettings(BlockState blockState, @Nullable LeafSettingsEntry entry) {
-        var set = ClientMod.getSpriteForLeafType(entry == null ? BuiltInRegistries.BLOCK.getKey(blockState.getBlock()) : entry.leafType());
-        if (set == null) {
-            set = ClientMod.getSpriteForLeafType(entry == null || !entry.considerAsConifer()? ClientMod.DEFAULT : ClientMod.CONIFER);
-        }
-        return set;
+    private static LeafTypeLoader.LeafTypeSettings getSpriteSetForSettings(BlockState blockState, @Nullable LeafSettingsEntry entry) {
+        return Optional.ofNullable(entry).flatMap(LeafSettingsEntry::leafType).map(ClientMod::getSpriteForLeafType).or(() -> Optional.ofNullable(BuiltInRegistries.BLOCK.getKey(blockState.getBlock())).map(ClientMod::getSpriteForLeafType)).orElseGet(() -> ClientMod.getSpriteForLeafType(entry != null && entry.considerAsConifer() ? ClientMod.CONIFER : ClientMod.DEFAULT));
     }
 
     private static boolean shouldSpawnParticle(Level world, BlockPos pos, double x, double y, double z) {

@@ -1,5 +1,4 @@
 {
-  "consider_as_conifer": false,
-  "leaf_type": "terrestria:yucca_palm_leaves",
-  "spawnrate": 0.0
+  "leaf_type": "fallingleaves:palms",
+  "spawnrate": 0.2
 }

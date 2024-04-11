@@ -20,10 +20,12 @@ public class ClientMod {
 
     public static final ResourceLocation DEFAULT = new ResourceLocation("fallingleaves", "default");
     public static final ResourceLocation CONIFER = new ResourceLocation("fallingleaves", "conifer");
+    public static final ResourceLocation PALMS = new ResourceLocation("fallingleaves", "palms");
+
     private static LeafTypeLoader leafTypeLoader;
     private static LeafSettingLoader treeValueLoader;
 
-    public static SpriteSet getSpriteForLeafType(ResourceLocation leafType) {
+    public static LeafTypeLoader.LeafTypeSettings getSpriteForLeafType(ResourceLocation leafType) {
         return leafTypeLoader.getSpriteSet(leafType);
     }
 

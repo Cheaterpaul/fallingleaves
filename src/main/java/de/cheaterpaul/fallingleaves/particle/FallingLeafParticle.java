@@ -84,10 +84,9 @@ public class FallingLeafParticle extends TextureSheetParticle {
     protected final int maxRotateTime;
     protected int rotateTime = 0;
 
-    protected FallingLeafParticle(ClientLevel clientWorld, double x, double y, double z, double r, double g, double b, SpriteSet provider) {
+    protected FallingLeafParticle(ClientLevel clientWorld, double x, double y, double z, double r, double g, double b, LeafTypeLoader.LeafTypeSettings provider) {
         super(clientWorld, x, y, z, 0, 0, 0);
-        this.pickSprite(provider);
-
+        this.pickSprite(provider.getSpriteSet());
 
         this.gravity = 0.08f + random.nextFloat() * 0.04f;
         this.windCoefficient = 0.6f + random.nextFloat() * 0.4f;
@@ -98,7 +97,7 @@ public class FallingLeafParticle extends TextureSheetParticle {
         this.zd = 0.0;
 
         this.hasPhysics = true; // TODO: is it possible to turn off collisions with leaf blocks?
-        this.lifetime = FallingLeavesConfig.CONFIG.leafLifespan.get();
+        this.lifetime = (int) (FallingLeavesConfig.CONFIG.leafLifespan.get() * provider.getLeafType().lifeSpanModifier());
 
         this.rCol = (float) r;
         this.gCol = (float) g;
@@ -109,7 +108,7 @@ public class FallingLeafParticle extends TextureSheetParticle {
 
         this.roll = this.oRoll = random.nextFloat() * TAU;
 
-        this.quadSize = FallingLeavesConfig.CONFIG.leafSize.get() / 50f;
+        this.quadSize = (FallingLeavesConfig.CONFIG.leafSize.get() / 50f) * provider.getLeafType().sizeModifier();
     }
 
     @Override
@@ -182,7 +181,7 @@ public class FallingLeafParticle extends TextureSheetParticle {
             return new FallingLeafParticle(world, x, y, z, r, g, b, ClientMod.getSpriteForLeafType(ClientMod.DEFAULT));
         }
 
-        public Particle createParticle(@Nullable SimpleParticleType parameters, @NotNull ClientLevel world, double x, double y, double z, double r, double g, double b, SpriteSet spriteSet) {
+        public Particle createParticle(@Nullable SimpleParticleType parameters, @NotNull ClientLevel world, double x, double y, double z, double r, double g, double b, LeafTypeLoader.LeafTypeSettings spriteSet) {
             return new FallingLeafParticle(world, x, y, z, r, g, b, spriteSet);
         }
 

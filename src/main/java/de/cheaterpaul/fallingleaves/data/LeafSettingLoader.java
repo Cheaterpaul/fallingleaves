@@ -1,6 +1,9 @@
 package de.cheaterpaul.fallingleaves.data;
 
 import com.google.gson.*;
+import com.mojang.datafixers.util.Pair;
+import com.mojang.serialization.DataResult;
+import com.mojang.serialization.JsonOps;
 import de.cheaterpaul.fallingleaves.config.LeafSettingsEntry;
 import de.cheaterpaul.fallingleaves.init.ClientMod;
 import net.minecraft.resources.ResourceLocation;
@@ -15,8 +18,10 @@ import org.jetbrains.annotations.NotNull;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class LeafSettingLoader extends SimpleJsonResourceReloadListener {
 
@@ -30,24 +35,13 @@ public class LeafSettingLoader extends SimpleJsonResourceReloadListener {
 
     @Override
     protected void apply(Map<ResourceLocation, JsonElement> values, @NotNull ResourceManager resourceManager, @NotNull ProfilerFiller profiler) {
-        Map<ResourceLocation, LeafSettingsEntry> map = new HashMap<>();
-        values.forEach((id, json) -> {
-            try {
-                JsonObject object = GsonHelper.convertToJsonObject(json, "leafsettings");
-                double spawn_rate = object.has("spawnrate") ? object.get("spawnrate").getAsDouble() : 1.0;
-                ResourceLocation leafType = object.has("leaf_type") ? new ResourceLocation(object.get("leaf_type").getAsString()) : id;
-                boolean considerAsConifer = false;
-                if (object.has("isConifer") && object.get("isConifer").getAsBoolean()) {
-                    leafType = ClientMod.CONIFER;
-                    considerAsConifer = true;
-                }
-                considerAsConifer = object.has("consider_as_conifer") ? object.get("consider_as_conifer").getAsBoolean() : considerAsConifer;
-                map.put(id, new LeafSettingsEntry(id, spawn_rate, leafType, considerAsConifer));
-            } catch (IllegalArgumentException | JsonParseException e) {
-                LOGGER.error("Parsing error loading leaf settings {}: {}", json, e.getMessage());
-            }
-        });
-        this.treeLeaveSizeValues = map;
+        this.treeLeaveSizeValues = values.entrySet().stream().<Pair<ResourceLocation,LeafSettingsEntry>>mapMulti((entry, consumer) -> {
+            DataResult<Pair<LeafSettingsEntry, JsonElement>> decode = LeafSettingsEntry.CODEC.decode(JsonOps.INSTANCE, entry.getValue());
+            decode.result().ifPresent(res -> consumer.accept(Pair.of(entry.getKey(), res.getFirst())));
+            decode.error().ifPresent(error -> {
+                LOGGER.error(error.message());
+            });
+        }).collect(Collectors.toMap(Pair::getFirst, Pair::getSecond));
     }
 
     @Nullable

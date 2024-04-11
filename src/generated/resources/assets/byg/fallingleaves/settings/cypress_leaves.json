@@ -1,5 +1,4 @@
 {
   "consider_as_conifer": true,
-  "leaf_type": "byg:cypress_leaves",
-  "spawnrate": 1.0
+  "leaf_type": "fallingleaves:conifer"
 }

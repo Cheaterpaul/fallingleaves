@@ -1,5 +1,3 @@
 {
-  "consider_as_conifer": false,
-  "leaf_type": "minecraft:jungle_leaves",
-  "spawnrate": 0.0
+  "leaf_type": "fallingleaves:palms"
 }
