@@ -21,6 +21,8 @@ public class ClientMod {
     public static final ResourceLocation DEFAULT = new ResourceLocation("fallingleaves", "default");
     public static final ResourceLocation CONIFER = new ResourceLocation("fallingleaves", "conifer");
     public static final ResourceLocation PALMS = new ResourceLocation("fallingleaves", "palms");
+    public static final ResourceLocation MAHOGANY = new ResourceLocation("fallingleaves", "mahogany");
+    public static final ResourceLocation MAPLE = new ResourceLocation("fallingleaves", "maple");
 
     private static LeafTypeLoader leafTypeLoader;
     private static LeafSettingLoader treeValueLoader;
