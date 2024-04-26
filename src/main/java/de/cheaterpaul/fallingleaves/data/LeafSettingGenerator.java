@@ -57,7 +57,7 @@ public class LeafSettingGenerator implements DataProvider {
     protected void registerLeafSettingEntries(BiConsumer<ResourceLocation, LeafSettingsEntry> consumer) {
         //minecraft
         consumer.accept(new ResourceLocation("minecraft", "spruce_leaves"), new LeafSettingsEntry(1, ClientMod.CONIFER));
-        consumer.accept(new ResourceLocation("minecraft", "jungle_leaves"), new LeafSettingsEntry(1, ClientMod.MAPLE));
+        consumer.accept(new ResourceLocation("minecraft", "jungle_leaves"), new LeafSettingsEntry(1, ClientMod.DEFAULT));
         consumer.accept(new ResourceLocation("minecraft", "cherry_leaves"), new LeafSettingsEntry(0));
         //byg
         consumer.accept(new ResourceLocation("byg", "blue_spruce_leaves"), new LeafSettingsEntry(1, ClientMod.CONIFER));
@@ -74,7 +74,7 @@ public class LeafSettingGenerator implements DataProvider {
         consumer.accept(new ResourceLocation("terrestria", "cypress_leaves"), new LeafSettingsEntry(1, ClientMod.CONIFER));
         consumer.accept(new ResourceLocation("terrestria", "hemlock_leaves"), new LeafSettingsEntry(1, ClientMod.CONIFER));
         consumer.accept(new ResourceLocation("terrestria", "redwood_leaves"), new LeafSettingsEntry(1, ClientMod.CONIFER));
-        consumer.accept(new ResourceLocation("terrestria", "japenese_maple_shrub_leaves"), new LeafSettingsEntry(0, ClientMod.MAPLE));
+        consumer.accept(new ResourceLocation("terrestria", "japanese_maple_shrub_leaves"), new LeafSettingsEntry(0, ClientMod.MAPLE));
         consumer.accept(new ResourceLocation("terrestria", "jungle_palm_leaves"), new LeafSettingsEntry(0.2, ClientMod.PALMS));
         consumer.accept(new ResourceLocation("terrestria", "yucca_palm_leaves"), new LeafSettingsEntry(0.2, ClientMod.PALMS));
         consumer.accept(new ResourceLocation("terrestria", "sakura_leaves"), new LeafSettingsEntry(1.4));
