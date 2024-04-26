@@ -18,6 +18,6 @@ public class FallingLeavesConfig {
     }
 
     public static void registerConfigs() {
-        ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, clientSpec);
+        ModLoadingContext.get().getActiveContainer().registerConfig(ModConfig.Type.CLIENT, clientSpec);
     }
 }

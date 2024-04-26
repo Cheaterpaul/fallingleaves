@@ -12,9 +12,9 @@ import java.util.Optional;
 
 public record LeafSettingsEntry(double spawnRateFactor, Optional<ResourceLocation> leafType, boolean considerAsConifer) {
     public static final Codec<LeafSettingsEntry> CODEC = RecordCodecBuilder.create(inst -> inst.group(
-            ExtraCodecs.strictOptionalField(Codec.DOUBLE, "spawnrate", 1.0).forGetter(LeafSettingsEntry::spawnRateFactor),
-            ExtraCodecs.strictOptionalField(ResourceLocation.CODEC, "leaf_type").forGetter(s -> s.leafType),
-            ExtraCodecs.strictOptionalField(Codec.BOOL, "consider_as_conifer", false).forGetter(s -> s.considerAsConifer)
+            Codec.DOUBLE.optionalFieldOf("spawnrate", 1.0).forGetter(LeafSettingsEntry::spawnRateFactor),
+            ResourceLocation.CODEC.optionalFieldOf( "leaf_type").forGetter(s -> s.leafType),
+            Codec.BOOL.optionalFieldOf( "consider_as_conifer", false).forGetter(s -> s.considerAsConifer)
     ).apply(inst, LeafSettingsEntry::new));
 
     @SuppressWarnings("OptionalUsedAsFieldOrParameterType")

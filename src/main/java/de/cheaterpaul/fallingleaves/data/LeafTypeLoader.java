@@ -55,8 +55,8 @@ public class LeafTypeLoader implements PreparableReloadListener {
     public record LeafType(Collection<ResourceLocation> textures, float sizeModifier, float lifeSpanModifier) {
         public static final Codec<LeafType> CODEC = RecordCodecBuilder.create(inst -> inst.group(
                 ResourceLocation.CODEC.listOf().fieldOf("textures").forGetter(l -> new ArrayList<>(l.textures)),
-                ExtraCodecs.strictOptionalField(Codec.FLOAT, "sizeModifier").forGetter(l -> Optional.of(l.sizeModifier)),
-                ExtraCodecs.strictOptionalField(Codec.FLOAT, "lifeSpanModifier").forGetter(l -> Optional.of(l.lifeSpanModifier))
+                Codec.FLOAT.optionalFieldOf("sizeModifier").forGetter(l -> Optional.of(l.sizeModifier)),
+                Codec.FLOAT.optionalFieldOf( "lifeSpanModifier").forGetter(l -> Optional.of(l.lifeSpanModifier))
         ).apply(inst, LeafType::new));
 
         @SuppressWarnings("OptionalUsedAsFieldOrParameterType")

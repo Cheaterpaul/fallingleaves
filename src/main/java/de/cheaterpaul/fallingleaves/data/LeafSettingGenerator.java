@@ -1,16 +1,12 @@
 package de.cheaterpaul.fallingleaves.data;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.mojang.serialization.JsonOps;
 import de.cheaterpaul.fallingleaves.config.LeafSettingsEntry;
 import de.cheaterpaul.fallingleaves.init.ClientMod;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 
 import java.nio.file.Path;
@@ -20,19 +16,20 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.BiConsumer;
-import java.util.function.Consumer;
 
 public class LeafSettingGenerator implements DataProvider {
 
     private final PackOutput.PathProvider pathProvider;
+    private final CompletableFuture<HolderLookup.Provider> holderLookup;
 
-    public LeafSettingGenerator(PackOutput packOutput) {
+    public LeafSettingGenerator(PackOutput packOutput, CompletableFuture<HolderLookup.Provider> holderLookup) {
         this.pathProvider = packOutput.createPathProvider(PackOutput.Target.RESOURCE_PACK, "fallingleaves/settings");
+        this.holderLookup = holderLookup;
     }
 
     @Override
     public @NotNull CompletableFuture<?> run(@NotNull CachedOutput cache) {
-        return CompletableFuture.supplyAsync(() -> {
+        return this.holderLookup.thenCompose((holder) -> {
             Set<ResourceLocation> set = new HashSet<>();
             List<CompletableFuture<?>> list = new ArrayList<>();
             BiConsumer<ResourceLocation, LeafSettingsEntry> consumer = (id, entry) -> {
@@ -40,7 +37,7 @@ public class LeafSettingGenerator implements DataProvider {
                     throw new IllegalStateException("Duplicate leaf setting entry " + id);
                 } else {
                     Path path = this.pathProvider.json(id);
-                    list.add(DataProvider.saveStable(cache, LeafSettingsEntry.CODEC, entry, path));
+                    list.add(DataProvider.saveStable(cache, holder, LeafSettingsEntry.CODEC, entry, path));
                 }
             };
             this.registerLeafSettingEntries(consumer);
