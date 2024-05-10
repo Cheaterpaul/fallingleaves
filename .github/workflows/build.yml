@@ -7,11 +7,11 @@ name: build
 on:
   push:
     branches:
-      - '1.19'
+      - 'forge/*'
       - 'feature/*'
   pull_request:
     branches:
-      - '1.19*'
+      - 'forge/*'
       - 'feature/*'
 
 jobs:
@@ -22,7 +22,7 @@ jobs:
       - name: Setup Java JDK
         uses: actions/setup-java@v3.1.0
         with:
-          java-version: '17'
+          java-version: '21'
           distribution: 'adopt'
           cache: 'gradle'
       - name: Setup Gradle
