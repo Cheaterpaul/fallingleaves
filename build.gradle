@@ -2,7 +2,7 @@ plugins {
     id "me.modmuss50.mod-publish-plugin" version "0.4.2"
     id 'idea'
     id 'eclipse'
-    id 'net.minecraftforge.gradle' version '6.+'
+    id 'net.minecraftforge.gradle' version '[6.0,6.2)'
     id 'org.spongepowered.mixin' version '0.7.+'
 }
 
@@ -36,6 +36,7 @@ minecraft {
 
     accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
     copyIdeResources = true
+    reobf = false
 
     // Default run configurations.
     // These can be tweaked, removed, or duplicated as needed.
@@ -66,6 +67,7 @@ minecraft {
 
         server {
             arg "-mixin.config=fallingleaves.mixins.json"
+            args '--nogui'
         }
 
         data {
@@ -91,6 +93,7 @@ dependencies {
     implementation "curse.maven:serene-seasons-291874:5329070"
     implementation "curse.maven:glitchcore-955399:5317312"
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
+    implementation('net.sf.jopt-simple:jopt-simple:5.0.4') { version { strictly '5.0.4' } }
 }
 
 tasks.named('jar', Jar).configure {
