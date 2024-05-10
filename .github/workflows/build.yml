@@ -7,11 +7,13 @@ name: build
 on:
   push:
     branches:
-      - '1.19'
+      - 'neo/*'
+      - 'forge/*'
       - 'feature/*'
   pull_request:
     branches:
-      - '1.19*'
+      - 'neo/*'
+      - 'forge/*'
       - 'feature/*'
 
 jobs:
