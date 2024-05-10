@@ -2,7 +2,7 @@ plugins {
     id "me.modmuss50.mod-publish-plugin" version "0.4.2"
     id 'idea'
     id 'eclipse'
-    id 'net.minecraftforge.gradle' version '6.0+'
+    id 'net.minecraftforge.gradle' version '6.+'
     id 'org.spongepowered.mixin' version '0.7.+'
 }
 
@@ -27,7 +27,7 @@ apply from: 'gradle/versioning.gradle'
 apply from: 'gradle/artifacts.gradle'
 apply from: 'gradle/deploy.gradle'
 
-java.toolchain.languageVersion = JavaLanguageVersion.of(17)
+java.toolchain.languageVersion = JavaLanguageVersion.of(21)
 
 println('Java: ' + System.getProperty('java.version') + ' JVM: ' + System.getProperty('java.vm.version') + '(' + System.getProperty('java.vendor') + ') Arch: ' + System.getProperty('os.arch'))
 //    mappings channel: mapping_channel, version: mapping_version
@@ -88,8 +88,8 @@ repositories {
 
 dependencies {
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
-    implementation fg.deobf("curse.maven:serene-seasons-291874:5206531")
-    implementation fg.deobf("curse.maven:glitchcore-955399:5088441")
+    implementation "curse.maven:serene-seasons-291874:5329070"
+    implementation "curse.maven:glitchcore-955399:5317312"
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 }
 
