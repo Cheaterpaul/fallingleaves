@@ -36,7 +36,7 @@ import java.util.stream.StreamSupport;
 public class LeafTypeLoader implements PreparableReloadListener {
 
     private static final Logger LOGGER = LogUtils.getLogger();
-    public static final ResourceLocation LEAVES_ATLAS = new ResourceLocation("fallingleaves", "leaves");
+    public static final ResourceLocation LEAVES_ATLAS = ResourceLocation.fromNamespaceAndPath("fallingleaves", "leaves");
     private static final FileToIdConverter PARTICLE_LISTER = FileToIdConverter.json("fallingleaves/leaftypes");
 
     private final TextureAtlas textureAtlas;

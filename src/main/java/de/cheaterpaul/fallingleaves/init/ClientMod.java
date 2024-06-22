@@ -18,11 +18,11 @@ import net.neoforged.neoforge.data.event.GatherDataEvent;
 
 public class ClientMod {
 
-    public static final ResourceLocation DEFAULT = new ResourceLocation("fallingleaves", "default");
-    public static final ResourceLocation CONIFER = new ResourceLocation("fallingleaves", "conifer");
-    public static final ResourceLocation PALMS = new ResourceLocation("fallingleaves", "palms");
-    public static final ResourceLocation MAHOGANY = new ResourceLocation("fallingleaves", "mahogany");
-    public static final ResourceLocation MAPLE = new ResourceLocation("fallingleaves", "maple");
+    public static final ResourceLocation DEFAULT = ResourceLocation.fromNamespaceAndPath("fallingleaves", "default");
+    public static final ResourceLocation CONIFER = ResourceLocation.fromNamespaceAndPath("fallingleaves", "conifer");
+    public static final ResourceLocation PALMS = ResourceLocation.fromNamespaceAndPath("fallingleaves", "palms");
+    public static final ResourceLocation MAHOGANY = ResourceLocation.fromNamespaceAndPath("fallingleaves", "mahogany");
+    public static final ResourceLocation MAPLE = ResourceLocation.fromNamespaceAndPath("fallingleaves", "maple");
 
     private static LeafTypeLoader leafTypeLoader;
     private static LeafSettingLoader treeValueLoader;
