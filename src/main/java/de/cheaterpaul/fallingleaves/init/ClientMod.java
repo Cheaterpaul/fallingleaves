@@ -18,8 +18,8 @@ import net.minecraftforge.eventbus.api.IEventBus;
 
 public class ClientMod {
 
-    public static final ResourceLocation DEFAULT = new ResourceLocation("fallingleaves", "default");
-    public static final ResourceLocation CONIFER = new ResourceLocation("fallingleaves", "conifer");
+    public static final ResourceLocation DEFAULT = ResourceLocation.fromNamespaceAndPath("fallingleaves", "default");
+    public static final ResourceLocation CONIFER = ResourceLocation.fromNamespaceAndPath("fallingleaves", "conifer");
     private static LeafTypeLoader leafTypeLoader;
     private static LeafSettingLoader treeValueLoader;
 

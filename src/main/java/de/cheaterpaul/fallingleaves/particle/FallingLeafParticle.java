@@ -55,16 +55,14 @@ import javax.annotation.Nullable;
 public class FallingLeafParticle extends TextureSheetParticle {
 
     public static final ParticleRenderType LEAVES_SHEET = new ParticleRenderType() {
-        public void begin(BufferBuilder p_107455_, @NotNull TextureManager p_107456_) {
+
+        @Override
+        public @NotNull BufferBuilder begin(Tesselator tesselator, @NotNull TextureManager textureManager) {
             RenderSystem.depthMask(true);
             RenderSystem.setShaderTexture(0, LeafTypeLoader.LEAVES_ATLAS);
             RenderSystem.enableBlend();
             RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
-            p_107455_.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.PARTICLE);
-        }
-
-        public void end(Tesselator p_107458_) {
-            p_107458_.end();
+            return tesselator.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.PARTICLE);
         }
 
         public String toString() {

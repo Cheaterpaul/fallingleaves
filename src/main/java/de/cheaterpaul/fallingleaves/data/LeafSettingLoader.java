@@ -35,7 +35,7 @@ public class LeafSettingLoader extends SimpleJsonResourceReloadListener {
             try {
                 JsonObject object = GsonHelper.convertToJsonObject(json, "leafsettings");
                 double spawn_rate = object.has("spawnrate") ? object.get("spawnrate").getAsDouble() : 1.0;
-                ResourceLocation leafType = object.has("leaf_type") ? new ResourceLocation(object.get("leaf_type").getAsString()) : id;
+                ResourceLocation leafType = object.has("leaf_type") ? ResourceLocation.parse(object.get("leaf_type").getAsString()) : id;
                 boolean considerAsConifer = false;
                 if (object.has("isConifer") && object.get("isConifer").getAsBoolean()) {
                     leafType = ClientMod.CONIFER;

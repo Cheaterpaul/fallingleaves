@@ -31,7 +31,7 @@ import java.util.stream.StreamSupport;
 public class LeafTypeLoader implements PreparableReloadListener {
 
     private static final Logger LOGGER = LogUtils.getLogger();
-    public static final ResourceLocation LEAVES_ATLAS = new ResourceLocation("fallingleaves", "leaves");
+    public static final ResourceLocation LEAVES_ATLAS = ResourceLocation.fromNamespaceAndPath("fallingleaves", "leaves");
     private static final FileToIdConverter PARTICLE_LISTER = FileToIdConverter.json("fallingleaves/leaftypes");
 
     private final TextureAtlas textureAtlas;
@@ -57,7 +57,7 @@ public class LeafTypeLoader implements PreparableReloadListener {
                 var key = PARTICLE_LISTER.fileToId(entry.getKey());
                 try (Reader reader = entry.getValue().openAsReader()) {
                     JsonObject object = GsonHelper.parse(reader);
-                    return new LeafType(key, StreamSupport.stream(object.get("textures").getAsJsonArray().spliterator(), false).map(JsonElement::getAsString).map(ResourceLocation::new).toList());
+                    return new LeafType(key, StreamSupport.stream(object.get("textures").getAsJsonArray().spliterator(), false).map(JsonElement::getAsString).map(ResourceLocation::parse).toList());
                 } catch (IOException e) {
                     return new LeafType(key);
                 }
