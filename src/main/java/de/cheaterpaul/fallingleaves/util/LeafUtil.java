@@ -28,13 +28,10 @@ import com.mojang.blaze3d.platform.NativeImage;
 import de.cheaterpaul.fallingleaves.FallingLeavesMod;
 import de.cheaterpaul.fallingleaves.config.LeafSettingsEntry;
 import de.cheaterpaul.fallingleaves.data.LeafTypeLoader;
-import de.cheaterpaul.fallingleaves.init.ClientMod;
-import de.cheaterpaul.fallingleaves.init.FallingLeavesConfig;
+import de.cheaterpaul.fallingleaves.data.LeafLoader;
 import de.cheaterpaul.fallingleaves.mixin.NativeImageAccessor;
-import de.cheaterpaul.fallingleaves.particle.FallingLeafParticle;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.client.particle.SpriteSet;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.texture.SpriteContents;
@@ -95,7 +92,10 @@ public class LeafUtil {
     }
 
     private static LeafTypeLoader.LeafTypeSettings getSpriteSetForSettings(BlockState blockState, @Nullable LeafSettingsEntry entry) {
-        return Optional.ofNullable(entry).flatMap(LeafSettingsEntry::leafType).map(ClientMod::getSpriteForLeafType).or(() -> Optional.ofNullable(BuiltInRegistries.BLOCK.getKey(blockState.getBlock())).map(ClientMod::getSpriteForLeafType)).orElseGet(() -> ClientMod.getSpriteForLeafType(entry != null && entry.considerAsConifer() ? ClientMod.CONIFER : ClientMod.DEFAULT));
+        return Optional.ofNullable(entry).flatMap(LeafSettingsEntry::leafType).map(LeafLoader::getSpriteForLeafType).or(() -> Optional.of(BuiltInRegistries.BLOCK.getKey(blockState.getBlock())).map(LeafLoader::getSpriteForLeafType)).orElseGet(() -> {
+            ResourceLocation leafType = entry != null && entry.considerAsConifer() ? FallingLeavesMod.CONIFER : FallingLeavesMod.DEFAULT;
+            return LeafLoader.getSpriteForLeafType(leafType);
+        });
     }
 
     private static boolean shouldSpawnParticle(Level world, BlockPos pos, double x, double y, double z) {
@@ -103,7 +103,7 @@ public class LeafUtil {
         // This test is necessary because modded leaf blocks may not have collisions
         if (isLeafBlock(world.getBlockState(pos.below()), true)) return false;
 
-        double y2 = y - FallingLeavesConfig.CONFIG.minimumFreeSpaceBelow.get() * 0.5;
+        double y2 = y - FallingLeavesMod.CONFIG.minimumFreeSpaceBelow.get() * 0.5;
         AABB collisionBox = new AABB(x - 0.1, y, z - 0.1, x + 0.1, y2, z + 0.1);
 
         // Only spawn the particle if there's enough room for it

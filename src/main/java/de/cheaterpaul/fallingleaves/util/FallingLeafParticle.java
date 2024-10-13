@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package de.cheaterpaul.fallingleaves.particle;
+package de.cheaterpaul.fallingleaves.util;
 
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
@@ -30,10 +30,9 @@ import com.mojang.blaze3d.vertex.BufferBuilder;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.Tesselator;
 import com.mojang.blaze3d.vertex.VertexFormat;
+import de.cheaterpaul.fallingleaves.FallingLeavesMod;
 import de.cheaterpaul.fallingleaves.data.LeafTypeLoader;
-import de.cheaterpaul.fallingleaves.init.ClientMod;
-import de.cheaterpaul.fallingleaves.init.FallingLeavesConfig;
-import de.cheaterpaul.fallingleaves.util.Wind;
+import de.cheaterpaul.fallingleaves.data.LeafLoader;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.*;
 import net.minecraft.client.renderer.texture.TextureManager;
@@ -95,7 +94,7 @@ public class FallingLeafParticle extends TextureSheetParticle {
         this.zd = 0.0;
 
         this.hasPhysics = true; // TODO: is it possible to turn off collisions with leaf blocks?
-        this.lifetime = (int) (FallingLeavesConfig.CONFIG.leafLifespan.get() * provider.getLeafType().lifeSpanModifier());
+        this.lifetime = (int) (FallingLeavesMod.CONFIG.leafLifespan.get() * provider.getLeafType().lifeSpanModifier());
 
         this.rCol = (float) r;
         this.gCol = (float) g;
@@ -106,7 +105,7 @@ public class FallingLeafParticle extends TextureSheetParticle {
 
         this.roll = this.oRoll = random.nextFloat() * TAU;
 
-        this.quadSize = (FallingLeavesConfig.CONFIG.leafSize.get() / 50f) * provider.getLeafType().sizeModifier();
+        this.quadSize = (FallingLeavesMod.CONFIG.leafSize.get() / 50f) * provider.getLeafType().sizeModifier();
     }
 
     @Override
@@ -176,7 +175,7 @@ public class FallingLeafParticle extends TextureSheetParticle {
     public static class LeavesParticleFactory implements ParticleProvider<SimpleParticleType> {
         @Override
         public Particle createParticle(@Nullable SimpleParticleType parameters, @NotNull ClientLevel world, double x, double y, double z, double r, double g, double b) {
-            return new FallingLeafParticle(world, x, y, z, r, g, b, ClientMod.getSpriteForLeafType(ClientMod.DEFAULT));
+            return new FallingLeafParticle(world, x, y, z, r, g, b, LeafLoader.getSpriteForLeafType(FallingLeavesMod.DEFAULT));
         }
 
         public Particle createParticle(@Nullable SimpleParticleType parameters, @NotNull ClientLevel world, double x, double y, double z, double r, double g, double b, LeafTypeLoader.LeafTypeSettings spriteSet) {

@@ -1,6 +1,6 @@
 package de.cheaterpaul.fallingleaves.util;
 
-import de.cheaterpaul.fallingleaves.init.FallingLeavesConfig;
+import de.cheaterpaul.fallingleaves.FallingLeavesMod;
 import de.cheaterpaul.fallingleaves.math.SmoothNoise;
 import de.cheaterpaul.fallingleaves.math.TriangularDistribution;
 import net.minecraft.client.Minecraft;
@@ -60,7 +60,7 @@ public class Wind {
         --stateDuration;
 
         ResourceLocation dimension = world.dimension().location();
-        if (FallingLeavesConfig.CONFIG.disableWind.get() || FallingLeavesConfig.CONFIG.windlessDimension.get().contains(dimension.toString())) {
+        if (FallingLeavesMod.CONFIG.disableWind.get() || FallingLeavesMod.CONFIG.windlessDimension.get().contains(dimension.toString())) {
             // override state to calm when there is no wind
             originalState = state;
             state = State.CALM;

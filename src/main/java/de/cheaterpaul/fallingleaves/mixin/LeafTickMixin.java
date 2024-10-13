@@ -24,14 +24,15 @@
 
 package de.cheaterpaul.fallingleaves.mixin;
 
+import de.cheaterpaul.fallingleaves.FallingLeavesMod;
 import de.cheaterpaul.fallingleaves.config.LeafSettingsEntry;
-import de.cheaterpaul.fallingleaves.init.ClientMod;
-import de.cheaterpaul.fallingleaves.init.FallingLeavesConfig;
 //import de.cheaterpaul.fallingleaves.modcompat.SereneSeasons;
+import de.cheaterpaul.fallingleaves.data.LeafLoader;
 import de.cheaterpaul.fallingleaves.modcompat.SereneSeasons;
 import de.cheaterpaul.fallingleaves.util.LeafUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.LeavesBlock;
@@ -49,22 +50,23 @@ public abstract class LeafTickMixin {
 
     @Inject(at = @At("HEAD"), method = "animateTick(Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/world/level/Level;Lnet/minecraft/core/BlockPos;Lnet/minecraft/util/RandomSource;)V")
     private void animateTick(BlockState state, Level world, BlockPos pos, RandomSource random, CallbackInfo ci) {
-        LeafSettingsEntry leafSettings = ClientMod.getLeafSetting(BuiltInRegistries.BLOCK.getKey(state.getBlock()));
+        ResourceLocation location = BuiltInRegistries.BLOCK.getKey(state.getBlock());
+        LeafSettingsEntry leafSettings = LeafLoader.getLeafSetting(location);
 
         // Every leaf block has a settings entry, but some blocks are considered leaves when they technically aren't
         // E.g. terrestria:sakura_log can be "leaf-logged" - in that case, we simply ignore them
         if (leafSettings == null && !(state.getBlock() instanceof LeavesBlock))
             return;
 
-        if (!FallingLeavesConfig.CONFIG.dropFromPlayerPlacedBlocks.get() && state.getValue(LeavesBlock.PERSISTENT))
+        if (!FallingLeavesMod.CONFIG.dropFromPlayerPlacedBlocks.get() && state.getValue(LeavesBlock.PERSISTENT))
             return;
 
         double spawnChance = 1;
-        double modifier = FallingLeavesConfig.CONFIG.leafSpawnRate.get();
+        double modifier = FallingLeavesMod.CONFIG.leafSpawnRate.get();
         if (leafSettings != null) {
             spawnChance = leafSettings.spawnRateFactor();
             if (leafSettings.considerAsConifer()) {
-                modifier = FallingLeavesConfig.CONFIG.coniferLeafSpawnRate.get();
+                modifier = FallingLeavesMod.CONFIG.coniferLeafSpawnRate.get();
             }
         }
         modifier = modifier / 10f / 75f;

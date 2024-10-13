@@ -1,11 +1,9 @@
 package de.cheaterpaul.fallingleaves.config;
 
-import com.google.gson.JsonObject;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import de.cheaterpaul.fallingleaves.init.ClientMod;
+import de.cheaterpaul.fallingleaves.FallingLeavesMod;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.ExtraCodecs;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
@@ -31,7 +29,7 @@ public record LeafSettingsEntry(double spawnRateFactor, Optional<ResourceLocatio
     }
 
     public LeafSettingsEntry(double spawnRateFactor, ResourceLocation leafType) {
-        this(spawnRateFactor, Optional.of(leafType), ClientMod.CONIFER.equals(leafType));
+        this(spawnRateFactor, Optional.of(leafType), FallingLeavesMod.CONIFER.equals(leafType));
     }
 
     public LeafSettingsEntry(double spawnRateFactor, boolean considerAsConifer, @Nullable ResourceLocation leafType) {

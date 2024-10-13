@@ -22,17 +22,20 @@
  * THE SOFTWARE.
  */
 
-package de.cheaterpaul.fallingleaves.init;
+package de.cheaterpaul.fallingleaves;
 
 import de.cheaterpaul.fallingleaves.config.LeafSettingsEntry;
+import de.cheaterpaul.fallingleaves.data.LeafLoader;
 import de.cheaterpaul.fallingleaves.util.LeafUtil;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.LeavesBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 
+@EventBusSubscriber(modid = FallingLeavesMod.MOD_ID, bus = EventBusSubscriber.Bus.GAME)
 public class EventHandler {
 
     /**
@@ -42,7 +45,8 @@ public class EventHandler {
     public void onAttackLeavesBlock(PlayerInteractEvent.LeftClickBlock e) {
         if (e.getLevel().isClientSide) {
             BlockState state = e.getLevel().getBlockState(e.getPos());
-            LeafSettingsEntry leafSettings = ClientMod.getLeafSetting(BuiltInRegistries.BLOCK.getKey(state.getBlock()));
+            ResourceLocation location = BuiltInRegistries.BLOCK.getKey(state.getBlock());
+            LeafSettingsEntry leafSettings = LeafLoader.getLeafSetting(location);
             if (leafSettings != null || state.getBlock() instanceof LeavesBlock) {
                 // binomial distribution - extremes (0 or 3 leaves) are less likely
                 for (int i = 0; i < 3; i++) {

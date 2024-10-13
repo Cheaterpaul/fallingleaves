@@ -1,7 +1,7 @@
 package de.cheaterpaul.fallingleaves.data;
 
+import de.cheaterpaul.fallingleaves.FallingLeavesMod;
 import de.cheaterpaul.fallingleaves.config.LeafSettingsEntry;
-import de.cheaterpaul.fallingleaves.init.ClientMod;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataProvider;
@@ -53,49 +53,49 @@ public class LeafSettingGenerator implements DataProvider {
 
     protected void registerLeafSettingEntries(BiConsumer<ResourceLocation, LeafSettingsEntry> consumer) {
         //minecraft
-        consumer.accept(ResourceLocation.fromNamespaceAndPath("minecraft", "spruce_leaves"), new LeafSettingsEntry(1, ClientMod.CONIFER));
-        consumer.accept(ResourceLocation.fromNamespaceAndPath("minecraft", "jungle_leaves"), new LeafSettingsEntry(1, ClientMod.DEFAULT));
+        consumer.accept(ResourceLocation.fromNamespaceAndPath("minecraft", "spruce_leaves"), new LeafSettingsEntry(1, FallingLeavesMod.CONIFER));
+        consumer.accept(ResourceLocation.fromNamespaceAndPath("minecraft", "jungle_leaves"), new LeafSettingsEntry(1, FallingLeavesMod.DEFAULT));
         consumer.accept(ResourceLocation.fromNamespaceAndPath("minecraft", "cherry_leaves"), new LeafSettingsEntry(0));
         //byg
-        consumer.accept(ResourceLocation.fromNamespaceAndPath("byg", "blue_spruce_leaves"), new LeafSettingsEntry(1, ClientMod.CONIFER));
-        consumer.accept(ResourceLocation.fromNamespaceAndPath("byg", "cypress_leaves"), new LeafSettingsEntry(1, ClientMod.CONIFER));
-        consumer.accept(ResourceLocation.fromNamespaceAndPath("byg", "fir_leaves"), new LeafSettingsEntry(1, ClientMod.CONIFER));
-        consumer.accept(ResourceLocation.fromNamespaceAndPath("byg", "orange_spruce_leaves"), new LeafSettingsEntry(1, ClientMod.CONIFER));
-        consumer.accept(ResourceLocation.fromNamespaceAndPath("byg", "pine_leaves"), new LeafSettingsEntry(1, ClientMod.CONIFER));
-        consumer.accept(ResourceLocation.fromNamespaceAndPath("byg", "red_spruce_leaves"), new LeafSettingsEntry(1, ClientMod.CONIFER));
-        consumer.accept(ResourceLocation.fromNamespaceAndPath("byg", "yellow_spruce_leaves"), new LeafSettingsEntry(1, ClientMod.CONIFER));
+        consumer.accept(ResourceLocation.fromNamespaceAndPath("byg", "blue_spruce_leaves"), new LeafSettingsEntry(1, FallingLeavesMod.CONIFER));
+        consumer.accept(ResourceLocation.fromNamespaceAndPath("byg", "cypress_leaves"), new LeafSettingsEntry(1, FallingLeavesMod.CONIFER));
+        consumer.accept(ResourceLocation.fromNamespaceAndPath("byg", "fir_leaves"), new LeafSettingsEntry(1, FallingLeavesMod.CONIFER));
+        consumer.accept(ResourceLocation.fromNamespaceAndPath("byg", "orange_spruce_leaves"), new LeafSettingsEntry(1, FallingLeavesMod.CONIFER));
+        consumer.accept(ResourceLocation.fromNamespaceAndPath("byg", "pine_leaves"), new LeafSettingsEntry(1, FallingLeavesMod.CONIFER));
+        consumer.accept(ResourceLocation.fromNamespaceAndPath("byg", "red_spruce_leaves"), new LeafSettingsEntry(1, FallingLeavesMod.CONIFER));
+        consumer.accept(ResourceLocation.fromNamespaceAndPath("byg", "yellow_spruce_leaves"), new LeafSettingsEntry(1, FallingLeavesMod.CONIFER));
         consumer.accept(ResourceLocation.fromNamespaceAndPath("byg", "pink_cherry_leaves"), new LeafSettingsEntry(1.4));
         consumer.accept(ResourceLocation.fromNamespaceAndPath("byg", "skyris_leaves"), new LeafSettingsEntry(1.4));
         consumer.accept(ResourceLocation.fromNamespaceAndPath("byg", "white_cherry_leaves"), new LeafSettingsEntry(1.4));
         //terrestria
-        consumer.accept(ResourceLocation.fromNamespaceAndPath("terrestria", "cypress_leaves"), new LeafSettingsEntry(1, ClientMod.CONIFER));
-        consumer.accept(ResourceLocation.fromNamespaceAndPath("terrestria", "hemlock_leaves"), new LeafSettingsEntry(1, ClientMod.CONIFER));
-        consumer.accept(ResourceLocation.fromNamespaceAndPath("terrestria", "redwood_leaves"), new LeafSettingsEntry(1, ClientMod.CONIFER));
-        consumer.accept(ResourceLocation.fromNamespaceAndPath("terrestria", "japanese_maple_shrub_leaves"), new LeafSettingsEntry(0, ClientMod.MAPLE));
-        consumer.accept(ResourceLocation.fromNamespaceAndPath("terrestria", "jungle_palm_leaves"), new LeafSettingsEntry(0.2, ClientMod.PALMS));
-        consumer.accept(ResourceLocation.fromNamespaceAndPath("terrestria", "yucca_palm_leaves"), new LeafSettingsEntry(0.2, ClientMod.PALMS));
+        consumer.accept(ResourceLocation.fromNamespaceAndPath("terrestria", "cypress_leaves"), new LeafSettingsEntry(1, FallingLeavesMod.CONIFER));
+        consumer.accept(ResourceLocation.fromNamespaceAndPath("terrestria", "hemlock_leaves"), new LeafSettingsEntry(1, FallingLeavesMod.CONIFER));
+        consumer.accept(ResourceLocation.fromNamespaceAndPath("terrestria", "redwood_leaves"), new LeafSettingsEntry(1, FallingLeavesMod.CONIFER));
+        consumer.accept(ResourceLocation.fromNamespaceAndPath("terrestria", "japanese_maple_shrub_leaves"), new LeafSettingsEntry(0, FallingLeavesMod.MAPLE));
+        consumer.accept(ResourceLocation.fromNamespaceAndPath("terrestria", "jungle_palm_leaves"), new LeafSettingsEntry(0.2, FallingLeavesMod.PALMS));
+        consumer.accept(ResourceLocation.fromNamespaceAndPath("terrestria", "yucca_palm_leaves"), new LeafSettingsEntry(0.2, FallingLeavesMod.PALMS));
         consumer.accept(ResourceLocation.fromNamespaceAndPath("terrestria", "sakura_leaves"), new LeafSettingsEntry(1.4));
         //traverse
-        consumer.accept(ResourceLocation.fromNamespaceAndPath("traverse", "fir_leaves"), new LeafSettingsEntry(1, ClientMod.CONIFER));
+        consumer.accept(ResourceLocation.fromNamespaceAndPath("traverse", "fir_leaves"), new LeafSettingsEntry(1, FallingLeavesMod.CONIFER));
         consumer.accept(ResourceLocation.fromNamespaceAndPath("traverse", "brown_autumnal_leaves"), new LeafSettingsEntry(1.8));
         consumer.accept(ResourceLocation.fromNamespaceAndPath("traverse", "orange_autumnal_leaves"), new LeafSettingsEntry(1.8));
         consumer.accept(ResourceLocation.fromNamespaceAndPath("traverse", "red_autumnal_leaves"), new LeafSettingsEntry(1.8));
         consumer.accept(ResourceLocation.fromNamespaceAndPath("traverse", "yellow_autumnal_leaves"), new LeafSettingsEntry(1.8));
         //woods and mires
-        consumer.accept(ResourceLocation.fromNamespaceAndPath("woods_and_mires", "pine_leaves"), new LeafSettingsEntry(1, ClientMod.CONIFER));
+        consumer.accept(ResourceLocation.fromNamespaceAndPath("woods_and_mires", "pine_leaves"), new LeafSettingsEntry(1, FallingLeavesMod.CONIFER));
         //biomes o plenty
-        consumer.accept(ResourceLocation.fromNamespaceAndPath("biomesoplenty", "fir_leaves"), new LeafSettingsEntry(1, ClientMod.CONIFER));
-        consumer.accept(ResourceLocation.fromNamespaceAndPath("biomesoplenty", "redwood_leaves"), new LeafSettingsEntry(1, ClientMod.CONIFER));
-        consumer.accept(ResourceLocation.fromNamespaceAndPath("biomesoplenty", "cypress_leaves"), new LeafSettingsEntry(1, ClientMod.CONIFER));
+        consumer.accept(ResourceLocation.fromNamespaceAndPath("biomesoplenty", "fir_leaves"), new LeafSettingsEntry(1, FallingLeavesMod.CONIFER));
+        consumer.accept(ResourceLocation.fromNamespaceAndPath("biomesoplenty", "redwood_leaves"), new LeafSettingsEntry(1, FallingLeavesMod.CONIFER));
+        consumer.accept(ResourceLocation.fromNamespaceAndPath("biomesoplenty", "cypress_leaves"), new LeafSettingsEntry(1, FallingLeavesMod.CONIFER));
         consumer.accept(ResourceLocation.fromNamespaceAndPath("biomesoplenty", "snowblossom_leaves"), new LeafSettingsEntry(0));
-        consumer.accept(ResourceLocation.fromNamespaceAndPath("biomesoplenty", "red_maple_leaves"), new LeafSettingsEntry(0,ClientMod.MAPLE));
-        consumer.accept(ResourceLocation.fromNamespaceAndPath("biomesoplenty", "orange_maple_leaves"), new LeafSettingsEntry(0, ClientMod.MAPLE));
-        consumer.accept(ResourceLocation.fromNamespaceAndPath("biomesoplenty", "yellow_maple_leaves"), new LeafSettingsEntry(0, ClientMod.MAPLE));
-        consumer.accept(ResourceLocation.fromNamespaceAndPath("biomesoplenty", "mahogany_leaves"), new LeafSettingsEntry(1, ClientMod.MAHOGANY));
+        consumer.accept(ResourceLocation.fromNamespaceAndPath("biomesoplenty", "red_maple_leaves"), new LeafSettingsEntry(0, FallingLeavesMod.MAPLE));
+        consumer.accept(ResourceLocation.fromNamespaceAndPath("biomesoplenty", "orange_maple_leaves"), new LeafSettingsEntry(0, FallingLeavesMod.MAPLE));
+        consumer.accept(ResourceLocation.fromNamespaceAndPath("biomesoplenty", "yellow_maple_leaves"), new LeafSettingsEntry(0, FallingLeavesMod.MAPLE));
+        consumer.accept(ResourceLocation.fromNamespaceAndPath("biomesoplenty", "mahogany_leaves"), new LeafSettingsEntry(1, FallingLeavesMod.MAHOGANY));
         consumer.accept(ResourceLocation.fromNamespaceAndPath("biomesoplenty", "pine_leaves"), new LeafSettingsEntry(1));
         consumer.accept(ResourceLocation.fromNamespaceAndPath("biomesoplenty", "rainbow_birch_leaves"), new LeafSettingsEntry(1));
         consumer.accept(ResourceLocation.fromNamespaceAndPath("biomesoplenty", "jacaranda_leaves"), new LeafSettingsEntry(1));
-        consumer.accept(ResourceLocation.fromNamespaceAndPath("biomesoplenty", "palm_leaves"), new LeafSettingsEntry(0.2, ClientMod.PALMS));
+        consumer.accept(ResourceLocation.fromNamespaceAndPath("biomesoplenty", "palm_leaves"), new LeafSettingsEntry(0.2, FallingLeavesMod.PALMS));
         consumer.accept(ResourceLocation.fromNamespaceAndPath("biomesoplenty", "willow_leaves"), new LeafSettingsEntry(1));
         consumer.accept(ResourceLocation.fromNamespaceAndPath("biomesoplenty", "dead_leaves"), new LeafSettingsEntry(1));
         consumer.accept(ResourceLocation.fromNamespaceAndPath("biomesoplenty", "magic_leaves"), new LeafSettingsEntry(1));

@@ -1,8 +1,6 @@
 package de.cheaterpaul.fallingleaves.modcompat;
 
 import de.cheaterpaul.fallingleaves.FallingLeavesMod;
-import de.cheaterpaul.fallingleaves.config.ClientConfig;
-import de.cheaterpaul.fallingleaves.init.FallingLeavesConfig;
 import net.minecraft.world.level.Level;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModList;
@@ -19,7 +17,7 @@ public class SereneSeasons {
     }
 
     public static float getModifier(Level level) {
-        if (FallingLeavesConfig.CONFIG.disableSeasonalModifier.get() || config == null) {
+        if (FallingLeavesMod.CONFIG.disableSeasonalModifier.get() || config == null) {
             return 1;
         }
         return config.getModifier(level);
