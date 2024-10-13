@@ -1,8 +1,8 @@
 {
   "textures": [
-    "fallingleaves:falling_leaf_conifer_1",
-    "fallingleaves:falling_leaf_conifer_2",
-    "fallingleaves:falling_leaf_conifer_3"
+    "fallingleaves:conifer_1",
+    "fallingleaves:conifer_2",
+    "fallingleaves:conifer_3"
   ],
   "lifeSpanModifier": 1.5
 }

@@ -1,7 +1,7 @@
 {
   "textures": [
-    "fallingleaves:falling_leaf_palms_1",
-    "fallingleaves:falling_leaf_palms_2"
+    "fallingleaves:palms_1",
+    "fallingleaves:palms_2"
   ],
   "sizeModifier": 4,
   "lifeSpanModifier": 2

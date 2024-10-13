@@ -1,9 +1,9 @@
 {
   "textures": [
-    "fallingleaves:falling_leaf_1",
-    "fallingleaves:falling_leaf_2",
-    "fallingleaves:falling_leaf_3",
-    "fallingleaves:falling_leaf_4",
-    "fallingleaves:falling_leaf_5"
+    "fallingleaves:default_1",
+    "fallingleaves:default_2",
+    "fallingleaves:default_3",
+    "fallingleaves:default_4",
+    "fallingleaves:default_5"
   ]
 }
