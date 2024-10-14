@@ -9,6 +9,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.JsonOps;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.client.particle.ParticleEngine;
+import net.minecraft.client.particle.ParticleProvider;
 import net.minecraft.client.particle.SpriteSet;
 import net.minecraft.client.renderer.texture.SpriteLoader;
 import net.minecraft.client.renderer.texture.TextureAtlas;
@@ -52,24 +53,33 @@ public class LeafTypeLoader implements PreparableReloadListener {
         manager.register(this.textureAtlas.location(), this.textureAtlas);
     }
 
-    public record LeafType(Collection<ResourceLocation> textures, float sizeModifier, float lifeSpanModifier) {
+    public record LeafType(Collection<ResourceLocation> textures, float sizeModifier, float lifeSpanModifier, float snowSizeModifier) {
         public static final Codec<LeafType> CODEC = RecordCodecBuilder.create(inst -> inst.group(
                 ResourceLocation.CODEC.listOf().fieldOf("textures").forGetter(l -> new ArrayList<>(l.textures)),
                 Codec.FLOAT.optionalFieldOf("sizeModifier").forGetter(l -> Optional.of(l.sizeModifier)),
-                Codec.FLOAT.optionalFieldOf( "lifeSpanModifier").forGetter(l -> Optional.of(l.lifeSpanModifier))
+                Codec.FLOAT.optionalFieldOf( "lifeSpanModifier").forGetter(l -> Optional.of(l.lifeSpanModifier)),
+                Codec.FLOAT.optionalFieldOf( "snowSizeModifier").forGetter(l -> Optional.of(l.lifeSpanModifier))
         ).apply(inst, LeafType::new));
 
         @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
-        public LeafType(Collection<ResourceLocation> textures, Optional<Float> sizeModifier, Optional<Float> lifeSpanModifier) {
-            this(textures, sizeModifier.orElse(1.0f), lifeSpanModifier.orElse(1.0f));
+        public LeafType(Collection<ResourceLocation> textures, Optional<Float> sizeModifier, Optional<Float> lifeSpanModifier, Optional<Float> snowSizeModifier) {
+            this(textures, sizeModifier.orElse(1.0f), lifeSpanModifier.orElse(1.0f), snowSizeModifier.orElse(1.0f));
         }
 
         public LeafType() {
-            this(Collections.emptyList(), 1.0f, 1.0f);
+            this(Collections.emptyList(), 1.0f, 1.0f, 1.0f);
         }
     }
 
-    public static class LeafTypeSettings {
+    public interface ParticleProvider {
+        ParticleEngine.MutableSpriteSet getSpriteSet();
+
+        float sizeModifier();
+
+        float lifeSpawnModifier();
+    }
+
+    public static class LeafTypeSettings implements ParticleProvider {
         private final ParticleEngine.MutableSpriteSet spriteSet;
         private LeafType leafType;
 
@@ -84,6 +94,20 @@ public class LeafTypeLoader implements PreparableReloadListener {
 
         public ParticleEngine.MutableSpriteSet getSpriteSet() {
             return spriteSet;
+        }
+
+        @Override
+        public float sizeModifier() {
+            return leafType.sizeModifier();
+        }
+
+        @Override
+        public float lifeSpawnModifier() {
+            return leafType.lifeSpanModifier();
+        }
+
+        public float snowSizeModifier() {
+            return leafType.snowSizeModifier();
         }
     }
 

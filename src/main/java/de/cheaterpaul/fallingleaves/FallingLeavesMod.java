@@ -23,7 +23,7 @@ import org.apache.commons.lang3.tuple.Pair;
 
 
 @Mod(value = FallingLeavesMod.MOD_ID, dist = Dist.CLIENT)
-@EventBusSubscriber(modid = FallingLeavesMod.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(modid = FallingLeavesMod.MOD_ID, bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public class FallingLeavesMod {
 
     public static final String MOD_ID = "fallingleaves";
@@ -33,16 +33,17 @@ public class FallingLeavesMod {
     public static final ResourceLocation PALMS = ResourceLocation.fromNamespaceAndPath(MOD_ID, "palms");
     public static final ResourceLocation MAHOGANY = ResourceLocation.fromNamespaceAndPath(MOD_ID, "mahogany");
     public static final ResourceLocation MAPLE = ResourceLocation.fromNamespaceAndPath(MOD_ID, "maple");
+    public static final ResourceLocation SNOW = ResourceLocation.fromNamespaceAndPath(MOD_ID, "snow");
 
     public static final ClientConfig CONFIG;
     private static final ModConfigSpec CLIENT_CONFIG_SPEC;
 
     public FallingLeavesMod(IEventBus modBus, ModContainer container) {
         container.registerExtensionPoint(IConfigScreenFactory.class, ConfigurationScreen::new);
-        container.registerConfig(ModConfig.Type.CLIENT, CLIENT_CONFIG_SPEC);
         if (SereneSeasons.setup()) {
             modBus.register(SereneSeasons.class);
         }
+        container.registerConfig(ModConfig.Type.CLIENT, CLIENT_CONFIG_SPEC);
     }
 
     @SubscribeEvent
@@ -51,6 +52,7 @@ public class FallingLeavesMod {
     }
 
     static {
+        SereneSeasons.setup();
         final Pair<ClientConfig, ModConfigSpec> specPair = new ModConfigSpec.Builder().configure(ClientConfig::new);
         CLIENT_CONFIG_SPEC = specPair.getRight();
         CONFIG = specPair.getLeft();

@@ -32,6 +32,8 @@ import de.cheaterpaul.fallingleaves.data.LeafLoader;
 import de.cheaterpaul.fallingleaves.mixin.NativeImageAccessor;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.client.particle.ParticleEngine;
+import net.minecraft.client.particle.SnowflakeParticle;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.texture.SpriteContents;
@@ -64,27 +66,43 @@ public class LeafUtil {
     private static final RandomSource renderRandom = RandomSource.create();
     private static final FallingLeafParticle.LeavesParticleFactory factory = new FallingLeafParticle.LeavesParticleFactory();
 
-    public static void trySpawnLeafParticle(BlockState state, Level world, BlockPos pos, RandomSource random, @Nullable LeafSettingsEntry leafSettings) {
+    public static void trySpawnSnowParticle(BlockState state, ClientLevel level, BlockPos pos, RandomSource random, @Nullable LeafSettingsEntry leafSettings) {
         // Particle position
         double x = pos.getX() + random.nextDouble();
         double y = pos.getY() - (random.nextDouble() / 3);
         double z = pos.getZ() + random.nextDouble();
 
-        if (shouldSpawnParticle(world, pos, x, y, z)) {
+        if (shouldSpawnParticle(level, pos, x, y, z)) {
+
+            // Add the particle.
+            var particle = factory.createParticle(null, level, x, y, z, 1, 1, 1, LeafLoader.getSnowParticleProvider(getSpriteSetForSettings(state, leafSettings)));
+            if (particle != null) {
+                Minecraft.getInstance().particleEngine.add(particle);
+            }
+        }
+    }
+
+    public static void trySpawnLeafParticle(BlockState state, ClientLevel level, BlockPos pos, RandomSource random, @Nullable LeafSettingsEntry leafSettings) {
+        // Particle position
+        double x = pos.getX() + random.nextDouble();
+        double y = pos.getY() - (random.nextDouble() / 3);
+        double z = pos.getZ() + random.nextDouble();
+
+        if (shouldSpawnParticle(level, pos, x, y, z)) {
             Minecraft client = Minecraft.getInstance();
 
             // read the bottom quad to determine whether we should color the texture
             BakedModel model = client.getBlockRenderer().getBlockModel(state);
-            ModelData modelData = model.getModelData(world, pos, state, ModelData.EMPTY);
+            ModelData modelData = model.getModelData(level, pos, state, ModelData.EMPTY);
 
-            double[] color = getBlockTextureColor(state, world, pos, modelData);
+            double[] color = getBlockTextureColor(state, level, pos, modelData);
 
             double r = color[0];
             double g = color[1];
             double b = color[2];
 
             // Add the particle.
-            var particle = factory.createParticle(null, (ClientLevel) world, x, y, z, r, g, b, getSpriteSetForSettings(state, leafSettings));
+            var particle = factory.createParticle(null, level, x, y, z, r, g, b, getSpriteSetForSettings(state, leafSettings));
             if (particle != null) {
                 Minecraft.getInstance().particleEngine.add(particle);
             }
@@ -98,16 +116,16 @@ public class LeafUtil {
         });
     }
 
-    private static boolean shouldSpawnParticle(Level world, BlockPos pos, double x, double y, double z) {
+    private static boolean shouldSpawnParticle(ClientLevel level, BlockPos pos, double x, double y, double z) {
         // Never spawn a particle if there's a leaf block below
         // This test is necessary because modded leaf blocks may not have collisions
-        if (isLeafBlock(world.getBlockState(pos.below()), true)) return false;
+        if (isLeafBlock(level.getBlockState(pos.below()), true)) return false;
 
         double y2 = y - FallingLeavesMod.CONFIG.minimumFreeSpaceBelow.get() * 0.5;
         AABB collisionBox = new AABB(x - 0.1, y, z - 0.1, x + 0.1, y2, z + 0.1);
 
         // Only spawn the particle if there's enough room for it
-        return !world.getBlockCollisions(null, collisionBox).iterator().hasNext();
+        return !level.getBlockCollisions(null, collisionBox).iterator().hasNext();
     }
 
     /** Block tags can only be used once the integrated server is started */
@@ -161,7 +179,7 @@ public class LeafUtil {
         };
     }
 
-    public static double[] getBlockTextureColor(BlockState state, Level world, BlockPos pos, ModelData modelData) {
+    public static double[] getBlockTextureColor(BlockState state, ClientLevel level, BlockPos pos, ModelData modelData) {
         Minecraft client = Minecraft.getInstance();
         BakedModel model = client.getBlockRenderer().getBlockModel(state);
 
@@ -185,7 +203,7 @@ public class LeafUtil {
         SpriteContents contents = sprite.contents();
         ResourceLocation spriteId = contents.name();
         NativeImage texture = contents.byMipLevel[0]; // directly extract texture
-        int blockColor = (shouldColor ? client.getBlockColors().getColor(state, world, pos, 0) : -1);
+        int blockColor = (shouldColor ? client.getBlockColors().getColor(state, level, pos, 0) : -1);
 
         return calculateLeafColor(spriteId, texture, blockColor);
     }

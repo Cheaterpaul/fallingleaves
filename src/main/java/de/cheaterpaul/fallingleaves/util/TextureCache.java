@@ -24,7 +24,9 @@
 
 package de.cheaterpaul.fallingleaves.util;
 
+import de.cheaterpaul.fallingleaves.FallingLeavesMod;
 import net.minecraft.resources.ResourceLocation;
+import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.TextureAtlasStitchedEvent;
@@ -33,7 +35,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
-@EventBusSubscriber(modid = "fallingleaves", bus = EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(modid = FallingLeavesMod.MOD_ID, bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public class TextureCache {
     public record Data(double[] color) {
 

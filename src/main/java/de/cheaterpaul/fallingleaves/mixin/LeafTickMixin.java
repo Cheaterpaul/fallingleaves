@@ -24,61 +24,38 @@
 
 package de.cheaterpaul.fallingleaves.mixin;
 
-import de.cheaterpaul.fallingleaves.FallingLeavesMod;
-import de.cheaterpaul.fallingleaves.config.LeafSettingsEntry;
+import de.cheaterpaul.fallingleaves.EventHandler;
 //import de.cheaterpaul.fallingleaves.modcompat.SereneSeasons;
-import de.cheaterpaul.fallingleaves.data.LeafLoader;
-import de.cheaterpaul.fallingleaves.modcompat.SereneSeasons;
-import de.cheaterpaul.fallingleaves.util.LeafUtil;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.LeavesBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@OnlyIn(Dist.CLIENT)
 @Mixin(LeavesBlock.class)
 public abstract class LeafTickMixin {
 
+    @Shadow public abstract BlockState getStateForPlacement(BlockPlaceContext pContext);
+
     @Inject(at = @At("HEAD"), method = "animateTick(Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/world/level/Level;Lnet/minecraft/core/BlockPos;Lnet/minecraft/util/RandomSource;)V")
-    private void animateTick(BlockState state, Level world, BlockPos pos, RandomSource random, CallbackInfo ci) {
-        ResourceLocation location = BuiltInRegistries.BLOCK.getKey(state.getBlock());
-        LeafSettingsEntry leafSettings = LeafLoader.getLeafSetting(location);
+    private void dropOnAnimate(BlockState state, Level world, BlockPos pos, RandomSource random, CallbackInfo ci) {
+        EventHandler.spawnParticles(state, (ClientLevel) world, pos, random);
+    }
 
-        // Every leaf block has a settings entry, but some blocks are considered leaves when they technically aren't
-        // E.g. terrestria:sakura_log can be "leaf-logged" - in that case, we simply ignore them
-        if (leafSettings == null && !(state.getBlock() instanceof LeavesBlock))
-            return;
-
-        if (!FallingLeavesMod.CONFIG.dropFromPlayerPlacedBlocks.get() && state.getValue(LeavesBlock.PERSISTENT))
-            return;
-
-        double spawnChance = 1;
-        double modifier = FallingLeavesMod.CONFIG.leafSpawnRate.get();
-        if (leafSettings != null) {
-            spawnChance = leafSettings.spawnRateFactor();
-            if (leafSettings.considerAsConifer()) {
-                modifier = FallingLeavesMod.CONFIG.coniferLeafSpawnRate.get();
-            }
-        }
-        modifier = modifier / 10f / 75f;
-        spawnChance *= modifier;
-        spawnChance *= SereneSeasons.getModifier(world);
-
-        while (spawnChance > 0) {
-            if (random.nextDouble() < spawnChance) {
-                LeafUtil.trySpawnLeafParticle(state, world, pos, random, leafSettings);
-            }
-            spawnChance -= 1;
-        }
+    @Inject(method = "randomTick(Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/core/BlockPos;Lnet/minecraft/util/RandomSource;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/level/ServerLevel;removeBlock(Lnet/minecraft/core/BlockPos;Z)Z"))
+    private void dropOnDecay(BlockState state, ServerLevel world, BlockPos pos, RandomSource random, CallbackInfo ci) {
+        EventHandler.spawnDecayingParticles(state, Minecraft.getInstance().level, pos, random);
     }
 
 }
