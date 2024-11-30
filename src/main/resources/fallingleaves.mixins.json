@@ -7,6 +7,7 @@
     "LeafTickMixin",
     "MinecraftClientMixin",
     "NativeImageAccessor",
+    "ParticleEngineMixin",
     "ParticleManagerMixin"
   ],
   "injectors": {

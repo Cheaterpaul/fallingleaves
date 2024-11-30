@@ -53,6 +53,22 @@ import javax.annotation.Nullable;
 @OnlyIn(Dist.CLIENT)
 public class FallingLeafParticle extends TextureSheetParticle {
 
+    public static final ParticleRenderType LEAVES_SHEET = new ParticleRenderType() {
+
+        @Override
+        public @NotNull BufferBuilder begin(Tesselator tesselator, @NotNull TextureManager textureManager) {
+            RenderSystem.depthMask(true);
+            RenderSystem.setShaderTexture(0, LeafTypeLoader.LEAVES_ATLAS);
+            RenderSystem.enableBlend();
+            RenderSystem.defaultBlendFunc();
+            return tesselator.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.PARTICLE);
+        }
+
+        public String toString() {
+            return "FALLINGLEAVES_PARTICLE_SHEET_TRANSLUCENT";
+        }
+    };
+
     protected static final float TAU = (float) (2 * Math.PI); // 1 rotation
 
     protected static final int FADE_DURATION = 16; // ticks
@@ -152,7 +168,7 @@ public class FallingLeafParticle extends TextureSheetParticle {
 
     @Override
     public @NotNull ParticleRenderType getRenderType() {
-        return ParticleRenderType.PARTICLE_SHEET_TRANSLUCENT;
+        return LEAVES_SHEET;
     }
 
     @OnlyIn(Dist.CLIENT)
