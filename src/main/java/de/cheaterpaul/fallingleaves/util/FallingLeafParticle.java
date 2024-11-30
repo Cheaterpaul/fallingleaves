@@ -105,7 +105,8 @@ public class FallingLeafParticle extends TextureSheetParticle {
 
         this.roll = this.oRoll = random.nextFloat() * TAU;
 
-        this.quadSize = (FallingLeavesMod.CONFIG.leafSize.get() / 50f) * provider.sizeModifier();
+        float mod = (2 + random.nextFloat())/ 2.5f;
+        this.quadSize = ((FallingLeavesMod.CONFIG.leafSize.get() / 50f) * provider.sizeModifier()) * mod;
     }
 
     @Override
