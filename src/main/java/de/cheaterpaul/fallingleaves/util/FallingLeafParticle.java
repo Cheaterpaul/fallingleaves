@@ -26,24 +26,28 @@ package de.cheaterpaul.fallingleaves.util;
 
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.BufferBuilder;
-import com.mojang.blaze3d.vertex.DefaultVertexFormat;
-import com.mojang.blaze3d.vertex.Tesselator;
-import com.mojang.blaze3d.vertex.VertexFormat;
+import com.mojang.blaze3d.vertex.*;
 import de.cheaterpaul.fallingleaves.FallingLeavesMod;
 import de.cheaterpaul.fallingleaves.data.LeafTypeLoader;
 import de.cheaterpaul.fallingleaves.data.LeafLoader;
+import net.minecraft.client.Camera;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.*;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.tags.FluidTags;
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.phys.Vec3;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.NotNull;
+import org.joml.Quaternionf;
+import org.joml.Vector3f;
 
 import javax.annotation.Nullable;
+import java.util.List;
 
 /**
  * TODO - Plenty of "Magic numbers" in this class that we may want to get rid of
@@ -95,6 +99,7 @@ public class FallingLeafParticle extends TextureSheetParticle {
 
         this.hasPhysics = true; // TODO: is it possible to turn off collisions with leaf blocks?
         this.lifetime = (int) (FallingLeavesMod.CONFIG.leafLifespan.get() * provider.lifeSpawnModifier());
+        setSize(0.3f, 0.3f);
 
         this.rCol = (float) r;
         this.gCol = (float) g;
@@ -143,6 +148,9 @@ public class FallingLeafParticle extends TextureSheetParticle {
                 // spin when in the air
                 rotateTime = Math.min(rotateTime + 1, maxRotateTime);
                 this.roll += (rotateTime / (float) maxRotateTime) * maxRotateSpeed;
+
+                xd += (Wind.windX - xd) * windCoefficient / 60.0f;
+                zd += (Wind.windZ - zd) * windCoefficient / 60.0f;
             } else {
                 rotateTime = 0;
 
@@ -150,6 +158,9 @@ public class FallingLeafParticle extends TextureSheetParticle {
                 //       that is nice sometimes, but some/most leaves should still get blown along the ground by the wind
                 // velocityX *= (1 - FRICTION);
                 // velocityZ *= (1 - FRICTION);
+
+                xd = 0;
+                zd = 0;
             }
 
             // approach the target wind velocity over time via vel += (target - vel) * f, where f is in (0, 1)
@@ -160,11 +171,77 @@ public class FallingLeafParticle extends TextureSheetParticle {
             // the wind coefficient is just another factor in (0, 1) to add some variance between leaves.
             // this implementation lags behind the actual wind speed and will never reach it fully,
             // so wind speeds needs to be adjusted accordingly
-            xd += (Wind.windX - xd) * windCoefficient / 60.0f;
-            zd += (Wind.windZ - zd) * windCoefficient / 60.0f;
         }
 
         move(xd, yd, zd);
+    }
+
+    private static final double MAXIMUM_COLLISION_VELOCITY_SQUARED = Mth.square(100.0);
+
+    @Override
+    public void move(double pX, double pY, double pZ) {
+        double d0 = pX;
+        double d1 = pY;
+        double d2 = pZ;
+        if (this.hasPhysics && (pX != 0.0 || pY != 0.0 || pZ != 0.0) && pX * pX + pY * pY + pZ * pZ < MAXIMUM_COLLISION_VELOCITY_SQUARED) {
+            Vec3 vec3 = Entity.collideBoundingBox(null, new Vec3(pX, pY, pZ), this.getBoundingBox(), this.level, List.of());
+            pX = vec3.x;
+            pY = vec3.y;
+            pZ = vec3.z;
+            List<Entity> entities = this.level.getEntities(null, getBoundingBox());
+            if (!entities.isEmpty() && random.nextFloat() > 0.4f) {
+                Entity first = entities.getFirst();
+                pX += first.getDeltaMovement().x;
+                pZ += first.getDeltaMovement().z;
+            }
+        }
+
+        if (pX != 0.0 || pY != 0.0 || pZ != 0.0) {
+            this.setBoundingBox(this.getBoundingBox().move(pX, pY, pZ));
+            this.setLocationFromBoundingbox();
+        }
+
+        this.onGround = d1 != pY && d1 < 0.0;
+        if (d0 != pX) {
+            this.xd = 0.0;
+        }
+
+        if (d2 != pZ) {
+            this.zd = 0.0;
+        }
+    }
+
+    @Override
+    public void render(VertexConsumer pBuffer, Camera pRenderInfo, float pPartialTicks) {
+        Quaternionf q = new Quaternionf();
+        if (this.onGround) {
+            q.rotateX((float) Math.PI / -2f);
+            q.rotateZ(hashCode());
+
+
+            Vec3 pos = getPos();
+            Vec3 position = pRenderInfo.getPosition();
+            Vec3 subtract = position.subtract(pos);
+            if (subtract.y < 0) {
+                q.rotateY((float) Math.PI);
+                q.rotateZ((float) Math.PI/2);
+            }
+        } else {
+            getFacingCameraMode().setRotation(q, pRenderInfo, pPartialTicks);
+            if (this.roll != 0.0) {
+                q.rotateZ(Mth.lerp(pPartialTicks, this.oRoll, this.roll));
+            }
+        }
+        super.renderRotatedQuad(pBuffer, pRenderInfo, q, pPartialTicks);
+    }
+
+    @Override
+    protected void renderRotatedQuad(VertexConsumer pBuffer, Quaternionf pQuaternion, float pX, float pY, float pZ, float pPartialTicks) {
+        super.renderRotatedQuad(pBuffer, pQuaternion, pX, pY + switch (hashCode() % 3) {
+            case 0 -> 0.01f;
+            case 1 -> 0.02f;
+            default -> 0.03f;
+        }, pZ, pPartialTicks);
     }
 
     @Override
