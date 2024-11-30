@@ -113,7 +113,7 @@ public class EventHandler {
             double modifier = FallingLeavesMod.CONFIG.snowSpawnRate.get();
             modifier = modifier / 10f / 75;
             spawnChance *= modifier;
-            if (level.isRaining() && level.getBiome(pos).value().getPrecipitationAt(pos) == Biome.Precipitation.SNOW) {
+            if (level.isRaining() && level.getBiome(pos).value().getPrecipitationAt(pos, level.getSeaLevel()) == Biome.Precipitation.SNOW) {
                 spawnChance *= 5;
             }
 

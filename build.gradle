@@ -65,8 +65,8 @@ repositories {
 
 dependencies {
     implementation "net.neoforged:neoforge:${forge_version}"
-    implementation "curse.maven:serene-seasons-291874:5429913"
-    implementation "curse.maven:glitchcore-955399:5429863"
+    implementation "curse.maven:serene-seasons-291874:5861335"
+    implementation "curse.maven:glitchcore-955399:5884523"
 }
 
 tasks.named('jar', Jar).configure {

@@ -112,7 +112,7 @@ public class LeafTypeLoader implements PreparableReloadListener {
     }
 
     @Override
-    public @NotNull CompletableFuture<Void> reload(@NotNull PreparationBarrier stage, @NotNull ResourceManager resourceManager, @NotNull ProfilerFiller p_10640_, @NotNull ProfilerFiller p_10641_, @NotNull Executor pBackgroundExecutor, @NotNull Executor p_10643_) {
+    public @NotNull CompletableFuture<Void> reload(@NotNull PreparationBarrier stage, @NotNull ResourceManager resourceManager, @NotNull Executor pBackgroundExecutor, @NotNull Executor p_10643_) {
 
         CompletableFuture<Map<ResourceLocation, LeafType>> textures = CompletableFuture.supplyAsync(() -> PARTICLE_LISTER.listMatchingResources(resourceManager).entrySet(), pBackgroundExecutor).thenApplyAsync(list -> {
             return list.stream().collect(Collectors.toMap(entry -> PARTICLE_LISTER.fileToId(entry.getKey()), entry -> {

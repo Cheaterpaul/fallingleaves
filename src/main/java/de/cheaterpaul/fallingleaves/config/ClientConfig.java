@@ -59,7 +59,7 @@ public class ClientConfig {
             ResourceLocation id = ResourceLocation.tryParse(string);
             if (id != null) {
                 if (ServerLifecycleHooks.getCurrentServer() != null) {
-                    return ServerLifecycleHooks.getCurrentServer().registryAccess().registryOrThrow(key).containsKey(id);
+                    return ServerLifecycleHooks.getCurrentServer().registryAccess().lookupOrThrow(key).containsKey(id);
                 } else {
                     return true;
                 }

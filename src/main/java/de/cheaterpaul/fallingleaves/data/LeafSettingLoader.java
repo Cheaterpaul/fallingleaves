@@ -8,6 +8,7 @@ import de.cheaterpaul.fallingleaves.config.LeafSettingsEntry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.SimpleJsonResourceReloadListener;
+import net.minecraft.util.ExtraCodecs;
 import net.minecraft.util.profiling.ProfilerFiller;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -20,25 +21,18 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class LeafSettingLoader extends SimpleJsonResourceReloadListener {
+public class LeafSettingLoader extends SimpleJsonResourceReloadListener<LeafSettingsEntry> {
 
     private static final Logger LOGGER = LogManager.getLogger();
-    private static final Gson GSON = new GsonBuilder().create();
     private Map<ResourceLocation, LeafSettingsEntry> treeLeaveSizeValues = new HashMap<>();
 
     public LeafSettingLoader() {
-        super(GSON, "fallingleaves/settings");
+        super(LeafSettingsEntry.CODEC, "fallingleaves/settings");
     }
 
     @Override
-    protected void apply(Map<ResourceLocation, JsonElement> values, @NotNull ResourceManager resourceManager, @NotNull ProfilerFiller profiler) {
-        this.treeLeaveSizeValues = values.entrySet().stream().<Pair<ResourceLocation,LeafSettingsEntry>>mapMulti((entry, consumer) -> {
-            DataResult<Pair<LeafSettingsEntry, JsonElement>> decode = LeafSettingsEntry.CODEC.decode(JsonOps.INSTANCE, entry.getValue());
-            decode.result().ifPresent(res -> consumer.accept(Pair.of(entry.getKey(), res.getFirst())));
-            decode.error().ifPresent(error -> {
-                LOGGER.error(error.message());
-            });
-        }).collect(Collectors.toMap(Pair::getFirst, Pair::getSecond));
+    protected void apply(Map<ResourceLocation, LeafSettingsEntry> values, @NotNull ResourceManager resourceManager, @NotNull ProfilerFiller profiler) {
+        this.treeLeaveSizeValues = values;
     }
 
     @Nullable
