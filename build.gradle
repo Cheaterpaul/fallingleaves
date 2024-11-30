@@ -2,7 +2,7 @@ plugins {
     id "me.modmuss50.mod-publish-plugin" version "0.4.2"
     id 'idea'
     id 'eclipse'
-    id 'net.neoforged.gradle.userdev' version '7.0.145'
+    id 'net.neoforged.gradle.userdev' version '7.0.170'
 }
 
 ext.mod_version="Test"
