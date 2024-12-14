@@ -45,7 +45,7 @@ runs {
         systemProperty 'forge.enabledGameTestNamespaces', project.mod_id
     }
 
-    data {
+    clientData {
         programArguments.addAll '--mod', project.mod_id, '--all', '--output', file('src/generated/resources/').getAbsolutePath(), '--existing', file('src/main/resources/').getAbsolutePath()
     }
 }
@@ -65,8 +65,8 @@ repositories {
 
 dependencies {
     implementation "net.neoforged:neoforge:${forge_version}"
-    implementation "curse.maven:serene-seasons-291874:5861335"
-    implementation "curse.maven:glitchcore-955399:5884523"
+    implementation "curse.maven:serene-seasons-291874:5987111"
+    implementation "curse.maven:glitchcore-955399:5987013"
 }
 
 tasks.named('jar', Jar).configure {

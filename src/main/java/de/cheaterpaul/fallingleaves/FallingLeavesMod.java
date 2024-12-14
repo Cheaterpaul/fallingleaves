@@ -47,8 +47,8 @@ public class FallingLeavesMod {
     }
 
     @SubscribeEvent
-    public static void gatherData(final GatherDataEvent event) {
-        event.getGenerator().addProvider(event.includeClient(), new LeafSettingGenerator(event.getGenerator().getPackOutput(), event.getLookupProvider()));
+    public static void gatherData(final GatherDataEvent.Client event) {
+        event.getGenerator().addProvider(true, new LeafSettingGenerator(event.getGenerator().getPackOutput(), event.getLookupProvider()));
     }
 
     static {

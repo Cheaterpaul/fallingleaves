@@ -5,6 +5,7 @@ import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.JsonOps;
 import de.cheaterpaul.fallingleaves.config.LeafSettingsEntry;
+import net.minecraft.resources.FileToIdConverter;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.SimpleJsonResourceReloadListener;
@@ -27,7 +28,7 @@ public class LeafSettingLoader extends SimpleJsonResourceReloadListener<LeafSett
     private Map<ResourceLocation, LeafSettingsEntry> treeLeaveSizeValues = new HashMap<>();
 
     public LeafSettingLoader() {
-        super(LeafSettingsEntry.CODEC, "fallingleaves/settings");
+        super(LeafSettingsEntry.CODEC, FileToIdConverter.json("fallingleaves/settings"));
     }
 
     @Override

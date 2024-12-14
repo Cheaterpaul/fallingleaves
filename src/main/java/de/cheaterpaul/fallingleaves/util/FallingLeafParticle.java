@@ -35,6 +35,7 @@ import de.cheaterpaul.fallingleaves.data.LeafTypeLoader;
 import de.cheaterpaul.fallingleaves.data.LeafLoader;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.*;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.SimpleParticleType;
@@ -53,21 +54,7 @@ import javax.annotation.Nullable;
 @OnlyIn(Dist.CLIENT)
 public class FallingLeafParticle extends TextureSheetParticle {
 
-    public static final ParticleRenderType LEAVES_SHEET = new ParticleRenderType() {
-
-        @Override
-        public @NotNull BufferBuilder begin(Tesselator tesselator, @NotNull TextureManager textureManager) {
-            RenderSystem.depthMask(true);
-            RenderSystem.setShaderTexture(0, LeafTypeLoader.LEAVES_ATLAS);
-            RenderSystem.enableBlend();
-            RenderSystem.defaultBlendFunc();
-            return tesselator.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.PARTICLE);
-        }
-
-        public String toString() {
-            return "FALLINGLEAVES_PARTICLE_SHEET_TRANSLUCENT";
-        }
-    };
+    public static final ParticleRenderType LEAVES_SHEET = new ParticleRenderType("FALLINGLEAVES_PARTICLE_SHEET_TRANSLUCENT", RenderType.opaqueParticle(LeafTypeLoader.LEAVES_ATLAS), true);
 
     protected static final float TAU = (float) (2 * Math.PI); // 1 rotation
 
