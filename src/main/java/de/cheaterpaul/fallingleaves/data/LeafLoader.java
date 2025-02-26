@@ -8,7 +8,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.neoforge.client.event.RegisterClientReloadListenersEvent;
+import net.neoforged.neoforge.client.event.AddClientReloadListenersEvent;
 import net.neoforged.neoforge.client.event.TextureAtlasStitchedEvent;
 
 import java.util.HashMap;
@@ -17,15 +17,17 @@ import java.util.Map;
 @EventBusSubscriber(modid = FallingLeavesMod.MOD_ID, bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public class LeafLoader {
 
+    public static final ResourceLocation LEAF_TYPE_LISTENER = ResourceLocation.fromNamespaceAndPath(FallingLeavesMod.MOD_ID, "leaf_type");
+    public static final ResourceLocation TREE_VALUELISTENER = ResourceLocation.fromNamespaceAndPath(FallingLeavesMod.MOD_ID, "tree_value");
     private static LeafTypeLoader leafTypeLoader;
     private static LeafSettingLoader treeValueLoader;
 
     private static final Map<LeafTypeLoader.LeafType, LeafTypeLoader.ParticleProvider> SNOW_CACHE = new HashMap<>();
 
     @SubscribeEvent
-    public static void registerReloadListeners(RegisterClientReloadListenersEvent event) {
-        event.registerReloadListener(leafTypeLoader = new LeafTypeLoader(Minecraft.getInstance().getTextureManager()));
-        event.registerReloadListener(treeValueLoader = new LeafSettingLoader());
+    public static void registerReloadListeners(AddClientReloadListenersEvent event) {
+        event.addListener(LEAF_TYPE_LISTENER, leafTypeLoader = new LeafTypeLoader(Minecraft.getInstance().getTextureManager()));
+        event.addListener(TREE_VALUELISTENER, treeValueLoader = new LeafSettingLoader());
     }
 
     @SubscribeEvent
