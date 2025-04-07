@@ -1,0 +1,16 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "de.cheaterpaul.fallingleaves.mixin",
+  "compatibilityLevel": "JAVA_8",
+  "refmap": "fallingleaves.refmap.json",
+  "mixins": [
+  ],
+  "client": [
+    "wind.ClientLevelMixin",
+    "wind.FallingLeavesParticleMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
