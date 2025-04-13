@@ -1,8 +1,15 @@
 {
   "lifeSpanModifier": 1.5,
+  "spawnModifier": 0.2,
   "textures": [
-    "fallingleaves:conifer_1",
-    "fallingleaves:conifer_2",
-    "fallingleaves:conifer_3"
+    {
+      "texture": "fallingleaves:conifer_1"
+    },
+    {
+      "texture": "fallingleaves:conifer_2"
+    },
+    {
+      "texture": "fallingleaves:conifer_3"
+    }
   ]
 }

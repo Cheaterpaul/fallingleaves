@@ -1,6 +1,7 @@
 package de.cheaterpaul.fallingleaves.data.provider;
 
 import com.mojang.logging.LogUtils;
+import de.cheaterpaul.fallingleaves.ColoredSpriteProvider;
 import de.cheaterpaul.fallingleaves.FallingLeavesMod;
 import de.cheaterpaul.fallingleaves.leaves.mod.types.LeafSetting;
 import de.cheaterpaul.fallingleaves.leaves.mod.types.LeafType;
@@ -52,23 +53,21 @@ public class LeafProvider implements PreparableReloadListener {
             this.textureAtlas.upload(spriteloader$preparations);
             var spriteSets = new HashMap<ResourceLocation, LeafType.LoadedLeafType>();
             var leafSprites = new HashMap<ResourceLocation, LeafSetting.LoadedLeafSetting>();
-            TextureAtlasSprite textureatlassprite = spriteloader$preparations.missing();
+            ColoredSpriteProvider.TextureSprite notFound = new ColoredSpriteProvider.TextureSprite(spriteloader$preparations.missing(), true, 1);
 
             this.leafTypeProvider.getLeafTypes().forEach((key, leafType) -> {
-                List<TextureAtlasSprite> list = new ArrayList<>();
-                for (ResourceLocation texture : leafType.textures()) {
-                    TextureAtlasSprite sprite = spriteloader$preparations.regions().get(texture);
+                List<ColoredSpriteProvider.TextureSprite> list = new ArrayList<>();
+                for (LeafType.Texture texture : leafType.textures()) {
+                    TextureAtlasSprite sprite = spriteloader$preparations.regions().get(texture.texture());
                     if (sprite != null) {
-                        list.add(sprite);
+                        list.add(new ColoredSpriteProvider.TextureSprite(sprite, texture.isTinted(), texture.sizeModifier()));
                     } else {
-                        list.add(textureatlassprite);
+                        list.add(notFound);
                         LOGGER.warn("Missing leaves particle texture: {}", texture);
                     }
-                    list.add(Objects.requireNonNullElse(sprite, textureatlassprite));
                 }
 
-                var spriteSet = new ParticleEngine.MutableSpriteSet();
-                spriteSet.rebind(list);
+                var spriteSet = new ColoredSpriteProvider(list);
 
                 var settings = new LeafType.LoadedLeafType(leafType, spriteSet);
                 spriteSets.put(key, settings);

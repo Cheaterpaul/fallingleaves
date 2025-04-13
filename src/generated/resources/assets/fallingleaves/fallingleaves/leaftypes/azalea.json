@@ -1,0 +1,10 @@
+{
+  "spawnModifier": 1.3,
+  "textures": [
+    {
+      "isTinted": true,
+      "size": 2.0,
+      "texture": "fallingleaves:azalea_flower_1"
+    }
+  ]
+}

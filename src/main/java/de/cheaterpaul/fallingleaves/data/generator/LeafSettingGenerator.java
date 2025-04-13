@@ -57,7 +57,9 @@ public class LeafSettingGenerator implements DataProvider {
         consumer.accept(LeafLoader.DEFAULT_SETTINGS, new LeafSetting(LeafTypes.DEFAULT));
         consumer.accept(ResourceLocation.fromNamespaceAndPath("minecraft", "spruce_leaves"), new LeafSetting(LeafTypes.CONIFER));
         consumer.accept(ResourceLocation.fromNamespaceAndPath("minecraft", "jungle_leaves"), new LeafSetting(LeafTypes.DEFAULT));
-        consumer.accept(ResourceLocation.fromNamespaceAndPath("minecraft", "cherry_leaves"), new LeafSetting(LeafTypes.DEFAULT, 0));
+        consumer.accept(ResourceLocation.fromNamespaceAndPath("minecraft", "cherry_leaves"), new LeafSetting(LeafTypes.CHERRY));
+        consumer.accept(ResourceLocation.fromNamespaceAndPath("minecraft", "azalea_leaves"), new LeafSetting(LeafTypes.DEFAULT));
+        consumer.accept(ResourceLocation.fromNamespaceAndPath("minecraft", "flowering_azalea_leaves"), new LeafSetting(LeafTypes.AZALEA));
         //byg
         consumer.accept(ResourceLocation.fromNamespaceAndPath("byg", "blue_spruce_leaves"), new LeafSetting(LeafTypes.CONIFER));
         consumer.accept(ResourceLocation.fromNamespaceAndPath("byg", "cypress_leaves"), new LeafSetting(LeafTypes.CONIFER));

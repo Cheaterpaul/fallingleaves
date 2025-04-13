@@ -1,8 +1,13 @@
 {
   "lifeSpanModifier": 2.0,
   "sizeModifier": 4.0,
+  "spawnModifier": 0.5,
   "textures": [
-    "fallingleaves:palms_1",
-    "fallingleaves:palms_2"
+    {
+      "texture": "fallingleaves:palms_1"
+    },
+    {
+      "texture": "fallingleaves:palms_2"
+    }
   ]
 }

@@ -1,18 +1,15 @@
 package de.cheaterpaul.fallingleaves.leaves.mod;
 
-import de.cheaterpaul.fallingleaves.FallingLeavesMod;
+import de.cheaterpaul.fallingleaves.ColoredSpriteProvider;
 import de.cheaterpaul.fallingleaves.config.Config;
 import de.cheaterpaul.fallingleaves.data.LeafLoader;
 import de.cheaterpaul.fallingleaves.leaves.mod.types.LeafSetting;
 import de.cheaterpaul.fallingleaves.leaves.mod.util.RenderSettings;
 import de.cheaterpaul.fallingleaves.wind.IWindLevel;
-import de.cheaterpaul.fallingleaves.wind.Wind;
 import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.client.particle.Particle;
-import net.minecraft.client.particle.ParticleProvider;
-import net.minecraft.client.particle.ParticleRenderType;
-import net.minecraft.client.particle.TextureSheetParticle;
+import net.minecraft.client.particle.*;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.tags.FluidTags;
@@ -39,8 +36,6 @@ public class FallingLeafParticle extends TextureSheetParticle {
 
     protected FallingLeafParticle(ClientLevel clientWorld, double x, double y, double z, double r, double g, double b, @NotNull LeafSetting.LoadedLeafSetting provider) {
         super(clientWorld, x, y, z, 0, 0, 0);
-        this.pickSprite(provider.leafType().spriteSet());
-
         this.gravity = 0.08f + random.nextFloat() * 0.04f;
         this.windCoefficient = 0.6f + random.nextFloat() * 0.4f;
 
@@ -62,6 +57,18 @@ public class FallingLeafParticle extends TextureSheetParticle {
         this.roll = this.oRoll = random.nextFloat() * TAU;
 
         this.quadSize = (Config.CONFIG.leaves.mod.leafSize.get() / 50f) * provider.leafType().type().sizeModifier();
+
+        this.pickSprite(provider.leafType().spriteSet());
+    }
+
+    public void pickSprite(ColoredSpriteProvider sprite) {
+        ColoredSpriteProvider.TextureSprite textureSprite = sprite.get(this.random);
+        this.setSprite(textureSprite.sprite());
+        if (textureSprite.isTinted()) {
+            this.rCol = 1;
+            this.gCol = 1;
+            this.bCol = 1;
+        }
     }
 
     @Override

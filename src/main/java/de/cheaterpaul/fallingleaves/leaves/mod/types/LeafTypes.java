@@ -10,4 +10,6 @@ public class LeafTypes {
     public static final ResourceLocation PALMS = ResourceLocation.fromNamespaceAndPath(FallingLeavesMod.MODID, "palms");
     public static final ResourceLocation MAHOGANY = ResourceLocation.fromNamespaceAndPath(FallingLeavesMod.MODID, "mahogany");
     public static final ResourceLocation MAPLE = ResourceLocation.fromNamespaceAndPath(FallingLeavesMod.MODID, "maple");
+    public static final ResourceLocation CHERRY = ResourceLocation.fromNamespaceAndPath(FallingLeavesMod.MODID, "cherry");
+    public static final ResourceLocation AZALEA = ResourceLocation.fromNamespaceAndPath(FallingLeavesMod.MODID, "azalea");
 }

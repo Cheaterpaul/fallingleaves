@@ -1,4 +1,4 @@
-// 1.21.5	2025-04-13T18:53:49.3872988	leaf setting generator
+// 1.21.5	2025-04-13T23:42:35.707846	leaf setting generator
 c05f443dc67a17f7552035be06aff7ff9d51d3ef assets/biomesoplenty/fallingleaves/settings/cypress_leaves.json
 bf21a9e8fbc5a3846fb05b4fa0859e0917b2202f assets/biomesoplenty/fallingleaves/settings/dead_leaves.json
 c05f443dc67a17f7552035be06aff7ff9d51d3ef assets/biomesoplenty/fallingleaves/settings/fir_leaves.json
@@ -26,7 +26,9 @@ c05f443dc67a17f7552035be06aff7ff9d51d3ef assets/byg/fallingleaves/settings/red_s
 780bbee0ccd656b0bc42c8b4be6dd0e17b4bb667 assets/byg/fallingleaves/settings/skyris_leaves.json
 780bbee0ccd656b0bc42c8b4be6dd0e17b4bb667 assets/byg/fallingleaves/settings/white_cherry_leaves.json
 c05f443dc67a17f7552035be06aff7ff9d51d3ef assets/byg/fallingleaves/settings/yellow_spruce_leaves.json
-313dfc78ed362d4e73950e546545b254c05256f0 assets/minecraft/fallingleaves/settings/cherry_leaves.json
+bf21a9e8fbc5a3846fb05b4fa0859e0917b2202f assets/minecraft/fallingleaves/settings/azalea_leaves.json
+2e8dccfc4718bbbfb575671cece4a32c0b8bcd2e assets/minecraft/fallingleaves/settings/cherry_leaves.json
+a3ec1ad830d760dd51a2584316cc2cc8313e384a assets/minecraft/fallingleaves/settings/flowering_azalea_leaves.json
 bf21a9e8fbc5a3846fb05b4fa0859e0917b2202f assets/minecraft/fallingleaves/settings/jungle_leaves.json
 bf21a9e8fbc5a3846fb05b4fa0859e0917b2202f assets/minecraft/fallingleaves/settings/oak_leaves.json
 c05f443dc67a17f7552035be06aff7ff9d51d3ef assets/minecraft/fallingleaves/settings/spruce_leaves.json
