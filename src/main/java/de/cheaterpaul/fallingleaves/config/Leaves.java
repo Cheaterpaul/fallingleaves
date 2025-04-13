@@ -34,7 +34,7 @@ public class Leaves {
 
         public Mod(ModConfigSpec.Builder builder) {
             this.leafSize = builder.comment("Modifies the size of the leaves").defineInRange("leafSize", 5, 1, 20);
-            this.leafLifespan = builder.comment("Modifies how long it takes for the leaves to disappear.", "In Ticks", "Values over 2000 are not recommend").defineInRange("leafLifespan", 200, 100, Integer.MAX_VALUE);
+            this.leafLifespan = builder.comment("Modifies how long it takes for the leaves to disappear.", "In Ticks", "Values over 2000 are not recommend").defineInRange("leafLifespan", 400, 10, Integer.MAX_VALUE);
             this.leafSpawnRate = builder.comment("Modifies the amount of leaves that are spawning.", "Values over 10000 are not recommend").defineInRange("leafSpawnRate", 10, 0, Integer.MAX_VALUE);
             this.minimumFreeSpaceBelow = builder.comment("How much room below the leaves block is needed for the leaves to spawn").defineInRange("minimumFreeSpaceBelow", 0.5, 1d, 20d);
         }

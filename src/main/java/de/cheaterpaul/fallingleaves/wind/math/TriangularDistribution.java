@@ -2,7 +2,7 @@ package de.cheaterpaul.fallingleaves.wind.math;
 
 import net.minecraft.util.RandomSource;
 
-public class TriangularDistribution {
+public class TriangularDistribution implements ITriangularDistribution {
     public final float a, b, c;
     protected final float f;
 
@@ -16,6 +16,7 @@ public class TriangularDistribution {
         this.f = (c - a) / (b - a);
     }
 
+    @Override
     public float sample(RandomSource random) {
         float u = random.nextFloat();
         if (u < f) return a + (float) Math.sqrt(u * (b - a) * (c - a));

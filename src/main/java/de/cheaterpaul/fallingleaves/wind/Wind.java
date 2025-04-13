@@ -11,9 +11,9 @@ public class Wind {
 
     private final WindState state = new WindState();
     private final ClientLevel level;
-    private SmoothNoise velocityNoise;
-    private SmoothNoise directionTrendNoise;
-    private SmoothNoise directionNoise;
+    private final SmoothNoise velocityNoise;
+    private final SmoothNoise directionTrendNoise;
+    private final SmoothNoise directionNoise;
 
     private float windX;
     private float windZ;
@@ -42,6 +42,14 @@ public class Wind {
 
         this.windX = strength * Mth.cos(direction);
         this.windZ = strength * Mth.sin(direction);
+    }
+
+    public void changeWind() {
+        this.state.changeWind(this.level);
+    }
+
+    public void changeWind(WindState.State state) {
+        this.state.changeWind(state);
     }
 
     public boolean isActive() {

@@ -18,7 +18,7 @@ public class ColoredSpriteProvider {
         return this.sprites.get(randomSource.nextInt(this.sprites.size()));
     }
 
-    public record TextureSprite(TextureAtlasSprite sprite, boolean isTinted, float size) {
+    public record TextureSprite(TextureAtlasSprite sprite, boolean isTinted, float sizeModifier) {
 
     }
 }
