@@ -1,6 +1,7 @@
 package de.cheaterpaul.fallingleaves.wind;
 
 import de.cheaterpaul.fallingleaves.FallingLeavesMod;
+import de.cheaterpaul.fallingleaves.config.Config;
 import de.cheaterpaul.fallingleaves.wind.math.SmoothNoise;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.util.Mth;
@@ -58,7 +59,7 @@ public class Wind {
     }
 
     private boolean hasWind() {
-        return FallingLeavesMod.CONFIG.wind.hasWind(this.level);
+        return Config.CONFIG.wind.hasWind(this.level);
     }
 
     private void deactivate() {

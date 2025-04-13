@@ -1,59 +1,46 @@
 package de.cheaterpaul.fallingleaves.config;
 
-import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.level.Level;
+import de.cheaterpaul.fallingleaves.FallingLeavesMod;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.event.config.ModConfigEvent;
 import net.neoforged.neoforge.common.ModConfigSpec;
-import net.neoforged.neoforge.server.ServerLifecycleHooks;
+import org.apache.commons.lang3.tuple.Pair;
 
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
-
+@EventBusSubscriber(modid = FallingLeavesMod.MODID, bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public class Config {
 
+    public static final ModConfigSpec CONFIG_SPEC;
+    public static final Config CONFIG;
+
+    public final Leaves leaves;
     public final Wind wind;
+    public final Snow snow;
 
     public Config(ModConfigSpec.Builder builder) {
-        wind = new Wind(builder);
+        builder.push("leaves");
+        this.leaves = new Leaves(builder);
+        builder.pop();
+        builder.push("wind");
+        this.wind = new Wind(builder);
+        builder.pop();
+        builder.push("snow");
+        this.snow = new Snow(builder);
+        builder.pop();
     }
 
-    public void onLoad(final ModConfigEvent event) {
-        wind.onLoad(event);
+    @SubscribeEvent
+    public static void onLoad(final ModConfigEvent event) {
+        CONFIG.wind.onLoad(event);
+        CONFIG.leaves.onLoad(event);
     }
 
-    public static class Wind {
 
-        public final ModConfigSpec.BooleanValue enabled;
-        private final ModConfigSpec.ConfigValue<List< ? extends String>> windlessDimensions;
-        private Set<ResourceLocation> windlessDimensionsSet = Set.of();
-
-        public Wind(ModConfigSpec.Builder builder) {
-            this.enabled = builder.comment("Whether to enable the wind").define("enabled", true);
-            this.windlessDimensions = builder.comment("The dimension to disable the wind in").defineListAllowEmpty("windlessDimension", List.of(Level.NETHER.location().toString(), Level.END.location().toString()), () -> "", Wind::validateDimension);
-        }
-
-        public boolean hasWind(Level level) {
-            return this.enabled.get() && !this.windlessDimensionsSet.contains(level.dimension().location());
-        }
-
-        private static boolean validateDimension(Object o) {
-            if(o instanceof String dimName) {
-                ResourceLocation id = ResourceLocation.tryParse(dimName);
-                if (id != null) {
-                    if (ServerLifecycleHooks.getCurrentServer() != null) {
-                        return ServerLifecycleHooks.getCurrentServer().registryAccess().lookupOrThrow(Registries.DIMENSION).containsKey(id);
-                    } else {
-                        return true;
-                    }
-                }
-            }
-            return false;
-        }
-
-        public void onLoad(final ModConfigEvent event) {
-            this.windlessDimensionsSet = this.windlessDimensions.get().stream().map(ResourceLocation::parse).collect(Collectors.toSet());
-        }
+    static {
+        Pair<Config, ModConfigSpec> configure = new ModConfigSpec.Builder().configure(Config::new);
+        CONFIG = configure.getLeft();
+        CONFIG_SPEC = configure.getRight();
     }
+
 }

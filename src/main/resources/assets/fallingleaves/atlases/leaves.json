@@ -1,0 +1,14 @@
+{
+  "sources": [
+    {
+      "type": "directory",
+      "source": "particle",
+      "prefix": ""
+    },
+    {
+      "type": "directory",
+      "source": "falling_leaf",
+      "prefix": ""
+    }
+  ]
+}

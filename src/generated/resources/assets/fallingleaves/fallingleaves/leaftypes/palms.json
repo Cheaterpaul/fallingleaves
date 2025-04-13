@@ -1,0 +1,8 @@
+{
+  "lifeSpanModifier": 2.0,
+  "sizeModifier": 4.0,
+  "textures": [
+    "fallingleaves:palms_1",
+    "fallingleaves:palms_2"
+  ]
+}

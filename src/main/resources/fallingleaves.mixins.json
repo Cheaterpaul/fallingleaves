@@ -5,8 +5,14 @@
   "compatibilityLevel": "JAVA_8",
   "refmap": "fallingleaves.refmap.json",
   "mixins": [
+    "leaves.LeavesBlockMixin",
+    "snow.LeavesBlockMixin"
   ],
   "client": [
+    "NativeImageAccessor",
+    "decay.ClientLevelMixin",
+    "leaves.ClientLevelMixin",
+    "snow.ClientLevelMixin",
     "wind.ClientLevelMixin",
     "wind.FallingLeavesParticleMixin"
   ],

@@ -1,0 +1,8 @@
+{
+  "lifeSpanModifier": 1.5,
+  "textures": [
+    "fallingleaves:conifer_1",
+    "fallingleaves:conifer_2",
+    "fallingleaves:conifer_3"
+  ]
+}
