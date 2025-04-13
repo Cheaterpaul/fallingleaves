@@ -1,4 +1,4 @@
-package de.cheaterpaul.fallingleaves;
+package de.cheaterpaul.fallingleaves.particle;
 
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.RandomSource;

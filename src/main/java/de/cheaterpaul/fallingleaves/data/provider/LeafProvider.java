@@ -1,13 +1,12 @@
 package de.cheaterpaul.fallingleaves.data.provider;
 
 import com.mojang.logging.LogUtils;
-import de.cheaterpaul.fallingleaves.ColoredSpriteProvider;
+import de.cheaterpaul.fallingleaves.particle.ColoredSpriteProvider;
 import de.cheaterpaul.fallingleaves.FallingLeavesMod;
 import de.cheaterpaul.fallingleaves.leaves.mod.types.LeafSetting;
 import de.cheaterpaul.fallingleaves.leaves.mod.types.LeafType;
 import de.cheaterpaul.fallingleaves.leaves.mod.util.RenderSettings;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.particle.ParticleEngine;
 import net.minecraft.client.renderer.texture.SpriteLoader;
 import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;

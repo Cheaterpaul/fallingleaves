@@ -19,11 +19,8 @@ import org.slf4j.Logger;
 @Mod(value = FallingLeavesMod.MODID, dist = Dist.CLIENT)
 public class FallingLeavesMod {
     public static final String MODID = "fallingleaves";
-    public static FallingLeavesMod INSTANCE;
-
 
     public FallingLeavesMod(IEventBus modEventBus, ModContainer modContainer) {
-        INSTANCE = this;
         modContainer.registerConfig(ModConfig.Type.CLIENT, Config.CONFIG_SPEC);
     }
 

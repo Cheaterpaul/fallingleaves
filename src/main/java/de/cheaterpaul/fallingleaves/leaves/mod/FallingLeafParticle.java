@@ -1,6 +1,6 @@
 package de.cheaterpaul.fallingleaves.leaves.mod;
 
-import de.cheaterpaul.fallingleaves.ColoredSpriteProvider;
+import de.cheaterpaul.fallingleaves.particle.ColoredSpriteProvider;
 import de.cheaterpaul.fallingleaves.config.Config;
 import de.cheaterpaul.fallingleaves.data.LeafLoader;
 import de.cheaterpaul.fallingleaves.leaves.mod.types.LeafSetting;
@@ -9,7 +9,6 @@ import de.cheaterpaul.fallingleaves.wind.IWindLevel;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.*;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.tags.FluidTags;

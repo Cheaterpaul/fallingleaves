@@ -2,8 +2,7 @@ package de.cheaterpaul.fallingleaves.leaves.mod.types;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import de.cheaterpaul.fallingleaves.ColoredSpriteProvider;
-import net.minecraft.client.particle.ParticleEngine;
+import de.cheaterpaul.fallingleaves.particle.ColoredSpriteProvider;
 import net.minecraft.resources.ResourceLocation;
 
 import java.util.List;
