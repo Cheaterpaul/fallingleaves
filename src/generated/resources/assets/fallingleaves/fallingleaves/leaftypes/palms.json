@@ -3,11 +3,7 @@
   "sizeModifier": 4.0,
   "spawnModifier": 0.5,
   "textures": [
-    {
-      "texture": "fallingleaves:palms_1"
-    },
-    {
-      "texture": "fallingleaves:palms_2"
-    }
+    "fallingleaves:palms_1",
+    "fallingleaves:palms_2"
   ]
 }

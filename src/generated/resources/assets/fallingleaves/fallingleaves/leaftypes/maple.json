@@ -1,10 +1,6 @@
 {
   "textures": [
-    {
-      "texture": "fallingleaves:maple_1"
-    },
-    {
-      "texture": "fallingleaves:maple_1"
-    }
+    "fallingleaves:maple_1",
+    "fallingleaves:maple_1"
   ]
 }

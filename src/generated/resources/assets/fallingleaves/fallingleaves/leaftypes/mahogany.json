@@ -1,10 +1,6 @@
 {
   "textures": [
-    {
-      "texture": "fallingleaves:mahogany_1"
-    },
-    {
-      "texture": "fallingleaves:mahogany_2"
-    }
+    "fallingleaves:mahogany_1",
+    "fallingleaves:mahogany_2"
   ]
 }

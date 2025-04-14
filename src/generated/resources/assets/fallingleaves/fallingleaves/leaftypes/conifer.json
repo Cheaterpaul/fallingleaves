@@ -1,15 +1,15 @@
 {
   "lifeSpanModifier": 1.5,
+  "season": {
+    "autumn": 1.0,
+    "spring": 1.0,
+    "summer": 1.0,
+    "winter": 1.0
+  },
   "spawnModifier": 0.2,
   "textures": [
-    {
-      "texture": "fallingleaves:conifer_1"
-    },
-    {
-      "texture": "fallingleaves:conifer_2"
-    },
-    {
-      "texture": "fallingleaves:conifer_3"
-    }
+    "fallingleaves:conifer_1",
+    "fallingleaves:conifer_2",
+    "fallingleaves:conifer_3"
   ]
 }

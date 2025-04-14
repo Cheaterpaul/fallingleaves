@@ -10,12 +10,16 @@ public class Leaves {
     public final ModConfigSpec.BooleanValue enabled;
 
     public final Mod mod;
+    public final Seasons seasons;
 
     public Leaves(ModConfigSpec.Builder builder) {
         this.enabled = builder.comment("disable vanilla leaves and enable falling leaves leaves").define("enabled", true);
 
         builder.push("mod");
         this.mod = new Mod(builder);
+        builder.pop();
+        builder.push("seasons");
+        this.seasons = new Seasons(builder);
         builder.pop();
     }
 
@@ -37,6 +41,14 @@ public class Leaves {
             this.leafLifespan = builder.comment("Modifies how long it takes for the leaves to disappear.", "In Ticks", "Values over 2000 are not recommend").defineInRange("leafLifespan", 400, 10, Integer.MAX_VALUE);
             this.leafSpawnRate = builder.comment("Modifies the amount of leaves that are spawning.", "Values over 10000 are not recommend").defineInRange("leafSpawnRate", 10, 0, Integer.MAX_VALUE);
             this.minimumFreeSpaceBelow = builder.comment("How much room below the leaves block is needed for the leaves to spawn").defineInRange("minimumFreeSpaceBelow", 0.5, 1d, 20d);
+        }
+    }
+
+    public static class Seasons {
+        public final ModConfigSpec.BooleanValue enabled;
+
+        public Seasons(ModConfigSpec.Builder builder) {
+            this.enabled = builder.comment("Whether to enable the serene compatibility").define("enabled", true);
         }
     }
 }

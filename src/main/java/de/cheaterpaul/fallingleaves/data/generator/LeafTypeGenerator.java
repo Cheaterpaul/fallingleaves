@@ -54,13 +54,23 @@ public class LeafTypeGenerator implements DataProvider {
     }
 
     protected void registerLeafTypes(BiConsumer<ResourceLocation, LeafType> consumer) {
-        consumer.accept(LeafTypes.DEFAULT, new LeafType(modId("default_1"), modId("default_2"), modId("default_3"), modId("default_4"), modId("default_5")));
-        consumer.accept(LeafTypes.CONIFER, new LeafType(0.2f,1,1.5f, modId("conifer_1"), modId("conifer_2"), modId("conifer_3")));
-        consumer.accept(LeafTypes.PALMS, new LeafType(0.5f,4,2, modId("palms_1"), modId("palms_2")));
-        consumer.accept(LeafTypes.MAHOGANY, new LeafType(modId("mahogany_1"), modId("mahogany_2")));
-        consumer.accept(LeafTypes.MAPLE, new LeafType(modId("maple_1"), modId("maple_1")));
-        consumer.accept(LeafTypes.CHERRY, new LeafType(List.of(new LeafType.Texture(modId("cherry_flower_1"), true, 2), new LeafType.Texture(modId("cherry_flower_1"), true, 2), new LeafType.Texture(modId("cherry_1"), true)), 1.3f,1f,1f));
-        consumer.accept(LeafTypes.AZALEA, new LeafType(List.of(new LeafType.Texture(modId("azalea_flower_1"), true, 2)), 1.3f,1f,1f));
+        consumer.accept(LeafTypes.DEFAULT, new LeafType(1f,1f,1f,
+                modId("default_1"), modId("default_2"), modId("default_3"), modId("default_4"), modId("default_5")));
+        consumer.accept(LeafTypes.CONIFER, new LeafType(0.2f,1,1.5f,
+                new LeafType.SeasonModifier(new LeafType.Season(1), new LeafType.Season(1), new LeafType.Season(1), new LeafType.Season(1)),
+                modId("conifer_1"), modId("conifer_2"), modId("conifer_3")));
+        consumer.accept(LeafTypes.PALMS, new LeafType(0.5f,4f,2f,
+                modId("palms_1"), modId("palms_2")));
+        consumer.accept(LeafTypes.MAHOGANY, new LeafType(1f,1f,1f,
+                modId("mahogany_1"), modId("mahogany_2")));
+        consumer.accept(LeafTypes.MAPLE, new LeafType(1f,1f,1f,
+                modId("maple_1"), modId("maple_1")));
+        consumer.accept(LeafTypes.CHERRY, new LeafType( 1.3f,1f,1f,
+                new LeafType.SeasonModifier(new LeafType.Season(0.2f, 0.5f, 1.2f), new LeafType.Season(0.8f, 0.4f, 0), new LeafType.Season(0), new LeafType.Season(0)),
+                new LeafType.Texture(modId("cherry_flower_1"), true, 2), new LeafType.Texture(modId("cherry_flower_1"), true, 2), new LeafType.Texture(modId("cherry_1"), true)));
+        consumer.accept(LeafTypes.AZALEA, new LeafType(1.3f,1f,1f,
+                new LeafType.SeasonModifier(new LeafType.Season(0.2f, 0.5f, 1.2f), new LeafType.Season(0.8f, 0.4f, 0), new LeafType.Season(0), new LeafType.Season(0)),
+                new LeafType.Texture(modId("azalea_flower_1"), true, 2)));
 
     }
 }

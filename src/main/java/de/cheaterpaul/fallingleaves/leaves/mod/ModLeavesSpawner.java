@@ -5,6 +5,7 @@ import de.cheaterpaul.fallingleaves.data.LeafLoader;
 import de.cheaterpaul.fallingleaves.leaves.ILeavesSpawner;
 import de.cheaterpaul.fallingleaves.leaves.mod.types.LeafSetting;
 import de.cheaterpaul.fallingleaves.leaves.mod.util.LeafHelper;
+import de.cheaterpaul.fallingleaves.seasons.ISeasonProvider;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.ParticleEngine;
@@ -20,8 +21,10 @@ public class ModLeavesSpawner implements ILeavesSpawner {
 
     private final ParticleEngine particleEngine;
     private final FallingLeafParticle.LeavesParticleFactory particleFactory;
+    private final ISeasonProvider seasonProvider;
 
-    public ModLeavesSpawner() {
+    public ModLeavesSpawner(ISeasonProvider seasonProvider) {
+        this.seasonProvider = seasonProvider;
         this.particleEngine = Minecraft.getInstance().particleEngine;
         this.particleFactory = new FallingLeafParticle.LeavesParticleFactory();
     }
@@ -75,6 +78,8 @@ public class ModLeavesSpawner implements ILeavesSpawner {
     private boolean leafChance(LeafSetting.LoadedLeafSetting leafSetting, RandomSource randomSource) {
         double spawnChance = leafSetting.leafType().type().spawnModifier() * leafSetting.setting().spawnRate();
         spawnChance *= Config.CONFIG.leaves.mod.leafSpawnRate.get() / 500f;
+
+        spawnChance *= seasonProvider.getSeasonModifier(leafSetting.leafType().type());
 
         return randomSource.nextDouble() < spawnChance;
     }

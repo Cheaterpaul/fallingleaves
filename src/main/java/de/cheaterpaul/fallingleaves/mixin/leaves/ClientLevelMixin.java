@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.Unique;
 public class ClientLevelMixin implements ILeavesLevel {
 
     @Unique
-    private final Leaves fallingLeaves$leaves = new Leaves();
+    private final Leaves fallingLeaves$leaves = new Leaves((ClientLevel) (Object) this);
 
     @Override
     public Leaves fallingLeaves$getLeaves() {
