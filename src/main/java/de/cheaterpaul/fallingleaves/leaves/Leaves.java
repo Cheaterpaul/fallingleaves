@@ -26,14 +26,10 @@ public class Leaves {
 
     public void checkSpawner(boolean useVanilla) {
         ISeasonProvider seasonProvider = createSeasonProvider();
-        if (this.spawner == null) {
+        if (this.spawner == null || this.spawner.isVanilla() != useVanilla) {
             this.spawner = useVanilla ? new VanillaLeavesSpawner(seasonProvider) : new ModLeavesSpawner(seasonProvider);
-        } else if (this.spawner.isVanilla() != useVanilla) {
-            if (useVanilla) {
-                this.spawner = new VanillaLeavesSpawner(seasonProvider);
-            } else {
-                this.spawner = new ModLeavesSpawner(seasonProvider);
-            }
+        } else {
+            this.spawner.updateSeasonProvider(seasonProvider);
         }
     }
 

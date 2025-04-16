@@ -14,7 +14,8 @@ public class SereneSeasonProvider implements ISeasonProvider {
 
     private final ClientLevel level;
 
-    private final EnumBiMap<sereneseasons.api.season.Season.SubSeason, Season.SubSeason> seasonMap = EnumBiMap.create(new HashMap<>() {{
+    @SuppressWarnings("Convert2Diamond")
+    private final EnumBiMap<sereneseasons.api.season.Season.SubSeason, Season.SubSeason> seasonMap = EnumBiMap.create(new HashMap<sereneseasons.api.season.Season.SubSeason,Season.SubSeason>() {{
         put(sereneseasons.api.season.Season.SubSeason.EARLY_SPRING, Season.SubSeason.EARLY_SPRING);
         put(sereneseasons.api.season.Season.SubSeason.MID_SPRING, Season.SubSeason.MID_SPRING);
         put(sereneseasons.api.season.Season.SubSeason.LATE_SPRING, Season.SubSeason.LATE_SPRING);

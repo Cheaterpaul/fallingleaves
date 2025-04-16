@@ -30,7 +30,7 @@ import java.util.List;
 
 public class FallingLeafParticle extends TextureSheetParticle {
 
-    public static final ParticleRenderType LEAVES_SHEET = new ParticleRenderType("FALLINGLEAVES_PARTICLE_SHEET_TRANSLUCENT", RenderType.opaqueParticle(RenderSettings.LEAVES_ATLAS), true);
+    public static final ParticleRenderType LEAVES_SHEET = new ParticleRenderType("FALLINGLEAVES_PARTICLE_SHEET_TRANSLUCENT", RenderType.translucentParticle(RenderSettings.LEAVES_ATLAS), true);
 
     protected static final float TAU = (float) (2 * Math.PI); // 1 rotation
 
@@ -143,6 +143,13 @@ public class FallingLeafParticle extends TextureSheetParticle {
                 this.xd = 0;
                 this.zd = 0;
             }
+        }
+
+        float fadingDuration = Math.min(40, this.lifetime / 4f);
+        int remainingLifespan = this.lifetime - this.age;
+
+        if (remainingLifespan < fadingDuration) {
+            this.alpha = remainingLifespan / fadingDuration;
         }
 
         move(this.xd + windX, this.yd, this.zd + windZ);

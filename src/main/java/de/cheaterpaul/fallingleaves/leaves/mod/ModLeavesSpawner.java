@@ -21,12 +21,17 @@ public class ModLeavesSpawner implements ILeavesSpawner {
 
     private final ParticleEngine particleEngine;
     private final FallingLeafParticle.LeavesParticleFactory particleFactory;
-    private final ISeasonProvider seasonProvider;
+    private ISeasonProvider seasonProvider;
 
     public ModLeavesSpawner(ISeasonProvider seasonProvider) {
         this.seasonProvider = seasonProvider;
         this.particleEngine = Minecraft.getInstance().particleEngine;
         this.particleFactory = new FallingLeafParticle.LeavesParticleFactory();
+    }
+
+    @Override
+    public void updateSeasonProvider(ISeasonProvider seasonProvider) {
+        this.seasonProvider = seasonProvider;
     }
 
     @Override

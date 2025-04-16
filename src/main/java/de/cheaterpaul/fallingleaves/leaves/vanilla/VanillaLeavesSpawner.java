@@ -10,9 +10,14 @@ import net.minecraft.world.level.block.state.BlockState;
 
 public class VanillaLeavesSpawner implements ILeavesSpawner {
 
-    private final ISeasonProvider seasonProvider;
+    private ISeasonProvider seasonProvider;
 
     public VanillaLeavesSpawner(ISeasonProvider seasonProvider) {
+        this.seasonProvider = seasonProvider;
+    }
+
+    @Override
+    public void updateSeasonProvider(ISeasonProvider seasonProvider) {
         this.seasonProvider = seasonProvider;
     }
 
