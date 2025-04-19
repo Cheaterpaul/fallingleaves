@@ -1,6 +1,5 @@
 package de.cheaterpaul.fallingleaves.leaves.mod;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import de.cheaterpaul.fallingleaves.leaves.mod.types.LeafType;
 import de.cheaterpaul.fallingleaves.particle.ColoredSpriteProvider;
@@ -13,13 +12,14 @@ import net.minecraft.client.Camera;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.*;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.phys.shapes.Shapes;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.NotNull;
@@ -105,9 +105,6 @@ public class FallingLeafParticle extends TextureSheetParticle {
             return;
         }
 
-        double windX = 0;
-        double windZ = 0;
-
         if (this.level.getFluidState(new BlockPos((int) this.x, (int) this.y, (int) this.z)).is(FluidTags.WATER)) {
             // float on water
             this.yd = 0.0;
@@ -117,7 +114,7 @@ public class FallingLeafParticle extends TextureSheetParticle {
             this.zd *= (1 - WATER_FRICTION);
         } else {
             // apply gravity
-            this.yd -= 0.04 * this.gravity;
+            this.yd -= 0.02 * this.gravity;
 
             if (!onGround) {
                 // spin when in the air
@@ -133,10 +130,11 @@ public class FallingLeafParticle extends TextureSheetParticle {
                 // this implementation lags behind the actual wind speed and will never reach it fully,
                 // so wind speeds needs to be adjusted accordingly
                 var wind = ((IWindLevel) this.level).fallingLeaves$getWind();
-                windX = wind.getWindX() * this.windCoefficient;
-                windZ = wind.getWindZ() * this.windCoefficient;
-                //this.xd += (windX - this.xd) * 0.1;
-               // this.zd += (windZ - this.zd) * 0.1;
+                // Apply wind effect similar to vanilla implementation
+                // Don't multiply wind by coefficient before adjustment
+                // Use coefficient divided by 60f for slower, more natural adjustment
+                this.xd += (wind.getWindX() - this.xd) * this.windCoefficient / 60f;
+                this.zd += (wind.getWindZ() - this.zd) * this.windCoefficient / 60f;
             } else {
                 this.rotateTime = 0;
 
@@ -152,7 +150,15 @@ public class FallingLeafParticle extends TextureSheetParticle {
             this.alpha = remainingLifespan / fadingDuration;
         }
 
-        move(this.xd + windX, this.yd, this.zd + windZ);
+        if (!this.onGround || checkGroundCollision()) {
+            move(this.xd, this.yd, this.zd);
+        }
+    }
+
+    private boolean checkGroundCollision() {
+        BlockPos blockPos = new BlockPos((int) this.x, (int) this.y, (int) this.z);
+        var collision = List.of(level.getBlockState(blockPos).getCollisionShape(level, blockPos),level.getBlockState(blockPos.below()).getCollisionShape(level, blockPos.below()));
+        return Shapes.collide(Direction.Axis.Y, getBoundingBox().move(0,0.1,0), collision, 0.1) > 0.1;
     }
 
     @Override
@@ -167,6 +173,7 @@ public class FallingLeafParticle extends TextureSheetParticle {
         double d0 = pX;
         double d1 = pY;
         double d2 = pZ;
+
         if (this.hasPhysics && (pX != 0.0 || pY != 0.0 || pZ != 0.0) && pX * pX + pY * pY + pZ * pZ < MAXIMUM_COLLISION_VELOCITY_SQUARED) {
             Vec3 vec3 = Entity.collideBoundingBox(null, new Vec3(pX, pY, pZ), this.getBoundingBox(), this.level, List.of());
             pX = vec3.x;
@@ -192,6 +199,10 @@ public class FallingLeafParticle extends TextureSheetParticle {
 
         if (d2 != pZ) {
             this.zd = 0.0;
+        }
+
+        if (this.onGround && Config.CONFIG.leaves.mod.particlesDisappearOnGroundContact.get()) {
+            this.remove();
         }
     }
 

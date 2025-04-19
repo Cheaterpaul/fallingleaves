@@ -30,6 +30,7 @@ displayName = "${mod_name}" #mandatory
 #credits="" #optional
 # A text field displayed in the mod UI
 authors = "${mod_authors}" #optional
+credits = "${mod_credits}"
 
 # The description text for the mod (multi line!) (#mandatory)
 description = '''${mod_description}'''

@@ -21,6 +21,7 @@ public class LeafHelper {
     private static final Logger LOGGER = LogManager.getLogger();
 
     public static double[] getBlockTextureColor(BlockState state, ClientLevel level, BlockPos pos) {
+        // Use cached block model and texture information when possible
         BlockStateModel blockModel = Minecraft.getInstance().getBlockRenderer().getBlockModel(state);
 
         var quads = blockModel.collectParts(level, pos, state, level.random).stream().flatMap(x -> x.getQuads(Direction.DOWN).stream()).toList();
@@ -38,25 +39,45 @@ public class LeafHelper {
 
         SpriteContents contents = sprite.contents();
         ResourceLocation name = contents.name();
-        NativeImage nativeImage = contents.byMipLevel[0];
-        int blockColor = (shouldColor ? Minecraft.getInstance().getBlockColors().getColor(state, level, pos, 0) : -1);
 
-        return calculateLeafColor(name, nativeImage, blockColor);
+        // Get block color from cache or calculate it
+        Integer cachedBlockColor = TextureCache.getBlockColor(state, pos);
+        int blockColor;
+
+        if (cachedBlockColor != null) {
+            blockColor = cachedBlockColor;
+        } else {
+            blockColor = (shouldColor ? Minecraft.getInstance().getBlockColors().getColor(state, level, pos, 0) : -1);
+            TextureCache.putBlockColor(state, pos, blockColor);
+        }
+
+        return calculateLeafColor(name, contents.byMipLevel[0], blockColor);
     }
 
     private static double[] calculateLeafColor(ResourceLocation spriteId, NativeImage texture, int blockColor) {
+        // Check if we already have the combined color cached
+        double[] cachedCombinedColor = TextureCache.getCombinedColor(spriteId, blockColor);
+        if (cachedCombinedColor != null) {
+            return cachedCombinedColor;
+        }
+
+        // Get texture color from cache or calculate it
         double[] textureColor = TextureCache.INST.computeIfAbsent(spriteId, (loc) -> {
             double[] doubles = averageColor(texture);
             LogManager.getLogger().debug("{}: Calculated texture color {} ", spriteId, doubles);
             return new TextureCache.Data(doubles);
         }).getColor();
 
+        // Apply block tint if needed
         if (blockColor != -1) {
             // multiply texture and block color RGB values (in range 0-1)
             textureColor[0] *= (blockColor >> 16 & 255) / 255.0;
             textureColor[1] *= (blockColor >> 8  & 255) / 255.0;
             textureColor[2] *= (blockColor       & 255) / 255.0;
         }
+
+        // Cache the combined color
+        TextureCache.putCombinedColor(spriteId, blockColor, textureColor);
 
         return textureColor;
     }
