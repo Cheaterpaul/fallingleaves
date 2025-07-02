@@ -15,7 +15,7 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.RegisterClientCommandsEvent;
 import net.neoforged.neoforge.server.command.EnumArgument;
 
-@EventBusSubscriber(modid = FallingLeavesMod.MODID, bus = EventBusSubscriber.Bus.GAME, value = Dist.CLIENT)
+@EventBusSubscriber(modid = FallingLeavesMod.MODID, value = Dist.CLIENT)
 public class EventHandler {
 
     @SubscribeEvent

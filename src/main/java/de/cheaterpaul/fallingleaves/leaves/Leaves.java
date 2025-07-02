@@ -4,7 +4,7 @@ import de.cheaterpaul.fallingleaves.config.Config;
 import de.cheaterpaul.fallingleaves.leaves.mod.ModLeavesSpawner;
 import de.cheaterpaul.fallingleaves.leaves.vanilla.VanillaLeavesSpawner;
 import de.cheaterpaul.fallingleaves.seasons.ISeasonProvider;
-import de.cheaterpaul.fallingleaves.seasons.serene.SereneSeasonProvider;
+//import de.cheaterpaul.fallingleaves.seasons.serene.SereneSeasonProvider;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -34,7 +34,7 @@ public class Leaves {
     }
 
     public ISeasonProvider createSeasonProvider() {
-        return ModList.get().isLoaded("sereneseasons") && Config.CONFIG.leaves.seasons.enabled.get() ? new SereneSeasonProvider(this.level) : ISeasonProvider.DEFAULT;
+        return /*ModList.get().isLoaded("sereneseasons") && Config.CONFIG.leaves.seasons.enabled.get() ? new SereneSeasonProvider(this.level) : */ ISeasonProvider.DEFAULT;
     }
 
     public void makeDecayingLeavesParticles(ClientLevel level, BlockPos pos, BlockState state, RandomSource randomSource, BlockState stateBelow, BlockPos posBelow) {

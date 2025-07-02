@@ -72,11 +72,12 @@ neoForge {
 }
 
 sourceSets.main.resources { srcDir 'src/generated/resources' }
+sourceSets.main.java.exclude("**/serene/*")
 
 
 dependencies {
-    implementation "curse.maven:serene-seasons-291874:6394011"
-    implementation "curse.maven:glitchcore-955399:6398449"
+//    implementation "curse.maven:serene-seasons-291874:6394011"
+//    implementation "curse.maven:glitchcore-955399:6398449"
 }
 
 var generateModMetadata = tasks.register("generateModMetadata", ProcessResources) {
