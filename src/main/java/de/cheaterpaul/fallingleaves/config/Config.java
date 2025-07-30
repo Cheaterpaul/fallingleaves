@@ -19,13 +19,16 @@ public class Config {
     public final Snow snow;
 
     public Config(ModConfigSpec.Builder builder) {
-        builder.push("leaves");
+        builder.translation(FallingLeavesMod.MODID + ".configuration.leaves")
+                .push("leaves");
         this.leaves = new Leaves(builder);
         builder.pop();
-        builder.push("wind");
+        builder.translation(FallingLeavesMod.MODID + ".configuration.wind")
+                .push("wind");
         this.wind = new Wind(builder);
         builder.pop();
-        builder.push("snow");
+        builder.translation(FallingLeavesMod.MODID + ".configuration.snow")
+                .push("snow");
         this.snow = new Snow(builder);
         builder.pop();
     }

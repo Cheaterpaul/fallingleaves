@@ -1,5 +1,6 @@
 package de.cheaterpaul.fallingleaves.config;
 
+import de.cheaterpaul.fallingleaves.FallingLeavesMod;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
@@ -18,8 +19,14 @@ public class Wind {
     private Set<ResourceLocation> windlessDimensionsSet = Set.of();
 
     public Wind(ModConfigSpec.Builder builder) {
-        this.enabled = builder.comment("Whether to enable the wind").define("enabled", true);
-        this.windlessDimensions = builder.comment("The dimension to disable the wind in").defineListAllowEmpty("windlessDimension", List.of(Level.NETHER.location().toString(), Level.END.location().toString()), () -> "", Wind::validateDimension);
+        this.enabled = builder
+                .comment("Whether to enable the wind")
+                .translation(FallingLeavesMod.MODID + ".configuration.wind.enabled")
+                .define("enabled", true);
+        this.windlessDimensions = builder
+                .comment("The dimension to disable the wind in")
+                .translation(FallingLeavesMod.MODID + ".configuration.wind.windlessDimensions")
+                .defineListAllowEmpty("windlessDimension", List.of(Level.NETHER.location().toString(), Level.END.location().toString()), () -> "", Wind::validateDimension);
     }
 
     public boolean hasWind(Level level) {

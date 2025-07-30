@@ -1,5 +1,20 @@
 {
-  "itemGroup.fallingleaves": "Example Mod Tab",
-  "block.fallingleaves.example_block": "Example Block",
-  "item.fallingleaves.example_item": "Example Item"
+  "fallingleaves.configuration.mod": "Falling Leaves",
+  "fallingleaves.configuration.section.fallingleaves.client.toml": "Falling Leaves Config",
+  "fallingleaves.configuration.leaves": "Leaves",
+  "fallingleaves.configuration.leaves.enabled": "Use Modded Leaves",
+  "fallingleaves.configuration.leaves.mod": "Mod configuration",
+  "fallingleaves.configuration.leaves.leafSize": "Leaf size",
+  "fallingleaves.configuration.leaves.minimumFreeSpaceBelow": "Minimum Space Below",
+  "fallingleaves.configuration.leaves.performance-relevant": "Performance Relevant",
+  "fallingleaves.configuration.leaves.leafLifespan": "Lifespan",
+  "fallingleaves.configuration.leaves.leafSpawnRate": "Spawn rate",
+  "fallingleaves.configuration.leaves.particlesDisappearOnGroundContact": "Disappear on Ground contact",
+  "fallingleaves.configuration.leaves.seasons": "Seasons",
+  "fallingleaves.configuration.leaves.seasons.enabled": "Enabled",
+  "fallingleaves.configuration.wind": "Wind",
+  "fallingleaves.configuration.wind.enabled": "Enabled",
+  "fallingleaves.configuration.wind.windlessDimensions": "Windless Dimensions",
+  "fallingleaves.configuration.snow": "Snow",
+  "fallingleaves.configuration.snow.enabled": "Enabled"
 }
