@@ -239,7 +239,6 @@ public class FallingLeafParticle extends TextureSheetParticle {
         }, pZ, pPartialTicks);
     }
 
-    @OnlyIn(Dist.CLIENT)
     public static class LeavesParticleFactory implements ParticleProvider<SimpleParticleType> {
         @Override
         public Particle createParticle(@Nullable SimpleParticleType parameters, @NotNull ClientLevel world, double x, double y, double z, double r, double g, double b) {
