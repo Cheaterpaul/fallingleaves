@@ -1,0 +1,70 @@
+name: publish.yml
+on:
+  release:
+    types:
+      - released
+      - prereleased
+
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    outputs:
+      mc_version: ${{ steps.extract.outputs.mc_version }}
+      mod_version: ${{ steps.extract.outputs.mod_version }}
+      version_type: ${{ steps.extract.outputs.version_type }}
+    steps:
+      - name: "Extract"
+        id: extract
+        run: |
+          echo "test"
+
+  build:
+    needs: [ prepare]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+      - name: Setup Java
+        uses: actions/setup-java@v5
+        with:
+          java-version: '25'
+          distribution: 'adopt'
+          cache: 'gradle'
+      - name: Setup Gradle
+        run: ./gradlew
+      - name: Build
+        run: ./gradlew build
+      - name: Upload Jars
+        uses: actions/upload-artifact@v6
+        with:
+          name: jar
+          path: |
+            build/libs/*.jar
+          retention-days: 2
+
+
+  publish:
+    needs: [prepare, build]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get Artifacts
+        uses: actions/download-artifact@v6
+        with:
+          name: jar
+          path: build/
+      - name: Publish
+        uses: Kir-Antipov/mc-publish@v3.3
+        with:
+          curseforge-id: ${{ vars.CURSEFORGE_ID }}
+          curseforge-token: ${{ secrets.CURSEFORGE_TOKEN }}
+          modrinth-id: ${{ vars.MODRINTH_ID }}
+          modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
+          files: build/libs/fallingleaves-${{  needs.prepare.outputs.mod_version }}.jar
+          name: FallingLeaves ${{  needs.prepare.outputs.mod_version }}
+          version: ${{  needs.prepare.outputs.mod_version }}
+          version-type: ${{  needs.prepare.outputs.version_type }}
+          changelog: ${{ github.event.release.body }}
+          game-versions: |
+            ${{ needs.prepare.outputs.mc_version }}
+          loaders: |
+            neoforge
