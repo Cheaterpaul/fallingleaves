@@ -66,9 +66,9 @@ jobs:
         uses: actions/download-artifact@v6
         with:
           name: jar
-          path: build/
+          path: build/libs
       - name: Publish
-        uses: Kir-Antipov/mc-publish@v3.3
+        uses: Kir-Antipov/mc-publish@v3
         with:
           curseforge-id: ${{ vars.CURSEFORGE_ID }}
           curseforge-token: ${{ secrets.CURSEFORGE_TOKEN }}
