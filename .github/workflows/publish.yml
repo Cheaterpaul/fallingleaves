@@ -79,6 +79,7 @@ jobs:
           version: ${{  needs.prepare.outputs.mod_version }}
           version-type: ${{  needs.prepare.outputs.version_type }}
           changelog: ${{ github.event.release.body }}
+          environment: client
           game-versions: |
             ${{ needs.prepare.outputs.mc_version }}
           loaders: |
