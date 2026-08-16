@@ -4,7 +4,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import de.cheaterpaul.fallingleaves.particle.ColoredSpriteProvider;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.neoforged.neoforge.common.util.NeoForgeExtraCodecs;
 
 import java.util.List;
@@ -20,11 +20,11 @@ public record LeafType(List<Texture> textures, float spawnModifier, float sizeMo
             SeasonModifier.CODEC.optionalFieldOf("season", SeasonModifier.DEFAULT).forGetter(LeafType::seasonModifier)
     ).apply(inst, LeafType::new));
 
-    public LeafType(float spawnModifier, float sizeModifier, float lifeSpanModifier, ResourceLocation... textures) {
+    public LeafType(float spawnModifier, float sizeModifier, float lifeSpanModifier, Identifier... textures) {
         this(spawnModifier, sizeModifier, lifeSpanModifier, SeasonModifier.DEFAULT, textures);
     }
 
-    public LeafType(float spawnModifier, float sizeModifier, float lifeSpanModifier, SeasonModifier seasonModifier, ResourceLocation... textures) {
+    public LeafType(float spawnModifier, float sizeModifier, float lifeSpanModifier, SeasonModifier seasonModifier, Identifier... textures) {
         this(Stream.of(textures).map(Texture::new).toList(), spawnModifier, sizeModifier, lifeSpanModifier, seasonModifier);
     }
 
@@ -40,25 +40,25 @@ public record LeafType(List<Texture> textures, float spawnModifier, float sizeMo
 
     }
 
-    public record Texture(ResourceLocation texture, boolean isTinted, float sizeModifier) {
+    public record Texture(Identifier texture, boolean isTinted, float sizeModifier) {
 
-        public static final Codec<Texture> CODEC = NeoForgeExtraCodecs.withAlternative(ResourceLocation.CODEC.flatXmap(x -> DataResult.success(new Texture(x, false, 1)), x -> {
+        public static final Codec<Texture> CODEC = NeoForgeExtraCodecs.withAlternative(Identifier.CODEC.flatXmap(x -> DataResult.success(new Texture(x, false, 1)), x -> {
                     if (!x.isTinted && x.sizeModifier == 1) {
                         return DataResult.success(x.texture);
                     }
                     return DataResult.error(() -> "can not serialize with different isTinted and sizeModifier values");
                 }),
                 RecordCodecBuilder.create(inst -> inst.group(
-                        ResourceLocation.CODEC.fieldOf("texture").forGetter(Texture::texture),
+                        Identifier.CODEC.fieldOf("texture").forGetter(Texture::texture),
                         Codec.BOOL.optionalFieldOf("isTinted", false).forGetter(Texture::isTinted),
                         Codec.FLOAT.optionalFieldOf("size", 1f).forGetter(Texture::sizeModifier)
                 ).apply(inst, Texture::new)));
 
-        public Texture(ResourceLocation texture) {
+        public Texture(Identifier texture) {
             this(texture, false, 1);
         }
 
-        public Texture(ResourceLocation texture, boolean isTinted) {
+        public Texture(Identifier texture, boolean isTinted) {
             this(texture, isTinted, 1);
         }
     }

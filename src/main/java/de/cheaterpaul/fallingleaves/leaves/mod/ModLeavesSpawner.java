@@ -46,7 +46,7 @@ public class ModLeavesSpawner implements ILeavesSpawner {
         double g = color[1];
         double b = color[2];
 
-        var particle = this.particleFactory.createParticle(null, level, x, y, z, r, g, b, leafSetting);
+        var particle = this.particleFactory.createParticle(level, x, y, z, r, g, b, randomSource, leafSetting);
         if (particle != null) {
             this.particleEngine.add(particle);
         }

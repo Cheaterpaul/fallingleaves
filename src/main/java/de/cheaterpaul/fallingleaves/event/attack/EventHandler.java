@@ -26,10 +26,10 @@ public class EventHandler {
         BlockState statebelow = event.getLevel().getBlockState(posBelow);
 
         if (event.getLevel() instanceof ILeavesLevel leavesLevel) {
-            leavesLevel.fallingLeaves$getLeaves().makeAttackLeavesParticles((ClientLevel) event.getLevel(), pos, blockState, event.getLevel().random, posBelow, statebelow);
+            leavesLevel.fallingLeaves$getLeaves().makeAttackLeavesParticles((ClientLevel) event.getLevel(), pos, blockState, event.getLevel().getRandom(), posBelow, statebelow);
         }
         if (event.getLevel() instanceof ISnowLevel snowLevel) {
-            snowLevel.fallingLeaves$getSnow().makeAttackSnowParticles((ClientLevel) event.getLevel(), pos, blockState, event.getLevel().random, posBelow, statebelow);
+            snowLevel.fallingLeaves$getSnow().makeAttackSnowParticles((ClientLevel) event.getLevel(), pos, blockState, event.getLevel().getRandom(), posBelow, statebelow);
         }
     }
 }

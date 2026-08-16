@@ -6,7 +6,7 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.PackOutput;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.NotNull;
 
 import java.nio.file.Path;
@@ -32,9 +32,9 @@ public class LeafTypeGenerator implements DataProvider {
     @Override
     public @NotNull CompletableFuture<?> run(@NotNull CachedOutput cache) {
         return this.holderLookup.thenCompose((holder) -> {
-            Set<ResourceLocation> set = new HashSet<>();
+            Set<Identifier> set = new HashSet<>();
             List<CompletableFuture<?>> list = new ArrayList<>();
-            BiConsumer<ResourceLocation, LeafType> consumer = (id, entry) -> {
+            BiConsumer<Identifier, LeafType> consumer = (id, entry) -> {
                 if (!set.add(id)){
                     throw new IllegalStateException("Duplicate leaf type entry " + id);
                 } else {
@@ -53,7 +53,7 @@ public class LeafTypeGenerator implements DataProvider {
         return "leave type generator";
     }
 
-    protected void registerLeafTypes(BiConsumer<ResourceLocation, LeafType> consumer) {
+    protected void registerLeafTypes(BiConsumer<Identifier, LeafType> consumer) {
         consumer.accept(LeafTypes.DEFAULT, new LeafType(1f,1f,1f,
                 modId("default_1"), modId("default_2"), modId("default_3"), modId("default_4"), modId("default_5")));
         consumer.accept(LeafTypes.CONIFER, new LeafType(0.2f,1,1.5f,

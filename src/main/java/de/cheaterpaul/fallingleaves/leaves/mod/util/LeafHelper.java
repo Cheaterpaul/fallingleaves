@@ -4,41 +4,45 @@ import com.mojang.blaze3d.platform.NativeImage;
 import de.cheaterpaul.fallingleaves.mixin.NativeImageAccessor;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.client.renderer.block.model.BakedQuad;
-import net.minecraft.client.renderer.block.model.BlockStateModel;
+import net.minecraft.client.renderer.BiomeColors;
+import net.minecraft.client.renderer.block.dispatch.BlockStateModel;
+import net.minecraft.client.renderer.block.dispatch.BlockStateModelPart;
 import net.minecraft.client.renderer.texture.SpriteContents;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.block.state.BlockState;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.lwjgl.system.MemoryUtil;
+
+import java.util.ArrayList;
 
 public class LeafHelper {
 
     private static final Logger LOGGER = LogManager.getLogger();
 
     public static double[] getBlockTextureColor(BlockState state, ClientLevel level, BlockPos pos) {
-        // Use cached block model and texture information when possible
-        BlockStateModel blockModel = Minecraft.getInstance().getBlockRenderer().getBlockModel(state);
+        BlockStateModel blockModel = Minecraft.getInstance().getModelManager().getBlockStateModelSet().get(state);
 
-        var quads = blockModel.collectParts(level, pos, state, level.random).stream().flatMap(x -> x.getQuads(Direction.DOWN).stream()).toList();
+        var list = new ArrayList<BlockStateModelPart>();
+        blockModel.collectParts(level, pos, state, level.getRandom(), list);
+        var quads = list.stream().flatMap(x -> x.getQuads(Direction.DOWN).stream()).toList();
 
         TextureAtlasSprite sprite;
         boolean shouldColor;
         if (quads.isEmpty()) {
-            sprite = blockModel.particleIcon(level, pos, state);
+            sprite = blockModel.particleMaterial(level, pos, state).sprite();
             shouldColor = true;
         } else {
-            BakedQuad quad = quads.getFirst();
-            sprite = quad.sprite();
-            shouldColor = quad.isTinted();
+            var material = quads.getFirst().materialInfo();
+            sprite = material.sprite();
+            shouldColor = material.isTinted();
         }
 
         SpriteContents contents = sprite.contents();
-        ResourceLocation name = contents.name();
+        Identifier name = contents.name();
 
         // Get block color from cache or calculate it
         Integer cachedBlockColor = TextureCache.getBlockColor(state, pos);
@@ -47,14 +51,14 @@ public class LeafHelper {
         if (cachedBlockColor != null) {
             blockColor = cachedBlockColor;
         } else {
-            blockColor = (shouldColor ? Minecraft.getInstance().getBlockColors().getColor(state, level, pos, 0) : -1);
+            blockColor = (shouldColor ? level.getBlockTint(pos, BiomeColors.FOLIAGE_COLOR_RESOLVER) : -1);
             TextureCache.putBlockColor(state, pos, blockColor);
         }
 
         return calculateLeafColor(name, contents.byMipLevel[0], blockColor);
     }
 
-    private static double[] calculateLeafColor(ResourceLocation spriteId, NativeImage texture, int blockColor) {
+    private static double[] calculateLeafColor(Identifier spriteId, NativeImage texture, int blockColor) {
         // Check if we already have the combined color cached
         double[] cachedCombinedColor = TextureCache.getCombinedColor(spriteId, blockColor);
         if (cachedCombinedColor != null) {

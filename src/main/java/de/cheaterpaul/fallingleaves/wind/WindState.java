@@ -25,13 +25,13 @@ public class WindState {
     public void tick(ClientLevel level) {
         --this.duration;
 
-        boolean isRaining = level.getLevelData().isRaining();
+        boolean isRaining = level.isRaining();
         boolean isThundering = level.isThundering();
         boolean weatherChanged = this.wasRaining != isRaining || this.wasThundering != isThundering;
 
         if (weatherChanged || duration <= 0) {
             if (isThundering) {
-                this.state = StateGroup.STORM.getRandomState(level.random);
+                this.state = StateGroup.STORM.getRandomState(level.getRandom());
             } else {
                 // windy and stormy when raining, calm and windy otherwise
                 changeWind(level);
@@ -46,8 +46,8 @@ public class WindState {
     }
 
     public void changeWind(ClientLevel level) {
-        int index = level.random.nextInt(2);
-        this.state = StateGroup.values()[index].getRandomState(level.random);
+        int index = level.getRandom().nextInt(2);
+        this.state = StateGroup.values()[index].getRandomState(level.getRandom());
     }
 
     public void changeWind(WindState.State state) {

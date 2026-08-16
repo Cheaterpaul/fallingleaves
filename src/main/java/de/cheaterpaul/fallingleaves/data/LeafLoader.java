@@ -6,7 +6,7 @@ import de.cheaterpaul.fallingleaves.data.generator.LeafTypeGenerator;
 import de.cheaterpaul.fallingleaves.data.provider.LeafProvider;
 import de.cheaterpaul.fallingleaves.leaves.mod.types.LeafSetting;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.block.Block;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -18,7 +18,7 @@ import net.neoforged.neoforge.data.event.GatherDataEvent;
 public class LeafLoader {
 
     private static LeafProvider LEAF_PROVIDER;
-    public static final ResourceLocation DEFAULT_SETTINGS = ResourceLocation.fromNamespaceAndPath("minecraft", "oak_leaves");
+    public static final Identifier DEFAULT_SETTINGS = Identifier.fromNamespaceAndPath("minecraft", "oak_leaves");
 
     @SubscribeEvent
     public static void registerReloadListener(AddClientReloadListenersEvent event) {
@@ -30,12 +30,12 @@ public class LeafLoader {
     }
 
     public static LeafSetting.LoadedLeafSetting get(Block block) {
-        ResourceLocation key = BuiltInRegistries.BLOCK.getKey(block);
+        Identifier key = BuiltInRegistries.BLOCK.getKey(block);
         return LEAF_PROVIDER.getLoadedSettings().get(key);
     }
 
     public static LeafSetting.LoadedLeafSetting getOrDefault(Block block) {
-        ResourceLocation key = BuiltInRegistries.BLOCK.getKey(block);
+        Identifier key = BuiltInRegistries.BLOCK.getKey(block);
         if (LEAF_PROVIDER.getLoadedSettings().containsKey(key)) {
             return LEAF_PROVIDER.getLoadedSettings().get(key);
         } else {

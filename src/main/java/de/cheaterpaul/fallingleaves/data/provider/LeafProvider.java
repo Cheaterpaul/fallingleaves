@@ -10,7 +10,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.SpriteLoader;
 import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.resources.PreparableReloadListener;
 import net.minecraft.server.packs.resources.ResourceManager;
 import org.jetbrains.annotations.NotNull;
@@ -22,7 +22,7 @@ import java.util.concurrent.Executor;
 
 public class LeafProvider implements PreparableReloadListener {
 
-    public static final ResourceLocation LEAF_LISTENER = ResourceLocation.fromNamespaceAndPath(FallingLeavesMod.MODID, "leaves");
+    public static final Identifier LEAF_LISTENER = Identifier.fromNamespaceAndPath(FallingLeavesMod.MODID, "leaves");
     private static final Logger LOGGER = LogUtils.getLogger();
 
 
@@ -30,8 +30,8 @@ public class LeafProvider implements PreparableReloadListener {
     private final LeafSettingProvider leafSettingProvider;
     private final LeafTypeProvider leafTypeProvider;
 
-    private Map<ResourceLocation, LeafType.LoadedLeafType> loadedLeaves = Map.of();
-    private Map<ResourceLocation, LeafSetting.LoadedLeafSetting> loadedSettings = Map.of();
+    private Map<Identifier, LeafType.LoadedLeafType> loadedLeaves = Map.of();
+    private Map<Identifier, LeafSetting.LoadedLeafSetting> loadedSettings = Map.of();
 
     public LeafProvider() {
         this.textureAtlas = new TextureAtlas(RenderSettings.LEAVES_ATLAS);
@@ -41,17 +41,17 @@ public class LeafProvider implements PreparableReloadListener {
     }
 
     @Override
-    public @NotNull CompletableFuture<Void> reload(@NotNull PreparationBarrier preparationBarrier, @NotNull ResourceManager resourceManager, @NotNull Executor executor, @NotNull Executor executor1) {
-        CompletableFuture<Void> settingsReload = this.leafSettingProvider.reload(preparationBarrier, resourceManager, executor, executor1);
-        CompletableFuture<Void> typesReload = this.leafTypeProvider.reload(preparationBarrier, resourceManager, executor, executor1);
+    public @NotNull CompletableFuture<Void> reload(SharedState sharedState, Executor executor, PreparationBarrier preparationBarrier, Executor executor1) {
+        CompletableFuture<Void> settingsReload = this.leafSettingProvider.reload(sharedState, executor, preparationBarrier, executor1);
+        CompletableFuture<Void> typesReload = this.leafTypeProvider.reload(sharedState, executor, preparationBarrier, executor1);
 
 
-        CompletableFuture<SpriteLoader.Preparations> preparations = SpriteLoader.create(this.textureAtlas).loadAndStitch(resourceManager, RenderSettings.LEAVES_ATLAS, 0, executor).thenCompose(SpriteLoader.Preparations::waitForUpload);
+        CompletableFuture<SpriteLoader.Preparations> preparations = SpriteLoader.create(this.textureAtlas).loadAndStitch(sharedState.resourceManager(), RenderSettings.LEAVES_ATLAS, 0, executor, Set.of());
         return CompletableFuture.allOf(settingsReload, typesReload, preparations).thenCompose(preparationBarrier::wait).thenAcceptAsync(param -> {
             SpriteLoader.Preparations spriteloader$preparations = preparations.join();
             this.textureAtlas.upload(spriteloader$preparations);
-            var spriteSets = new HashMap<ResourceLocation, LeafType.LoadedLeafType>();
-            var leafSprites = new HashMap<ResourceLocation, LeafSetting.LoadedLeafSetting>();
+            var spriteSets = new HashMap<Identifier, LeafType.LoadedLeafType>();
+            var leafSprites = new HashMap<Identifier, LeafSetting.LoadedLeafSetting>();
             ColoredSpriteProvider.TextureSprite notFound = new ColoredSpriteProvider.TextureSprite(spriteloader$preparations.missing(), true, 1);
 
             this.leafTypeProvider.getLeafTypes().forEach((key, leafType) -> {
@@ -87,11 +87,11 @@ public class LeafProvider implements PreparableReloadListener {
         }, executor1);
     }
 
-    public Map<ResourceLocation, LeafType.LoadedLeafType> getLoadedLeaves() {
+    public Map<Identifier, LeafType.LoadedLeafType> getLoadedLeaves() {
         return loadedLeaves;
     }
 
-    public Map<ResourceLocation, LeafSetting.LoadedLeafSetting> getLoadedSettings() {
+    public Map<Identifier, LeafSetting.LoadedLeafSetting> getLoadedSettings() {
         return loadedSettings;
     }
 }

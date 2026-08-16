@@ -6,7 +6,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.FileToIdConverter;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.SimpleJsonResourceReloadListener;
 import net.minecraft.util.profiling.ProfilerFiller;
@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 
 public class LeafSettingProvider extends SimpleJsonResourceReloadListener<LeafSetting> {
 
-    private Map<ResourceLocation, LeafSetting> leafSettings = Map.of();
+    private Map<Identifier, LeafSetting> leafSettings = Map.of();
 
     public LeafSettingProvider() {
         super(LeafSetting.CODEC, FileToIdConverter.json("fallingleaves/settings"));
@@ -27,12 +27,12 @@ public class LeafSettingProvider extends SimpleJsonResourceReloadListener<LeafSe
 
 
     @Override
-    protected void apply(@NotNull Map<ResourceLocation, LeafSetting> resourceLocationLeafSettingMap, @NotNull ResourceManager resourceManager, @NotNull ProfilerFiller profilerFiller) {
+    protected void apply(@NotNull Map<Identifier, LeafSetting> IdentifierLeafSettingMap, @NotNull ResourceManager resourceManager, @NotNull ProfilerFiller profilerFiller) {
         DefaultedRegistry<Block> registry = BuiltInRegistries.BLOCK;
-        this.leafSettings = resourceLocationLeafSettingMap.entrySet().stream().filter(x -> registry.containsKey(x.getKey())).collect(Collectors.toUnmodifiableMap(Map.Entry::getKey, Map.Entry::getValue));
+        this.leafSettings = IdentifierLeafSettingMap.entrySet().stream().filter(x -> registry.containsKey(x.getKey())).collect(Collectors.toUnmodifiableMap(Map.Entry::getKey, Map.Entry::getValue));
     }
 
-    public Map<ResourceLocation, LeafSetting> getLeafSettings() {
+    public Map<Identifier, LeafSetting> getLeafSettings() {
         return this.leafSettings;
     }
 }

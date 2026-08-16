@@ -4,7 +4,7 @@ import com.mojang.logging.LogUtils;
 import de.cheaterpaul.fallingleaves.config.Config;
 import de.cheaterpaul.fallingleaves.data.provider.LeafProvider;
 import net.minecraft.client.Minecraft;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -27,8 +27,8 @@ public class FallingLeavesMod {
         modContainer.registerExtensionPoint(IConfigScreenFactory.class, ConfigurationScreen::new);
     }
 
-    public static ResourceLocation modId(String string) {
-        return ResourceLocation.fromNamespaceAndPath(MODID, string);
+    public static Identifier modId(String string) {
+        return Identifier.fromNamespaceAndPath(MODID, string);
     }
 
 }

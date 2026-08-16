@@ -11,12 +11,14 @@ import de.cheaterpaul.fallingleaves.wind.IWindLevel;
 import net.minecraft.client.Camera;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.*;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.RenderPipelines;
+import net.minecraft.client.renderer.state.level.QuadParticleRenderState;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.Shapes;
@@ -25,12 +27,14 @@ import net.neoforged.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Quaternionf;
+import org.jspecify.annotations.NonNull;
 
 import java.util.List;
 
-public class FallingLeafParticle extends TextureSheetParticle {
+public class FallingLeafParticle extends SingleQuadParticle {
 
-    public static final ParticleRenderType LEAVES_SHEET = new ParticleRenderType("FALLINGLEAVES_PARTICLE_SHEET_TRANSLUCENT", RenderType.translucentParticle(RenderSettings.LEAVES_ATLAS), true);
+    public static final ParticleRenderType LEAVES_SHEET = new ParticleRenderType("FALLINGLEAVES_PARTICLE_SHEET_TRANSLUCENT");
+    public static final Layer LAYER = new Layer(true, RenderSettings.LEAVES_ATLAS , RenderPipelines.TRANSLUCENT_PARTICLE);
 
     protected static final float TAU = (float) (2 * Math.PI); // 1 rotation
 
@@ -44,8 +48,8 @@ public class FallingLeafParticle extends TextureSheetParticle {
     protected final int maxRotateTime;
     protected int rotateTime = 0;
 
-    protected FallingLeafParticle(ClientLevel clientWorld, double x, double y, double z, double r, double g, double b, @NotNull LeafSetting.LoadedLeafSetting provider) {
-        super(clientWorld, x, y, z, 0, 0, 0);
+    protected FallingLeafParticle(ClientLevel clientWorld, double x, double y, double z, double r, double g, double b, @NotNull LeafSetting.LoadedLeafSetting provider, ColoredSpriteProvider.TextureSprite sprite) {
+        super(clientWorld, x, y, z, 0, 0, 0, sprite.sprite());
         LeafType.LoadedLeafType loadedType = provider.leafType();
         LeafType type = loadedType.type();
         this.gravity = 0.08f + random.nextFloat() * 0.04f;
@@ -71,19 +75,17 @@ public class FallingLeafParticle extends TextureSheetParticle {
         float mod = (2 + random.nextFloat())/ 2.5f;
 
         this.quadSize = (Config.CONFIG.leaves.mod.leafSize.get() / 50f) * type.sizeModifier() * mod;
-
-        this.pickSprite(loadedType.spriteSet());
-    }
-
-    public void pickSprite(ColoredSpriteProvider sprite) {
-        ColoredSpriteProvider.TextureSprite textureSprite = sprite.get(this.random);
-        this.setSprite(textureSprite.sprite());
-        if (textureSprite.isTinted()) {
+        if (sprite.isTinted()) {
             this.rCol = 1;
             this.gCol = 1;
             this.bCol = 1;
         }
-        this.quadSize *= textureSprite.sizeModifier();
+        this.quadSize *= sprite.sizeModifier();
+    }
+
+    @Override
+    protected @NonNull Layer getLayer() {
+        return LAYER;
     }
 
     @Override
@@ -162,7 +164,7 @@ public class FallingLeafParticle extends TextureSheetParticle {
     }
 
     @Override
-    public @NotNull ParticleRenderType getRenderType() {
+    public @NotNull ParticleRenderType getGroup() {
         return LEAVES_SHEET;
     }
 
@@ -207,7 +209,7 @@ public class FallingLeafParticle extends TextureSheetParticle {
     }
 
     @Override
-    public void render(@NotNull VertexConsumer pBuffer, @NotNull Camera pRenderInfo, float pPartialTicks) {
+    public void extract(@NonNull QuadParticleRenderState particleTypeRenderState, @NonNull Camera camera, float partialTickTime) {
         Quaternionf q = new Quaternionf();
         if (this.onGround) {
             q.rotateX((float) Math.PI / -2f);
@@ -215,41 +217,43 @@ public class FallingLeafParticle extends TextureSheetParticle {
 
 
             Vec3 pos = getPos();
-            Vec3 position = pRenderInfo.getPosition();
+            Vec3 position = camera.position();
             Vec3 subtract = position.subtract(pos);
             if (subtract.y < 0) {
                 q.rotateY((float) Math.PI);
                 q.rotateZ((float) Math.PI/2);
             }
         } else {
-            getFacingCameraMode().setRotation(q, pRenderInfo, pPartialTicks);
+            getFacingCameraMode().setRotation(q, camera, partialTickTime);
             if (this.roll != 0.0) {
-                q.rotateZ(Mth.lerp(pPartialTicks, this.oRoll, this.roll));
+                q.rotateZ(Mth.lerp(partialTickTime, this.oRoll, this.roll));
             }
         }
-        super.renderRotatedQuad(pBuffer, pRenderInfo, q, pPartialTicks);
+        super.extract(particleTypeRenderState, camera, partialTickTime);
     }
 
     @Override
-    protected void renderRotatedQuad(@NotNull VertexConsumer pBuffer, @NotNull Quaternionf pQuaternion, float pX, float pY, float pZ, float pPartialTicks) {
-        super.renderRotatedQuad(pBuffer, pQuaternion, pX, pY + switch (hashCode() % 3) {
+    protected void extractRotatedQuad(@NonNull QuadParticleRenderState particleTypeRenderState, @NonNull Quaternionf rotation, float x, float y, float z, float partialTickTime) {
+        super.extractRotatedQuad(particleTypeRenderState,rotation,x, y + switch (hashCode() % 3) {
             case 0 -> 0.01f;
             case 1 -> 0.02f;
             default -> 0.03f;
-        }, pZ, pPartialTicks);
+        }, z, partialTickTime);
     }
 
     public static class LeavesParticleFactory implements ParticleProvider<SimpleParticleType> {
-        @Override
-        public Particle createParticle(@Nullable SimpleParticleType parameters, @NotNull ClientLevel world, double x, double y, double z, double r, double g, double b) {
-            return createParticle(parameters, world, x, y, z, r, g, b, null);
-        }
 
-        public Particle createParticle(@Nullable SimpleParticleType parameters, @NotNull ClientLevel world, double x, double y, double z, double r, double g, double b, @Nullable LeafSetting.LoadedLeafSetting settings) {
+        public Particle createParticle(ClientLevel level, double x, double y, double z, double r, double g, double b, RandomSource random, @Nullable LeafSetting.LoadedLeafSetting settings) {
             if (settings == null) {
                 settings = LeafLoader.getDefault();
             }
-            return new FallingLeafParticle(world, x, y, z, r, g, b, settings);
+            ColoredSpriteProvider.TextureSprite textureSprite = settings.leafType().spriteSet().get(random);
+            return new FallingLeafParticle(level, x, y, z, r, g, b, settings, textureSprite);
+        }
+
+        @Override
+        public @Nullable Particle createParticle(@Nullable SimpleParticleType options, @NonNull ClientLevel level, double x, double y, double z, double xAux, double yAux, double zAux, @NonNull RandomSource random) {
+            return createParticle(level, x, y, z, 0 ,0 ,0, random, null);
         }
 
     }

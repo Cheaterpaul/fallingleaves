@@ -7,7 +7,7 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.PackOutput;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.NotNull;
 
 import java.nio.file.Path;
@@ -31,9 +31,9 @@ public class LeafSettingGenerator implements DataProvider {
     @Override
     public @NotNull CompletableFuture<?> run(@NotNull CachedOutput cache) {
         return this.holderLookup.thenCompose((holder) -> {
-            Set<ResourceLocation> set = new HashSet<>();
+            Set<Identifier> set = new HashSet<>();
             List<CompletableFuture<?>> list = new ArrayList<>();
-            BiConsumer<ResourceLocation, LeafSetting> consumer = (id, entry) -> {
+            BiConsumer<Identifier, LeafSetting> consumer = (id, entry) -> {
                 if (!set.add(id)){
                     throw new IllegalStateException("Duplicate leaf setting entry " + id);
                 } else {
@@ -52,58 +52,58 @@ public class LeafSettingGenerator implements DataProvider {
         return "leaf setting generator";
     }
     
-    protected void registerLeafSettings(BiConsumer<ResourceLocation, LeafSetting> consumer) {
+    protected void registerLeafSettings(BiConsumer<Identifier, LeafSetting> consumer) {
         //minecraft
         consumer.accept(LeafLoader.DEFAULT_SETTINGS, new LeafSetting(LeafTypes.DEFAULT));
-        consumer.accept(ResourceLocation.fromNamespaceAndPath("minecraft", "spruce_leaves"), new LeafSetting(LeafTypes.CONIFER));
-        consumer.accept(ResourceLocation.fromNamespaceAndPath("minecraft", "jungle_leaves"), new LeafSetting(LeafTypes.DEFAULT));
-        consumer.accept(ResourceLocation.fromNamespaceAndPath("minecraft", "cherry_leaves"), new LeafSetting(LeafTypes.CHERRY));
-        consumer.accept(ResourceLocation.fromNamespaceAndPath("minecraft", "azalea_leaves"), new LeafSetting(LeafTypes.DEFAULT));
-        consumer.accept(ResourceLocation.fromNamespaceAndPath("minecraft", "flowering_azalea_leaves"), new LeafSetting(LeafTypes.AZALEA));
+        consumer.accept(Identifier.fromNamespaceAndPath("minecraft", "spruce_leaves"), new LeafSetting(LeafTypes.CONIFER));
+        consumer.accept(Identifier.fromNamespaceAndPath("minecraft", "jungle_leaves"), new LeafSetting(LeafTypes.DEFAULT));
+        consumer.accept(Identifier.fromNamespaceAndPath("minecraft", "cherry_leaves"), new LeafSetting(LeafTypes.CHERRY));
+        consumer.accept(Identifier.fromNamespaceAndPath("minecraft", "azalea_leaves"), new LeafSetting(LeafTypes.DEFAULT));
+        consumer.accept(Identifier.fromNamespaceAndPath("minecraft", "flowering_azalea_leaves"), new LeafSetting(LeafTypes.AZALEA));
         //byg
-        consumer.accept(ResourceLocation.fromNamespaceAndPath("byg", "blue_spruce_leaves"), new LeafSetting(LeafTypes.CONIFER));
-        consumer.accept(ResourceLocation.fromNamespaceAndPath("byg", "cypress_leaves"), new LeafSetting(LeafTypes.CONIFER));
-        consumer.accept(ResourceLocation.fromNamespaceAndPath("byg", "fir_leaves"), new LeafSetting(LeafTypes.CONIFER));
-        consumer.accept(ResourceLocation.fromNamespaceAndPath("byg", "orange_spruce_leaves"), new LeafSetting(LeafTypes.CONIFER));
-        consumer.accept(ResourceLocation.fromNamespaceAndPath("byg", "pine_leaves"), new LeafSetting(LeafTypes.CONIFER));
-        consumer.accept(ResourceLocation.fromNamespaceAndPath("byg", "red_spruce_leaves"), new LeafSetting(LeafTypes.CONIFER));
-        consumer.accept(ResourceLocation.fromNamespaceAndPath("byg", "yellow_spruce_leaves"), new LeafSetting(LeafTypes.CONIFER));
-        consumer.accept(ResourceLocation.fromNamespaceAndPath("byg", "pink_cherry_leaves"), new LeafSetting(LeafTypes.DEFAULT, 1.4));
-        consumer.accept(ResourceLocation.fromNamespaceAndPath("byg", "skyris_leaves"), new LeafSetting(LeafTypes.DEFAULT, 1.4));
-        consumer.accept(ResourceLocation.fromNamespaceAndPath("byg", "white_cherry_leaves"), new LeafSetting(LeafTypes.DEFAULT, 1.4));
+        consumer.accept(Identifier.fromNamespaceAndPath("byg", "blue_spruce_leaves"), new LeafSetting(LeafTypes.CONIFER));
+        consumer.accept(Identifier.fromNamespaceAndPath("byg", "cypress_leaves"), new LeafSetting(LeafTypes.CONIFER));
+        consumer.accept(Identifier.fromNamespaceAndPath("byg", "fir_leaves"), new LeafSetting(LeafTypes.CONIFER));
+        consumer.accept(Identifier.fromNamespaceAndPath("byg", "orange_spruce_leaves"), new LeafSetting(LeafTypes.CONIFER));
+        consumer.accept(Identifier.fromNamespaceAndPath("byg", "pine_leaves"), new LeafSetting(LeafTypes.CONIFER));
+        consumer.accept(Identifier.fromNamespaceAndPath("byg", "red_spruce_leaves"), new LeafSetting(LeafTypes.CONIFER));
+        consumer.accept(Identifier.fromNamespaceAndPath("byg", "yellow_spruce_leaves"), new LeafSetting(LeafTypes.CONIFER));
+        consumer.accept(Identifier.fromNamespaceAndPath("byg", "pink_cherry_leaves"), new LeafSetting(LeafTypes.DEFAULT, 1.4));
+        consumer.accept(Identifier.fromNamespaceAndPath("byg", "skyris_leaves"), new LeafSetting(LeafTypes.DEFAULT, 1.4));
+        consumer.accept(Identifier.fromNamespaceAndPath("byg", "white_cherry_leaves"), new LeafSetting(LeafTypes.DEFAULT, 1.4));
         //terrestria
-        consumer.accept(ResourceLocation.fromNamespaceAndPath("terrestria", "cypress_leaves"), new LeafSetting(LeafTypes.CONIFER));
-        consumer.accept(ResourceLocation.fromNamespaceAndPath("terrestria", "hemlock_leaves"), new LeafSetting(LeafTypes.CONIFER));
-        consumer.accept(ResourceLocation.fromNamespaceAndPath("terrestria", "redwood_leaves"), new LeafSetting(LeafTypes.CONIFER));
-        consumer.accept(ResourceLocation.fromNamespaceAndPath("terrestria", "japanese_maple_shrub_leaves"), new LeafSetting(LeafTypes.PALMS, 0));
-        consumer.accept(ResourceLocation.fromNamespaceAndPath("terrestria", "jungle_palm_leaves"), new LeafSetting(LeafTypes.PALMS, 0.2));
-        consumer.accept(ResourceLocation.fromNamespaceAndPath("terrestria", "yucca_palm_leaves"), new LeafSetting(LeafTypes.PALMS, 0.2));
-        consumer.accept(ResourceLocation.fromNamespaceAndPath("terrestria", "sakura_leaves"), new LeafSetting(LeafTypes.DEFAULT, 1.4));
+        consumer.accept(Identifier.fromNamespaceAndPath("terrestria", "cypress_leaves"), new LeafSetting(LeafTypes.CONIFER));
+        consumer.accept(Identifier.fromNamespaceAndPath("terrestria", "hemlock_leaves"), new LeafSetting(LeafTypes.CONIFER));
+        consumer.accept(Identifier.fromNamespaceAndPath("terrestria", "redwood_leaves"), new LeafSetting(LeafTypes.CONIFER));
+        consumer.accept(Identifier.fromNamespaceAndPath("terrestria", "japanese_maple_shrub_leaves"), new LeafSetting(LeafTypes.PALMS, 0));
+        consumer.accept(Identifier.fromNamespaceAndPath("terrestria", "jungle_palm_leaves"), new LeafSetting(LeafTypes.PALMS, 0.2));
+        consumer.accept(Identifier.fromNamespaceAndPath("terrestria", "yucca_palm_leaves"), new LeafSetting(LeafTypes.PALMS, 0.2));
+        consumer.accept(Identifier.fromNamespaceAndPath("terrestria", "sakura_leaves"), new LeafSetting(LeafTypes.DEFAULT, 1.4));
         //traverse
-        consumer.accept(ResourceLocation.fromNamespaceAndPath("traverse", "fir_leaves"), new LeafSetting(LeafTypes.CONIFER));
-        consumer.accept(ResourceLocation.fromNamespaceAndPath("traverse", "brown_autumnal_leaves"), new LeafSetting(LeafTypes.DEFAULT, 1.8));
-        consumer.accept(ResourceLocation.fromNamespaceAndPath("traverse", "orange_autumnal_leaves"), new LeafSetting(LeafTypes.DEFAULT, 1.8));
-        consumer.accept(ResourceLocation.fromNamespaceAndPath("traverse", "red_autumnal_leaves"), new LeafSetting(LeafTypes.DEFAULT, 1.8));
-        consumer.accept(ResourceLocation.fromNamespaceAndPath("traverse", "yellow_autumnal_leaves"), new LeafSetting(LeafTypes.DEFAULT, 1.8));
+        consumer.accept(Identifier.fromNamespaceAndPath("traverse", "fir_leaves"), new LeafSetting(LeafTypes.CONIFER));
+        consumer.accept(Identifier.fromNamespaceAndPath("traverse", "brown_autumnal_leaves"), new LeafSetting(LeafTypes.DEFAULT, 1.8));
+        consumer.accept(Identifier.fromNamespaceAndPath("traverse", "orange_autumnal_leaves"), new LeafSetting(LeafTypes.DEFAULT, 1.8));
+        consumer.accept(Identifier.fromNamespaceAndPath("traverse", "red_autumnal_leaves"), new LeafSetting(LeafTypes.DEFAULT, 1.8));
+        consumer.accept(Identifier.fromNamespaceAndPath("traverse", "yellow_autumnal_leaves"), new LeafSetting(LeafTypes.DEFAULT, 1.8));
         //woods and mires
-        consumer.accept(ResourceLocation.fromNamespaceAndPath("woods_and_mires", "pine_leaves"), new LeafSetting(LeafTypes.CONIFER));
+        consumer.accept(Identifier.fromNamespaceAndPath("woods_and_mires", "pine_leaves"), new LeafSetting(LeafTypes.CONIFER));
         //biomes o plenty
-        consumer.accept(ResourceLocation.fromNamespaceAndPath("biomesoplenty", "fir_leaves"), new LeafSetting(LeafTypes.CONIFER));
-        consumer.accept(ResourceLocation.fromNamespaceAndPath("biomesoplenty", "redwood_leaves"), new LeafSetting(LeafTypes.CONIFER));
-        consumer.accept(ResourceLocation.fromNamespaceAndPath("biomesoplenty", "cypress_leaves"), new LeafSetting(LeafTypes.CONIFER));
-        consumer.accept(ResourceLocation.fromNamespaceAndPath("biomesoplenty", "snowblossom_leaves"), new LeafSetting(LeafTypes.DEFAULT, 0));
-        consumer.accept(ResourceLocation.fromNamespaceAndPath("biomesoplenty", "red_maple_leaves"), new LeafSetting(LeafTypes.MAPLE, 0));
-        consumer.accept(ResourceLocation.fromNamespaceAndPath("biomesoplenty", "orange_maple_leaves"), new LeafSetting(LeafTypes.MAPLE, 0));
-        consumer.accept(ResourceLocation.fromNamespaceAndPath("biomesoplenty", "yellow_maple_leaves"), new LeafSetting(LeafTypes.MAPLE, 0));
-        consumer.accept(ResourceLocation.fromNamespaceAndPath("biomesoplenty", "mahogany_leaves"), new LeafSetting(LeafTypes.MAHOGANY, 1));
-        consumer.accept(ResourceLocation.fromNamespaceAndPath("biomesoplenty", "pine_leaves"), new LeafSetting(LeafTypes.DEFAULT));
-        consumer.accept(ResourceLocation.fromNamespaceAndPath("biomesoplenty", "rainbow_birch_leaves"), new LeafSetting(LeafTypes.DEFAULT));
-        consumer.accept(ResourceLocation.fromNamespaceAndPath("biomesoplenty", "jacaranda_leaves"), new LeafSetting(LeafTypes.DEFAULT, 1));
-        consumer.accept(ResourceLocation.fromNamespaceAndPath("biomesoplenty", "palm_leaves"), new LeafSetting(LeafTypes.PALMS, 0.2));
-        consumer.accept(ResourceLocation.fromNamespaceAndPath("biomesoplenty", "willow_leaves"), new LeafSetting(LeafTypes.DEFAULT));
-        consumer.accept(ResourceLocation.fromNamespaceAndPath("biomesoplenty", "dead_leaves"), new LeafSetting(LeafTypes.DEFAULT));
-        consumer.accept(ResourceLocation.fromNamespaceAndPath("biomesoplenty", "magic_leaves"), new LeafSetting(LeafTypes.DEFAULT));
-        consumer.accept(ResourceLocation.fromNamespaceAndPath("biomesoplenty", "umbran_leaves"), new LeafSetting(LeafTypes.DEFAULT));
-        consumer.accept(ResourceLocation.fromNamespaceAndPath("biomesoplenty", "hellbark_leaves"), new LeafSetting(LeafTypes.DEFAULT));
+        consumer.accept(Identifier.fromNamespaceAndPath("biomesoplenty", "fir_leaves"), new LeafSetting(LeafTypes.CONIFER));
+        consumer.accept(Identifier.fromNamespaceAndPath("biomesoplenty", "redwood_leaves"), new LeafSetting(LeafTypes.CONIFER));
+        consumer.accept(Identifier.fromNamespaceAndPath("biomesoplenty", "cypress_leaves"), new LeafSetting(LeafTypes.CONIFER));
+        consumer.accept(Identifier.fromNamespaceAndPath("biomesoplenty", "snowblossom_leaves"), new LeafSetting(LeafTypes.DEFAULT, 0));
+        consumer.accept(Identifier.fromNamespaceAndPath("biomesoplenty", "red_maple_leaves"), new LeafSetting(LeafTypes.MAPLE, 0));
+        consumer.accept(Identifier.fromNamespaceAndPath("biomesoplenty", "orange_maple_leaves"), new LeafSetting(LeafTypes.MAPLE, 0));
+        consumer.accept(Identifier.fromNamespaceAndPath("biomesoplenty", "yellow_maple_leaves"), new LeafSetting(LeafTypes.MAPLE, 0));
+        consumer.accept(Identifier.fromNamespaceAndPath("biomesoplenty", "mahogany_leaves"), new LeafSetting(LeafTypes.MAHOGANY, 1));
+        consumer.accept(Identifier.fromNamespaceAndPath("biomesoplenty", "pine_leaves"), new LeafSetting(LeafTypes.DEFAULT));
+        consumer.accept(Identifier.fromNamespaceAndPath("biomesoplenty", "rainbow_birch_leaves"), new LeafSetting(LeafTypes.DEFAULT));
+        consumer.accept(Identifier.fromNamespaceAndPath("biomesoplenty", "jacaranda_leaves"), new LeafSetting(LeafTypes.DEFAULT, 1));
+        consumer.accept(Identifier.fromNamespaceAndPath("biomesoplenty", "palm_leaves"), new LeafSetting(LeafTypes.PALMS, 0.2));
+        consumer.accept(Identifier.fromNamespaceAndPath("biomesoplenty", "willow_leaves"), new LeafSetting(LeafTypes.DEFAULT));
+        consumer.accept(Identifier.fromNamespaceAndPath("biomesoplenty", "dead_leaves"), new LeafSetting(LeafTypes.DEFAULT));
+        consumer.accept(Identifier.fromNamespaceAndPath("biomesoplenty", "magic_leaves"), new LeafSetting(LeafTypes.DEFAULT));
+        consumer.accept(Identifier.fromNamespaceAndPath("biomesoplenty", "umbran_leaves"), new LeafSetting(LeafTypes.DEFAULT));
+        consumer.accept(Identifier.fromNamespaceAndPath("biomesoplenty", "hellbark_leaves"), new LeafSetting(LeafTypes.DEFAULT));
     }
 }

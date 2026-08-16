@@ -2,7 +2,7 @@ plugins {
     id 'java-library'
     id 'maven-publish'
     id 'idea'
-    id 'net.neoforged.moddev' version '2.0.105'
+    id 'net.neoforged.moddev' version '2.0.141'
 }
 
 tasks.named('wrapper', Wrapper).configure {
@@ -27,18 +27,13 @@ base {
     archivesName = mod_id
 }
 
-java.toolchain.languageVersion = JavaLanguageVersion.of(21)
+java.toolchain.languageVersion = JavaLanguageVersion.of(25)
 
 neoForge {
     version = project.neo_version
 
     accessTransformers.from('src/main/resources/accesstransformer.cfg')
 
-
-    parchment {
-        mappingsVersion = project.parchment_mappings_version
-        minecraftVersion = project.parchment_minecraft_version
-    }
 
     runs {
         client {
@@ -65,7 +60,10 @@ neoForge {
         // applies to all the run configs above
         configureEach {
             systemProperty 'forge.logging.markers', 'REGISTRIES'
-            logLevel = org.slf4j.event.Level.DEBUG
+            logLevel = org.slf4j.event.Level.WARN
+
+            jvmArgument '-XX:+AllowEnhancedClassRedefinition'
+            jvmArgument '-XX:+IgnoreUnrecognizedVMOptions'
         }
     }
 
@@ -79,6 +77,10 @@ neoForge {
 sourceSets.main.resources { srcDir 'src/generated/resources' }
 sourceSets.main.java.exclude("**/serene/*")
 
+
+configurations {
+    runtimeClasspath.extendsFrom localRuntime
+}
 
 dependencies {
 //    implementation "curse.maven:serene-seasons-291874:6394011"
@@ -100,8 +102,8 @@ var generateModMetadata = tasks.register("generateModMetadata", ProcessResources
                              mod_credits            : mod_credits]
     inputs.properties replaceProperties
     expand replaceProperties
-    from "src/main/templates"
-    into "build/generated/sources/modMetadata"
+    from file("src/main/templates")
+    into layout.buildDirectory.dir("generated/sources/modMetadata")
 }
 
 sourceSets.main.resources.srcDir generateModMetadata

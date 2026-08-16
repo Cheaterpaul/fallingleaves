@@ -1,15 +1,15 @@
 package de.cheaterpaul.fallingleaves.leaves.mod.types;
 
 import de.cheaterpaul.fallingleaves.FallingLeavesMod;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 public class LeafTypes {
 
-    public static final ResourceLocation DEFAULT = ResourceLocation.fromNamespaceAndPath(FallingLeavesMod.MODID, "default");
-    public static final ResourceLocation CONIFER = ResourceLocation.fromNamespaceAndPath(FallingLeavesMod.MODID, "conifer");
-    public static final ResourceLocation PALMS = ResourceLocation.fromNamespaceAndPath(FallingLeavesMod.MODID, "palms");
-    public static final ResourceLocation MAHOGANY = ResourceLocation.fromNamespaceAndPath(FallingLeavesMod.MODID, "mahogany");
-    public static final ResourceLocation MAPLE = ResourceLocation.fromNamespaceAndPath(FallingLeavesMod.MODID, "maple");
-    public static final ResourceLocation CHERRY = ResourceLocation.fromNamespaceAndPath(FallingLeavesMod.MODID, "cherry");
-    public static final ResourceLocation AZALEA = ResourceLocation.fromNamespaceAndPath(FallingLeavesMod.MODID, "azalea");
+    public static final Identifier DEFAULT = Identifier.fromNamespaceAndPath(FallingLeavesMod.MODID, "default");
+    public static final Identifier CONIFER = Identifier.fromNamespaceAndPath(FallingLeavesMod.MODID, "conifer");
+    public static final Identifier PALMS = Identifier.fromNamespaceAndPath(FallingLeavesMod.MODID, "palms");
+    public static final Identifier MAHOGANY = Identifier.fromNamespaceAndPath(FallingLeavesMod.MODID, "mahogany");
+    public static final Identifier MAPLE = Identifier.fromNamespaceAndPath(FallingLeavesMod.MODID, "maple");
+    public static final Identifier CHERRY = Identifier.fromNamespaceAndPath(FallingLeavesMod.MODID, "cherry");
+    public static final Identifier AZALEA = Identifier.fromNamespaceAndPath(FallingLeavesMod.MODID, "azalea");
 }

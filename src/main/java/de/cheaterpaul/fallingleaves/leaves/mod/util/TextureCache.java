@@ -2,7 +2,7 @@ package de.cheaterpaul.fallingleaves.leaves.mod.util;
 
 import de.cheaterpaul.fallingleaves.FallingLeavesMod;
 import net.minecraft.core.BlockPos;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -29,7 +29,7 @@ public class TextureCache {
     }
 
     // Cache for texture colors
-    public static final Map<ResourceLocation, Data> INST = new HashMap<>();
+    public static final Map<Identifier, Data> INST = new HashMap<>();
 
     // Cache for block colors (BlockState + position -> color)
     private static final Map<BlockColorKey, Integer> BLOCK_COLOR_CACHE = new HashMap<>();
@@ -57,7 +57,7 @@ public class TextureCache {
     }
 
     // Key for combined color cache
-    public record CombinedColorKey(ResourceLocation textureId, int blockColor) {
+    public record CombinedColorKey(Identifier textureId, int blockColor) {
         @Override
         public boolean equals(Object o) {
             if (this == o) return true;
@@ -82,11 +82,11 @@ public class TextureCache {
         BLOCK_COLOR_CACHE.put(new BlockColorKey(state, pos), color);
     }
 
-    public static double[] getCombinedColor(ResourceLocation textureId, int blockColor) {
+    public static double[] getCombinedColor(Identifier textureId, int blockColor) {
         return COMBINED_COLOR_CACHE.get(new CombinedColorKey(textureId, blockColor));
     }
 
-    public static void putCombinedColor(ResourceLocation textureId, int blockColor, double[] color) {
+    public static void putCombinedColor(Identifier textureId, int blockColor, double[] color) {
         COMBINED_COLOR_CACHE.put(new CombinedColorKey(textureId, blockColor), color);
     }
 

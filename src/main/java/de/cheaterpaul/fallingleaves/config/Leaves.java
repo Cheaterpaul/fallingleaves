@@ -50,7 +50,7 @@ public class Leaves {
             this.minimumFreeSpaceBelow = builder
                     .comment("How much room below the leaves block is needed for the leaves to spawn")
                     .translation(FallingLeavesMod.MODID + ".configuration.leaves.minimumFreeSpaceBelow")
-                    .defineInRange("minimumFreeSpaceBelow", 0.5, 1d, 20d);
+                    .defineInRange("minimumFreeSpaceBelow", 1, 1d, 20d);
             builder.comment("The following config option will affect performance.")
                     .comment("Generally speaking the more leaves that are present will the higher is the performance impact.")
                     .translation(FallingLeavesMod.MODID + ".configuration.leaves.performance-relevant")
