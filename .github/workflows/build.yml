@@ -1,0 +1,19 @@
+name: build.yml
+on:
+  push:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - name: Setup Java JDK
+        uses: actions/setup-java@v5
+        with:
+          java-version: '25'
+          distribution: 'adopt'
+          cache: 'gradle'
+      - name: Setup Gradle
+        run: ./gradlew
+      - name: Build
+        run: ./gradlew build
