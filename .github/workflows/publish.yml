@@ -15,8 +15,23 @@ jobs:
     steps:
       - name: "Extract"
         id: extract
+        env:
+          TAG: ${{ github.event.release.tag_name }}
         run: |
-          echo "test"
+          mc_version="${TAG%%-*}"
+          rest="${TAG#"$mc_version"-}"
+
+          if [[ "$rest" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            version_type="release"
+          elif [[ "$rest" =~ ^[0-9]+\.[0-9]+\.[0-9]+-beta$ ]]; then
+            version_type="beta"
+          else
+            version_type="alpha"
+          fi
+
+          echo "mc_version=$mc_version" >> "$GITHUB_OUTPUT"
+          echo "mod_version=$TAG" >> "$GITHUB_OUTPUT"
+          echo "version_type=$version_type" >> "$GITHUB_OUTPUT"
 
   build:
     needs: [ prepare]
@@ -28,12 +43,12 @@ jobs:
         uses: actions/setup-java@v5
         with:
           java-version: '25'
-          distribution: 'adopt'
+          distribution: 'temurin'
           cache: 'gradle'
       - name: Setup Gradle
         run: ./gradlew
       - name: Build
-        run: ./gradlew build
+        run: ./gradlew build -Pmod_version=${{ needs.prepare.outputs.mod_version }}
       - name: Upload Jars
         uses: actions/upload-artifact@v6
         with:
