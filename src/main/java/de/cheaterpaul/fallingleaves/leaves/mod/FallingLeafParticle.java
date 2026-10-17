@@ -48,6 +48,9 @@ public class FallingLeafParticle extends SingleQuadParticle {
     protected final int maxRotateTime;
     protected int rotateTime = 0;
 
+    protected final float groundRotation;
+    protected final float groundOffset;
+
     protected FallingLeafParticle(ClientLevel clientWorld, double x, double y, double z, double r, double g, double b, @NotNull LeafSetting.LoadedLeafSetting provider, ColoredSpriteProvider.TextureSprite sprite) {
         super(clientWorld, x, y, z, 0, 0, 0, sprite.sprite());
         LeafType.LoadedLeafType loadedType = provider.leafType();
@@ -71,6 +74,8 @@ public class FallingLeafParticle extends SingleQuadParticle {
         this.maxRotateSpeed = (random.nextBoolean() ? -1 : 1) * (0.1f + 2.4f * random.nextFloat()) * TAU / 20f;
 
         this.roll = this.oRoll = random.nextFloat() * TAU;
+        this.groundRotation = random.nextFloat() * TAU;
+        this.groundOffset = 0.002f + random.nextFloat() * 0.02f;
 
         float mod = (2 + random.nextFloat())/ 2.5f;
 
@@ -212,33 +217,21 @@ public class FallingLeafParticle extends SingleQuadParticle {
     public void extract(@NonNull QuadParticleRenderState particleTypeRenderState, @NonNull Camera camera, float partialTickTime) {
         Quaternionf q = new Quaternionf();
         if (this.onGround) {
-            q.rotateX((float) Math.PI / -2f);
-            q.rotateZ(hashCode());
-
-
-            Vec3 pos = getPos();
-            Vec3 position = camera.position();
-            Vec3 subtract = position.subtract(pos);
-            if (subtract.y < 0) {
-                q.rotateY((float) Math.PI);
-                q.rotateZ((float) Math.PI/2);
-            }
+            double leafY = Mth.lerp(partialTickTime, this.yo, this.y) + this.groundOffset;
+            q.rotateX((float) Math.PI / (camera.position().y < leafY ? 2f : -2f));
+            q.rotateZ(this.groundRotation);
         } else {
             getFacingCameraMode().setRotation(q, camera, partialTickTime);
             if (this.roll != 0.0) {
                 q.rotateZ(Mth.lerp(partialTickTime, this.oRoll, this.roll));
             }
         }
-        super.extract(particleTypeRenderState, camera, partialTickTime);
+        extractRotatedQuad(particleTypeRenderState, camera, q, partialTickTime);
     }
 
     @Override
     protected void extractRotatedQuad(@NonNull QuadParticleRenderState particleTypeRenderState, @NonNull Quaternionf rotation, float x, float y, float z, float partialTickTime) {
-        super.extractRotatedQuad(particleTypeRenderState,rotation,x, y + switch (hashCode() % 3) {
-            case 0 -> 0.01f;
-            case 1 -> 0.02f;
-            default -> 0.03f;
-        }, z, partialTickTime);
+        super.extractRotatedQuad(particleTypeRenderState, rotation, x, this.onGround ? y + this.groundOffset : y, z, partialTickTime);
     }
 
     public static class LeavesParticleFactory implements ParticleProvider<SimpleParticleType> {

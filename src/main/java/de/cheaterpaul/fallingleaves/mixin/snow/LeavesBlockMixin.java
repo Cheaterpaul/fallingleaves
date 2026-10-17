@@ -25,7 +25,6 @@ public class LeavesBlockMixin {
     private void animateTick(BlockState state, Level level, BlockPos pos, RandomSource randomSource, CallbackInfo ci) {
         Snow snow = ((ISnowLevel) level).fallingLeaves$getSnow();
         BlockPos below = pos.below();
-        BlockState blockstate = level.getBlockState(below);
-        snow.makeSnowParticles(level, pos, randomSource, blockstate, below, this.leafParticleChance);
+        snow.makeSnowParticles(level, pos, randomSource, level.getBlockState(below), below, this.leafParticleChance);
     }
 }
