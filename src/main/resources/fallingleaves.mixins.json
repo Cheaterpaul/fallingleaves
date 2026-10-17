@@ -14,7 +14,7 @@
     "leaves.ClientLevelMixin",
     "snow.ClientLevelMixin",
     "wind.ClientLevelMixin",
-    "wind.FallingLeavesParticleMixin"
+    "wind.FallingParticleMixin"
   ],
   "injectors": {
     "defaultRequire": 1

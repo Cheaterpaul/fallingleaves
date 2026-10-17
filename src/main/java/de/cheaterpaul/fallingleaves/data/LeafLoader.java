@@ -46,8 +46,8 @@ public class LeafLoader {
 
     @SubscribeEvent
     public static void onGatherData(GatherDataEvent.Client event) {
-        event.getGenerator().addProvider(true, new LeafSettingGenerator(event.getGenerator().getPackOutput(), event.getLookupProvider()));
-        event.getGenerator().addProvider(true, new LeafTypeGenerator(event.getGenerator().getPackOutput(), event.getLookupProvider()));
+        event.getGenerator().addProvider(true, new LeafSettingGenerator(event.getGenerator().getPackOutput(), event.getReloadableLookupProvider()));
+        event.getGenerator().addProvider(true, new LeafTypeGenerator(event.getGenerator().getPackOutput(), event.getReloadableLookupProvider()));
     }
 
 

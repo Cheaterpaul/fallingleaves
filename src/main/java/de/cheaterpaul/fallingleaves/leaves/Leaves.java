@@ -45,8 +45,8 @@ public class Leaves {
         }
     }
 
-    public void makeLeavesParticles(ClientLevel level, BlockPos pos, RandomSource randomSource, BlockState state, BlockPos posBelow) {
-        this.spawner.makeFallingLeavesParticles(level, pos, randomSource, state, posBelow);
+    public void makeLeavesParticles(ClientLevel level, BlockPos pos, RandomSource randomSource, BlockState stateBelow, BlockPos posBelow) {
+        this.spawner.makeFallingLeavesParticles(level, pos, randomSource, stateBelow, posBelow);
     }
 
     public void makeAttackLeavesParticles(ClientLevel level, BlockPos pos, BlockState blockState, RandomSource random, BlockPos posBelow, BlockState stateBelow) {

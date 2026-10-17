@@ -8,13 +8,14 @@ import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.FallingParticlesLeavesBlock;
 import net.minecraft.world.level.block.LeavesBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 
-@Mixin(LeavesBlock.class)
+@Mixin(FallingParticlesLeavesBlock.class)
 public abstract class LeavesBlockMixin implements ILeavesBlockExtension {
 
 
@@ -26,19 +27,20 @@ public abstract class LeavesBlockMixin implements ILeavesBlockExtension {
     }
 
     @Shadow
-    protected abstract void makeFallingLeavesParticles(Level level, BlockPos pos, RandomSource randomSource, BlockState belowState, BlockPos belowPos);
+    protected abstract void makeFallingLeavesParticles(Level level, BlockPos pos, RandomSource random);
 
     @Override
     public void fallingLeaves$makeFallingLeavesParticles(Level level, BlockPos blockPos, RandomSource randomSource, BlockState belowState, BlockPos belowPos) {
-        this.makeFallingLeavesParticles(level, blockPos, randomSource, belowState, belowPos);
+        this.makeFallingLeavesParticles(level, blockPos, randomSource);
     }
 
-    @WrapOperation(method = "animateTick", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/LeavesBlock;makeFallingLeavesParticles(Lnet/minecraft/world/level/Level;Lnet/minecraft/core/BlockPos;Lnet/minecraft/util/RandomSource;Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/core/BlockPos;)V"))
-    private void replaceFallingLeaves(LeavesBlock block, Level level, BlockPos pos, RandomSource randomSource, BlockState belowState, BlockPos belowPos, Operation<Void> original) {
+    @WrapOperation(method = "animateTick", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/FallingParticlesLeavesBlock;makeFallingLeavesParticles(Lnet/minecraft/world/level/Level;Lnet/minecraft/core/BlockPos;Lnet/minecraft/util/RandomSource;)V"))
+    private void replaceFallingLeaves(FallingParticlesLeavesBlock instance, Level level, BlockPos pos, RandomSource random, Operation<Void> original) {
         if (level instanceof ClientLevel clientLevel) {
-            ((ILeavesLevel) clientLevel).fallingLeaves$getLeaves().makeLeavesParticles(clientLevel, pos, randomSource, belowState, belowPos);
+            var posBelow = pos.below();
+            ((ILeavesLevel) clientLevel).fallingLeaves$getLeaves().makeLeavesParticles(clientLevel, pos, random, level.getBlockState(posBelow), posBelow);
         } else {
-            original.call(block, level, pos, randomSource, belowState, belowPos);
+            original.call(instance, level, pos, random);
         }
     }
 }

@@ -3,9 +3,8 @@ package de.cheaterpaul.fallingleaves.mixin.wind;
 import de.cheaterpaul.fallingleaves.wind.IWindLevel;
 import de.cheaterpaul.fallingleaves.wind.Wind;
 import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.client.particle.FallingLeavesParticle;
+import net.minecraft.client.particle.FallingParticle;
 import net.minecraft.client.particle.SingleQuadParticle;
-import net.minecraft.client.particle.SpriteSet;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
@@ -13,15 +12,15 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(FallingLeavesParticle.class)
-public abstract class FallingLeavesParticleMixin extends SingleQuadParticle {
+@Mixin(FallingParticle.class)
+public abstract class FallingParticleMixin extends SingleQuadParticle {
 
 
     @Unique
     private float fallingLeaves$windCoefficient;
 
     @Deprecated
-    private FallingLeavesParticleMixin(ClientLevel level, double x, double y, double z, TextureAtlasSprite sprite) {
+    private FallingParticleMixin(ClientLevel level, double x, double y, double z, TextureAtlasSprite sprite) {
         super(level, x, y, z, sprite);
     }
 
