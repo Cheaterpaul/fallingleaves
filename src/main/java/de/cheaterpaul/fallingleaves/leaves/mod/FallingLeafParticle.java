@@ -33,7 +33,7 @@ import java.util.List;
 
 public class FallingLeafParticle extends SingleQuadParticle {
 
-    public static final ParticleRenderType LEAVES_SHEET = new ParticleRenderType("FALLINGLEAVES_PARTICLE_SHEET_TRANSLUCENT");
+    public static final ParticleRenderType LEAVES_SHEET = new ParticleRenderType("FALLINGLEAVES_PARTICLE_SHEET_TRANSLUCENT", "FPT");
     public static final Layer LAYER = new Layer(true, RenderSettings.LEAVES_ATLAS , RenderPipelines.TRANSLUCENT_PARTICLE);
 
     protected static final float TAU = (float) (2 * Math.PI); // 1 rotation
@@ -177,7 +177,7 @@ public class FallingLeafParticle extends SingleQuadParticle {
         double d2 = pZ;
 
         if (this.hasPhysics && (pX != 0.0 || pY != 0.0 || pZ != 0.0) && pX * pX + pY * pY + pZ * pZ < MAXIMUM_COLLISION_VELOCITY_SQUARED) {
-            Vec3 vec3 = Entity.collideBoundingBox(null, new Vec3(pX, pY, pZ), this.getBoundingBox(), this.level, List.of());
+            Vec3 vec3 = Entity.collideBoundingBox((Entity) null, new Vec3(pX, pY, pZ), this.getBoundingBox(), this.level, List.of());
             pX = vec3.x;
             pY = vec3.y;
             pZ = vec3.z;
