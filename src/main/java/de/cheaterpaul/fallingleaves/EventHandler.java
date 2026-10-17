@@ -165,9 +165,11 @@ public class EventHandler {
             }
         }
 
-        for (int i = 0; i < FallingLeavesMod.CONFIG.maxDecayingSnowParticles.get(); i++) {
-            if (random.nextBoolean()) {
-                LeafUtil.trySpawnSnowParticle(state, level, pos, random, leafSettings);
+        if (canSnow(level, pos)) {
+            for (int i = 0; i < FallingLeavesMod.CONFIG.maxDecayingSnowParticles.get(); i++) {
+                if (random.nextBoolean()) {
+                    LeafUtil.trySpawnSnowParticle(state, level, pos, random, leafSettings);
+                }
             }
         }
 

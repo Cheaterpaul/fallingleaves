@@ -78,6 +78,8 @@ public class FallingLeafParticle extends TextureSheetParticle {
     protected static final int FADE_DURATION = 16; // ticks
     // protected static final double FRICTION       = 0.30;
     protected static final double WATER_FRICTION = 0.05;
+    protected static final double MIN_WATER_VELOCITY = 0.001;
+    protected static final int GROUND_CHECK_INTERVAL = 10; // ticks
 
     protected final float windCoefficient; // to emulate drag/lift
 
@@ -133,13 +135,16 @@ public class FallingLeafParticle extends TextureSheetParticle {
             return;
         }
 
-        if (this.level.getFluidState(new BlockPos((int) x, (int) y, (int) z)).is(FluidTags.WATER)) {
+        if (this.level.getFluidState(BlockPos.containing(x, y, z)).is(FluidTags.WATER)) {
             // float on water
             yd = 0.0;
             rotateTime = 0;
 
             xd *= (1 - WATER_FRICTION);
             zd *= (1 - WATER_FRICTION);
+            // stop drifting entirely once the leaf is barely moving, so we don't run collision checks every tick
+            if (Math.abs(xd) < MIN_WATER_VELOCITY) xd = 0;
+            if (Math.abs(zd) < MIN_WATER_VELOCITY) zd = 0;
         } else {
             // apply gravity
             yd -= 0.04 * gravity;
@@ -161,6 +166,12 @@ public class FallingLeafParticle extends TextureSheetParticle {
 
                 xd = 0;
                 zd = 0;
+
+                // leaves resting on the ground only need to check occasionally whether the ground is still there
+                if ((age + hashCode()) % GROUND_CHECK_INTERVAL != 0) {
+                    yd = 0;
+                    return;
+                }
             }
 
             // approach the target wind velocity over time via vel += (target - vel) * f, where f is in (0, 1)
