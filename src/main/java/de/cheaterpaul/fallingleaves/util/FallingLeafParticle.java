@@ -243,7 +243,12 @@ public class FallingLeafParticle extends TextureSheetParticle {
                 q.rotateZ(Mth.lerp(pPartialTicks, this.oRoll, this.roll));
             }
         }
-        super.renderRotatedQuad(pBuffer, pRenderInfo, q, pPartialTicks);
+        // call the positional overload directly, as sodium replaces the camera overload and would skip the y offset below
+        Vec3 camera = pRenderInfo.getPosition();
+        float x = (float) (Mth.lerp(pPartialTicks, this.xo, this.x) - camera.x());
+        float y = (float) (Mth.lerp(pPartialTicks, this.yo, this.y) - camera.y());
+        float z = (float) (Mth.lerp(pPartialTicks, this.zo, this.z) - camera.z());
+        this.renderRotatedQuad(pBuffer, q, x, y, z, pPartialTicks);
     }
 
     @Override
