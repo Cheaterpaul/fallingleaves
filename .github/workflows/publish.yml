@@ -18,6 +18,9 @@ jobs:
         env:
           TAG: ${{ github.event.release.tag_name }}
         run: |
+          # allow an optional neo/ or forge/ prefix on the tag name, it is not part of the version
+          TAG="${TAG#neo/}"
+          TAG="${TAG#forge/}"
           mc_version="${TAG%%-*}"
           rest="${TAG#"$mc_version"-}"
 
