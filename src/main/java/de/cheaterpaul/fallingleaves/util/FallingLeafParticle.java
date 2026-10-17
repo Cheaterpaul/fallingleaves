@@ -220,6 +220,10 @@ public class FallingLeafParticle extends TextureSheetParticle {
         if (d2 != pZ) {
             this.zd = 0.0;
         }
+
+        if (this.onGround && FallingLeavesMod.CONFIG.particlesDisappearOnGroundContact.get()) {
+            this.remove();
+        }
     }
 
     @Override

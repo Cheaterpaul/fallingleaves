@@ -22,6 +22,7 @@ public class ClientConfig {
     public final ModConfigSpec.IntValue coniferLeafSpawnRate;
     public final ModConfigSpec.BooleanValue dropFromPlayerPlacedBlocks;
     public final ModConfigSpec.IntValue maxDecayingLeaves;
+    public final ModConfigSpec.BooleanValue particlesDisappearOnGroundContact;
     public final ModConfigSpec.IntValue minimumFreeSpaceBelow;
     public final ModConfigSpec.BooleanValue disableWind;
     public final ModConfigSpec.ConfigValue<List<? extends String>> windlessDimension;
@@ -38,6 +39,7 @@ public class ClientConfig {
         dropFromPlayerPlacedBlocks = builder.comment("Whether player placed blocks should also drop leaves").define("dropFromPlayerPlacedBlocks", true);
         minimumFreeSpaceBelow = builder.comment("How much room below the leaves block is needed for the leaves to spawn").defineInRange("minimumFreeSpaceBelow", 1, 1, 20);
         maxDecayingLeaves = builder.comment("How many leaves should spawn when a leaves block is decaying", "This is the maximum amount, but they are binomial distributed.", "This only works in singleplayer").defineInRange("decayingLeaves", 10, 1, 1000);
+        particlesDisappearOnGroundContact = builder.comment("Whether the leaves particles should disappear when touching the ground").define("particlesDisappearOnGroundContact", false);
         builder.pop();
         builder.push("wind");
         disableWind = builder.comment("Disable wind effects").define("disableWind", false);

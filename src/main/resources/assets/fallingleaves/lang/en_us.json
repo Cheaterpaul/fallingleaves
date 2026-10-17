@@ -8,6 +8,7 @@
   "fallingleaves.configuration.Serene Seasons": "Serene Seasons",
   "fallingleaves.configuration.leafSize": "Leave Size",
   "fallingleaves.configuration.leafSpawnRate": "Leaf Spawn Rate",
+  "fallingleaves.configuration.particlesDisappearOnGroundContact": "Disappear on Ground contact",
   "fallingleaves.configuration.disableSeasonalModifier": "Disable Seasonal Modifier",
   "fallingleaves.configuration.wind": "Wind settings",
   "fallingleaves.configuration.leaf_settings": "Leaf settings",
